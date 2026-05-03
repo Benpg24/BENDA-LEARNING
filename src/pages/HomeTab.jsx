@@ -110,19 +110,6 @@ export default function HomeTab({progress:pr,onBike,onNav}){
       </div>
     </div>
 
-    {/* ── QUICK ACCESS ── */}
-    <div style={{padding:"0 16px",marginBottom:10}}>
-      <HomeSLabel>QUICK ACCESS</HomeSLabel>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8,marginTop:6}}>
-        {[{label:"RANGE",img:"/images/BENDA logo icon .png",nav:"range",filter:"brightness(0) invert(1)",sz:28},{label:"QUIZ",img:"/images/quizicon.png",nav:"train",filter:"none",sz:46},{label:"COMPARE",img:"/images/compareicon.png",nav:"compare",filter:"none",sz:46},{label:"GLOSSARY",img:"/images/Glossaryicon.png",nav:"glossary",filter:"none",sz:46}].map(t=>(
-          <div key={t.label} className="tp" onClick={()=>onNav(t.nav)} style={{aspectRatio:"1/1.05",borderRadius:12,background:C.s1,border:`1px solid #2a2a2a`,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,cursor:"pointer"}}>
-            {t.img?<img src={t.img} alt={t.label} style={{width:t.sz,height:t.sz,objectFit:"contain",filter:t.filter}}/>:<span style={{fontSize:20,color:"#fafafa"}}>{t.icon}</span>}
-            <div style={{fontSize:9,fontWeight:700,letterSpacing:0.8,color:"#fafafa",fontFamily:"'Rajdhani',sans-serif"}}>{t.label}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-
     {/* ── YOUR GARAGE ── */}
     <div style={{marginBottom:10}}>
       <div style={{padding:"0 16px",display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:6}}>
@@ -151,6 +138,7 @@ export default function HomeTab({progress:pr,onBike,onNav}){
         })}
       </div>
     </div>
+
 
     {/* ── TRAINING SNAPSHOT ── */}
     <div style={{padding:"0 16px",marginBottom:22}}>
