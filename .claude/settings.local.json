@@ -1,17 +1,4 @@
 {
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo '{\"systemMessage\": \"Remember to git commit and push before ending the session!\"}'",
-            "timeout": 5
-          }
-        ]
-      }
-    ]
-  },
   "permissions": {
     "allow": [
       "Bash(npm create:*)",
@@ -24,7 +11,23 @@
       "Bash(grep -n \"const bikes\\\\|const BIKES\\\\|const glossary\\\\|const GLOSSARY\\\\|const compare\\\\|const COMPARE\\\\|\\\\];$\" /Users/benpg/Documents/BENDA-LEARNING/src/App.jsx)",
       "Bash(python3)",
       "Bash(npx vite *)",
-      "Bash(python3 -)"
+      "Bash(python3 -)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"systemMessage\": \"Remember to git commit and push before ending the session!\"}'",
+            "timeout": 5
+          }
+        ]
+      }
     ]
   }
 }
