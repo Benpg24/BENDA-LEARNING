@@ -12,7 +12,7 @@ export default function RangeTab({onBike,progress:pr}){
     </div>
     <div style={bd}>
       {BIKES.map((b,i)=>{const m=bm(pr,b.id);return(
-        <A key={b.id} d={80+i*50}><HoverCard onClick={()=>onBike(b)} style={{background:"#000",padding:"16px 20px",marginBottom:10,display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}>
+        <A key={b.id} d={80+i*50}><HoverCard onClick={()=>onBike(b)} style={{background:C.s1,padding:"16px 20px",marginBottom:10,display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}>
           <div style={{width:120,height:90,flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
             {b.icon&&<img src={b.icon} alt={b.name} style={{maxWidth:"100%",maxHeight:"100%",objectFit:"contain"}}/>}
           </div>
