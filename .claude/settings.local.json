@@ -1,4 +1,17 @@
 {
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"systemMessage\": \"Remember to git commit and push before ending the session!\"}'",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
   "permissions": {
     "allow": [
       "Bash(npm create:*)",
@@ -6,7 +19,12 @@
       "Bash(npm run:*)",
       "Bash(sed -n '15,938p' \"/Users/matthewpink-gyett/Desktop/bendatraining/benda-training .html\")",
       "Read(//tmp/**)",
-      "Read(//private/tmp/**)"
+      "Read(//private/tmp/**)",
+      "Bash(sips -c 430 749 --cropOffset 0 0 \"/Users/benpg/Documents/BENDA-LEARNING/public/images/BENDAlogo.png\" --out \"/Users/benpg/Documents/BENDA-LEARNING/public/images/benda-icon.png\")",
+      "Bash(grep -n \"const bikes\\\\|const BIKES\\\\|const glossary\\\\|const GLOSSARY\\\\|const compare\\\\|const COMPARE\\\\|\\\\];$\" /Users/benpg/Documents/BENDA-LEARNING/src/App.jsx)",
+      "Bash(python3)",
+      "Bash(npx vite *)",
+      "Bash(python3 -)"
     ]
   }
 }
