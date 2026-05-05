@@ -25,7 +25,7 @@ function BikeCarousel({images,name}){
   }
   if(!images||!images.length)return <div style={{width:"100%",paddingBottom:"100%",background:C.s2,borderRadius:6,border:`1px solid ${C.border}`,position:"relative",marginBottom:8}}><div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:12,color:C.t4,letterSpacing:1}}>NO PHOTO YET</span></div></div>;
   return <div style={{marginBottom:8}}>
-    <div style={{width:"100%",position:"relative",paddingBottom:"100%",background:C.s2,borderRadius:6,border:`1px solid ${C.border}`,overflow:"hidden"}} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+    <div style={{width:"100%",position:"relative",paddingBottom:"62%",background:C.s2,borderRadius:6,border:`1px solid ${C.border}`,overflow:"hidden"}} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <div style={{position:"absolute",inset:0}}>
         <img src={images[idx]} alt={`${name} ${idx+1}`} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
       </div>
@@ -185,50 +185,74 @@ function GlossaryItem({term,def}){
 }
 
 // ── LEARN TAB ───────────────────────────────────────────────────────────────
+function LearnSLabel({children}){
+  return <div style={{marginBottom:12,textAlign:"left"}}>
+    <div style={{fontSize:10,fontWeight:700,letterSpacing:2,color:"#fafafa"}}>{children}</div>
+  </div>;
+}
 function LearnTab({bike:b}){
-  return <div style={bd}>
-    <A><div style={{marginBottom:20}}>
+  const GT=C.goldTxt,GOLD=C.gold,GD=C.goldDim;
+  return <div style={{...bd,...(b.id==="nb250"?{zoom:0.9}:{})}}>
+
+    {/* Carousel */}
+    <A><div style={{marginBottom:16}}>
       <BikeCarousel images={b.images} name={b.name}/>
     </div></A>
-    <A d={60}>
-      <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:26,letterSpacing:1,textTransform:"uppercase",marginBottom:2}}>{b.name}</div>
-      <div style={{fontSize:14,color:"#4ade80",fontWeight:600,marginBottom:4,fontFamily:"'Rajdhani',sans-serif",letterSpacing:1}}>{b.price}</div>
-      <div style={{fontSize:12,color:C.t2,letterSpacing:2,textTransform:"uppercase",marginBottom:24}}>{b.type}</div>
-    </A>
-    <A d={120}><div style={{border:`1px solid ${C.border}`,borderRadius:6,overflow:"hidden",marginBottom:24}}>
-      {[["Type",b.anchors.type],["Feel",b.anchors.feel],["Who",b.anchors.who]].map(([l,v],i,a)=>(
-        <div key={l} style={{background:C.s1,padding:"16px 18px",display:"flex",gap:14,alignItems:"baseline",...(i<a.length-1?{borderBottom:`1px solid ${C.border}`}:{})}}>
-          <div style={{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:C.accent,fontWeight:600,width:44,flexShrink:0}}>{l}</div>
-          <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:17,letterSpacing:.5,lineHeight:1.2}}>{v}</div>
-        </div>
-      ))}
+
+    {/* Hero — name / price / type */}
+    <A d={60}><div style={{marginBottom:24}}>
+      <div style={{fontSize:10,fontWeight:700,letterSpacing:2,color:C.t3,textTransform:"uppercase",marginBottom:6}}>{b.type}</div>
+      <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:800,fontSize:34,letterSpacing:-0.5,textTransform:"uppercase",lineHeight:1,marginBottom:6}}>{b.name}</div>
+      <div style={{fontFamily:"'Rajdhani',sans-serif",fontSize:22,fontWeight:700,color:GT}}>{b.price}</div>
     </div></A>
-    <A d={180}><div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:24}}>
-      {b.captions.map(c=><div key={c.label} style={{background:C.s1,border:`1px solid ${C.border}`,borderRadius:4,padding:"7px 12px",fontSize:12}}>
-        <span style={{fontWeight:500}}>{c.label}: </span><span style={{color:C.t2}}>{c.value}</span>
-      </div>)}
+
+    {/* The Pitch — Type / Feel / Who */}
+    <A d={120}><div style={{marginBottom:24}}>
+      <LearnSLabel>THE PITCH</LearnSLabel>
+      <div style={{display:"flex",flexDirection:"column",gap:8}}>
+        {[["TYPE",b.anchors.type],["FEEL",b.anchors.feel],["WHO IT'S FOR",b.anchors.who]].map(([l,v])=>(
+          <div key={l} style={{background:C.s1,border:`1px solid ${C.border}`,borderLeft:`3px solid ${GOLD}`,borderRadius:6,padding:"14px 16px"}}>
+            <div style={{fontSize:9,fontWeight:700,letterSpacing:2,color:GT,marginBottom:6}}>{l}</div>
+            <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:17,lineHeight:1.3,color:"#fafafa"}}>{v}</div>
+          </div>
+        ))}
+      </div>
     </div></A>
-    <A d={240}><div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:1,background:C.border,border:`1px solid ${C.border}`,borderRadius:6,overflow:"hidden",marginBottom:24}}>
-      {b.stats.map(s=><div key={s.key} style={{background:C.s1,padding:16,textAlign:"center"}}>
-        <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:24,lineHeight:1,marginBottom:4}}>{s.val}</div>
-        <div style={{fontSize:10,color:C.t2,letterSpacing:1,textTransform:"uppercase"}}>{s.key}</div>
-      </div>)}
+
+    {/* By the Numbers — stats grid */}
+    <A d={200}><div style={{marginBottom:24}}>
+      <LearnSLabel>BY THE NUMBERS</LearnSLabel>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+        {b.stats.map(s=><div key={s.key} style={{background:C.s1,border:`1px solid ${C.border}`,borderRadius:6,padding:"14px 12px",textAlign:"center"}}>
+          <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:800,fontSize:28,lineHeight:1,color:GT,marginBottom:4}}>{s.val}</div>
+          <div style={{fontSize:9,color:C.t3,letterSpacing:1.5,textTransform:"uppercase"}}>{s.key}</div>
+        </div>)}
+      </div>
     </div></A>
-    <A d={300}><div style={{...sec,marginBottom:14}}>Key Facts</div>
-    <div style={{display:"flex",flexDirection:"column",gap:1}}>
-      {b.facts.map((f,i)=><div key={i} style={{background:C.s1,padding:"16px 18px",display:"flex",gap:14,alignItems:"baseline"}}>
-        <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:20,color:C.accent,lineHeight:1,flexShrink:0,width:28}}>0{i+1}</div>
-        <div><div style={{fontWeight:500,fontSize:14,marginBottom:3,textAlign:"left"}}>{f.title}</div><div style={{fontSize:13,color:C.t2,lineHeight:1.5}}>{f.desc}</div></div>
-      </div>)}
+
+    {/* Key Facts */}
+    <A d={280}><div style={{marginBottom:24}}>
+      <LearnSLabel>KEY FACTS</LearnSLabel>
+      <div style={{display:"flex",flexDirection:"column",gap:8}}>
+        {b.facts.map((f,i)=><div key={i} style={{background:C.s1,border:`1px solid ${C.border}`,borderRadius:6,padding:"14px 16px",display:"flex",gap:14}}>
+          <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:800,fontSize:22,color:GD,lineHeight:1,flexShrink:0,width:28,paddingTop:2}}>0{i+1}</div>
+          <div>
+            <div style={{fontWeight:700,fontSize:14,marginBottom:4,color:"#fafafa"}}>{f.title}</div>
+            <div style={{fontSize:13,color:C.t2,lineHeight:1.5}}>{f.desc}</div>
+          </div>
+        </div>)}
+      </div>
     </div></A>
-    {b.sellingPoints&&<A d={400}><div style={{height:1,background:C.border,margin:"24px 0"}}/>
-      <div style={{...sec,marginBottom:14}}>Sales Playbook</div>
+
+    {/* Sales Playbook */}
+    {b.sellingPoints&&<A d={360}><div style={{height:1,background:C.border,margin:"0 0 20px"}}/>
+      <LearnSLabel>SALES PLAYBOOK</LearnSLabel>
       {b.sellingPoints.map((sp,i)=><div key={i} style={{...crd,padding:"14px 16px",marginBottom:8}}>
-        <div style={{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:C.accent,fontWeight:600,marginBottom:6,textAlign:"left"}}>{sp.title}</div>
-        <div style={{fontSize:13,color:"#ccc",lineHeight:1.6,textAlign:"left"}}>{sp.text}</div>
+        <div style={{fontSize:9,letterSpacing:2,textTransform:"uppercase",color:GT,fontWeight:700,marginBottom:6}}>{sp.title}</div>
+        <div style={{fontSize:13,color:C.t2,lineHeight:1.6}}>{sp.text}</div>
       </div>)}
     </A>}
-  </div>
+  </div>;
 }
 
 // ── SPECS TAB ───────────────────────────────────────────────────────────────

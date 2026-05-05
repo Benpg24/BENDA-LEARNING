@@ -18,15 +18,14 @@ function SpeedoDial({value,gold,goldTxt,sz=110}){
 }
 
 function HomeSLabel({children}){
-  return <div style={{display:"flex",alignItems:"center",gap:8}}>
-    <div style={{width:14,height:1,background:C.gold}}/>
+  return <div style={{textAlign:"left"}}>
     <div style={{fontSize:10,fontWeight:700,letterSpacing:2,color:"#fafafa"}}>{children}</div>
   </div>;
 }
 
 export default function HomeTab({progress:pr,onBike,onNav}){
   const GOLD=C.gold,GT=C.goldTxt,GD=C.goldDim;
-  const trainingImg={nb500:"/images/nb500-training.png",ch500:"/images/ch500-training.png",df500:"/images/df500-training.png",lfc700:"/images/lfc700-training.png"};
+  const trainingImg={nb250:"/images/napbobpotential.png",nb500:"/images/nb500-training.png",ch500:"/images/ch500-training.png",df500:"/images/df500-training.png",lfc700:"/images/lfc700-training.png"};
   const garageRef=useRef(null);
   const [activeGarageId,setActiveGarageId]=useState(null);
   const onGarageScroll=useCallback(()=>{
@@ -85,7 +84,7 @@ export default function HomeTab({progress:pr,onBike,onNav}){
 
     {/* ── CONTINUE TRAINING ── */}
     <div style={{margin:"0 16px 10px",padding:16,borderRadius:16,background:C.s1,border:`1px solid #2a2a2a`,position:"relative",overflow:"hidden"}}>
-      <img src={trainingImg[featured.id]||"/images/Napbob250trainingapp2 (1600 x 900 px)-2.png"} alt={featured.name} style={{position:"absolute",right:"3px",top:"40%",transform:"translateY(-50%)",height:"88%",width:"auto",maxWidth:"55%",objectFit:"contain",opacity:0.7,pointerEvents:"none",WebkitMaskImage:"linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%)",maskImage:"linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%)"}}/>
+      <img src={trainingImg[featured.id]||"/images/Napbob250trainingapp2 (1600 x 900 px)-2.png"} alt={featured.name} style={{position:"absolute",right:"20px",top:"-8px",height:"72%",width:"auto",maxWidth:"70%",objectFit:"contain",opacity:0.9,filter:"brightness(1.3)",pointerEvents:"none",WebkitMaskImage:"linear-gradient(to right, transparent 0%, black 20%, black 85%, transparent 100%)",maskImage:"linear-gradient(to right, transparent 0%, black 20%, black 85%, transparent 100%)"}}/>
       <div style={{position:"relative",zIndex:1,display:"flex",alignItems:"flex-start"}}>
         <div style={{minWidth:0}}>
           <div style={{fontSize:10,fontWeight:700,letterSpacing:1.6,color:C.t3}}>CONTINUE TRAINING</div>
