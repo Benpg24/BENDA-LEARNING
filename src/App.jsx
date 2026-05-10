@@ -222,13 +222,13 @@ function BikeLearnTab({bike:b,onQuiz}){
       {/* ATTRIBUTE BADGES */}
       <div style={{display:"flex",gap:8,marginBottom:12}}>
         {[
-          {icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={WI} strokeWidth="1.5"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1l-2 8h12l-2-8z"/><path d="M5.5 14L10 6"/></svg>,label:b.badges[0]},
-          {icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={WI} strokeWidth="1.5"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg>,label:b.badges[1]},
-          {icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={WI} strokeWidth="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,label:b.badges[2]},
+          {icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="1.5"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1l-2 8h12l-2-8z"/><path d="M5.5 14L10 6"/></svg>,label:b.badges[0]},
+          {icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="1.5"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg>,label:b.badges[1]},
+          {icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,label:b.badges[2]},
         ].map(({icon,label})=>(
-          <div key={label} style={{flex:1,background:C.s1,border:`1px solid ${C.border}`,borderRadius:10,padding:"12px 6px",textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",gap:8}}>
+          <div key={label} style={{flex:1,background:"#fff",border:"1px solid rgba(0,0,0,0.08)",borderRadius:10,padding:"12px 6px",textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",gap:8}}>
             {icon}
-            <div style={{fontSize:10,color:"#fafafa",lineHeight:1.3,fontWeight:500,letterSpacing:.3}}>{label}</div>
+            <div style={{fontSize:10,color:"#111",lineHeight:1.3,fontWeight:600,letterSpacing:.3}}>{label}</div>
           </div>
         ))}
       </div>
@@ -237,7 +237,7 @@ function BikeLearnTab({bike:b,onQuiz}){
         {[["TYPE",b.anchors.type],["FEEL",b.anchors.feel],["WHO",b.anchors.who]].map(([l,v],i,arr)=>(
           <div key={l} style={{display:"flex",gap:14,padding:"12px 14px",background:C.s1,borderBottom:i<arr.length-1?`1px solid ${C.border}`:"none"}}>
             <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:10,letterSpacing:2,color:"rgba(255,255,255,0.5)",width:30,flexShrink:0,paddingTop:2}}>{l}</div>
-            <div style={{fontSize:13,color:"#fafafa",lineHeight:1.5}}>{v}</div>
+            <div style={{fontSize:13,color:"#fafafa",lineHeight:1.5,fontFamily:"'Outfit',sans-serif"}}>{v}</div>
           </div>
         ))}
       </div>
@@ -250,7 +250,6 @@ function BikeLearnTab({bike:b,onQuiz}){
           <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:12,letterSpacing:2,textTransform:"uppercase",color:"#fff",marginBottom:6}}>QUICK PITCH</div>
           <div style={{fontSize:13,color:C.t2,lineHeight:1.6}}>{b.sellingPoints[0].text}</div>
         </div>
-        <div style={{color:C.t4,fontSize:20,flexShrink:0,alignSelf:"center",lineHeight:1}}>›</div>
       </div>
       {/* WHY CUSTOMERS LOVE IT */}
       <div style={{background:C.s1,border:`1px solid ${C.border}`,borderRadius:10,padding:"14px",marginBottom:16,display:"flex",gap:12,alignItems:"flex-start"}}>
@@ -268,7 +267,6 @@ function BikeLearnTab({bike:b,onQuiz}){
             ))}
           </div>
         </div>
-        <div style={{color:C.t4,fontSize:20,flexShrink:0,alignSelf:"center",lineHeight:1}}>›</div>
       </div>
       {/* KEY HIGHLIGHTS */}
       <div style={{marginBottom:20}}>
@@ -295,19 +293,171 @@ function BikeLearnTab({bike:b,onQuiz}){
               <div style={{marginBottom:8}}>{pbIcons[i]}</div>
               <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:11,letterSpacing:1.5,textTransform:"uppercase",color:"#fff",marginBottom:6,paddingRight:14,lineHeight:1.2}}>{sp.title}</div>
               <div style={{fontSize:11,color:C.t2,lineHeight:1.5}}>{sp.text}</div>
-              <div style={{position:"absolute",top:12,right:12,color:C.t4,fontSize:16,lineHeight:1}}>›</div>
             </div>
           ))}
         </div>
       </div>
-      {/* CONTINUE TRAINING */}
-      {onQuiz&&<button className="tp" onClick={onQuiz} style={{...btnA,width:"100%",padding:18,fontSize:13,letterSpacing:2}}>CONTINUE TRAINING ›</button>}
     </div>
+  </div>;
+}
+
+// ── BIKE LEARN TAB V2 ───────────────────────────────────────────────────────
+function BikeLearnTabV2({bike:b,onUp,onNext}){
+  const [tab,setTab]=useState('overview');
+  const GOLD=C.gold,GT=C.goldTxt;
+  const CARD='#141414',BORDER='#282828';
+  const T1='#f5f5f5',T2='#b8b8b8',T3='#666';
+  const sp=b.sellingPoints;
+
+  const TABS=['overview','specs','sales','quiz'];
+  const TLBL={overview:'Overview',specs:'Specs',sales:'Sales',quiz:'Quiz'};
+
+  const statIcons=[
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.8"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>,
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.8"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>,
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.8"><line x1="12" y1="2" x2="12" y2="15"/><path d="M5 15h14"/><path d="M5 19h14"/></svg>,
+  ];
+
+  const anchorIcons={
+    TYPE:<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.8"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><circle cx="7" cy="7" r="1.5" fill={GOLD} stroke="none"/></svg>,
+    FEEL:<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.8"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>,
+    WHO:<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+  };
+
+  const salesCards=[
+    {icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>,title:'Opening Pitch',text:sp[0].text},
+    {icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,title:'Ideal Customer',text:sp[2].text},
+    {icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,title:sp[3].title,text:sp[3].text},
+    {icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,title:'Competitor Comparison',text:sp[1].text},
+  ];
+
+  const nameParts=[b.name.split(' ')[0],b.name.split(' ').slice(1).join(' ')];
+
+  return <div style={{background:'#0a0a0a',color:T1,fontFamily:"'Outfit',sans-serif",paddingBottom:40}}>
+
+    {/* HERO */}
+    <div style={{position:'relative',overflow:'hidden',padding:'20px 20px 14px',minHeight:170}}>
+      <img src={b.img} alt={b.name} style={{position:'absolute',right:'-5px',top:'-10px',height:'115%',width:'58%',objectFit:'contain',opacity:0.92,filter:'brightness(1.1)',WebkitMaskImage:'linear-gradient(to right,transparent 0%,black 20%,black 80%,transparent 100%)',maskImage:'linear-gradient(to right,transparent 0%,black 20%,black 80%,transparent 100%)',pointerEvents:'none'}}/>
+      <div style={{position:'relative',zIndex:1,textAlign:'left'}}>
+        <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:900,textTransform:'uppercase',lineHeight:0.88,letterSpacing:-0.5,color:T1}}>
+          <div style={{fontSize:28}}>{nameParts[0]}</div>
+          <div style={{fontSize:42}}>{nameParts[1]}</div>
+        </div>
+        <div style={{fontSize:10,color:T3,fontWeight:600,letterSpacing:2.5,textTransform:'uppercase',marginTop:8,marginBottom:8}}>{b.type}</div>
+        <div style={{fontFamily:"'Rajdhani',sans-serif",fontSize:26,fontWeight:800,color:GT,lineHeight:1}}>{b.price}</div>
+      </div>
+    </div>
+
+    {/* TAB BAR */}
+    <div style={{display:'flex',overflowX:'auto',scrollbarWidth:'none',borderBottom:`1px solid ${BORDER}`,padding:'0 16px',WebkitOverflowScrolling:'touch',position:'sticky',top:54,zIndex:90,background:'#0a0a0a'}}>
+      {TABS.map(t=>(
+        <button key={t} onClick={()=>setTab(t)} className="tp" style={{
+          flexShrink:0,padding:'10px 12px',background:'none',border:'none',
+          borderBottom:tab===t?`2px solid ${GOLD}`:'2px solid transparent',
+          color:tab===t?GT:T3,
+          fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:11,letterSpacing:1.5,textTransform:'uppercase',cursor:'pointer',marginBottom:-1,whiteSpace:'nowrap'
+        }}>{TLBL[t]}</button>
+      ))}
+    </div>
+
+    {/* OVERVIEW */}
+    {tab==='overview'&&<div style={{padding:'20px'}}>
+      <div style={{display:'flex',gap:8,marginBottom:20}}>
+        {[
+          {icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.5"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 00-1-1h-4a1 1 0 00-1 1l-2 8h12l-2-8z"/><path d="M5.5 14L10 6"/></svg>,label:b.badges[0]},
+          {icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.5"><path d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg>,label:b.badges[1]},
+          {icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,label:b.badges[2]},
+        ].map(({icon,label})=>(
+          <div key={label} style={{flex:1,background:CARD,border:`1px solid ${BORDER}`,borderRadius:10,padding:'12px 6px',textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center',gap:8}}>
+            {icon}
+            <div style={{fontSize:10,color:T1,lineHeight:1.3,fontWeight:500}}>{label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{background:CARD,border:`1px solid ${BORDER}`,borderRadius:10,overflow:'hidden',marginBottom:20}}>
+        {[['TYPE',b.anchors.type,'TYPE'],['FEEL',b.anchors.feel,'FEEL'],['WHO',b.anchors.who,'WHO']].map(([l,v,k],i,arr)=>(
+          <div key={l} style={{display:'flex',gap:12,padding:'12px 14px',borderBottom:i<arr.length-1?`1px solid ${BORDER}`:'none',alignItems:'flex-start'}}>
+            <div style={{flexShrink:0}}>{anchorIcons[k]}</div>
+            <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:10,letterSpacing:2,color:GT,width:30,flexShrink:0,marginTop:-1}}>{l}</div>
+            <div style={{fontSize:12,color:T1,lineHeight:1.5,fontFamily:"'Outfit',sans-serif",flex:1,textAlign:'left'}}>{v}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{background:CARD,border:`1px solid ${BORDER}`,borderRadius:10,overflow:'hidden',marginBottom:20}}>
+        <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:11,letterSpacing:2,textTransform:'uppercase',color:GT,padding:'14px 14px 10px'}}>Key Facts</div>
+        {(b.facts||[]).map((f,i)=>(
+          <div key={i} style={{display:'flex',gap:12,padding:'10px 14px',borderTop:`1px solid ${BORDER}`,alignItems:'flex-start'}}>
+            <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:800,fontSize:16,color:GT,flexShrink:0,width:20,lineHeight:1,paddingTop:3}}>{i+1}</div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:12,fontWeight:600,color:T1,marginBottom:2,textAlign:'left'}}>{f.title}</div>
+              <div style={{fontSize:12,color:T2,lineHeight:1.5,textAlign:'left'}}>{f.desc}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{background:CARD,border:`1px solid ${BORDER}`,borderRadius:10,padding:'14px'}}>
+        <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:11,letterSpacing:2,textTransform:'uppercase',color:GT,marginBottom:12}}>Why Customers Love It</div>
+        {(b.love||[]).map(item=>(
+          <div key={item} style={{display:'flex',alignItems:'flex-start',gap:10,marginBottom:9}}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0,marginTop:2}}><polyline points="20 6 9 17 4 12"/></svg>
+            <span style={{fontSize:13,color:T2,lineHeight:1.4}}>{item}</span>
+          </div>
+        ))}
+      </div>
+    </div>}
+
+    {/* SPECS */}
+    {tab==='specs'&&<div style={{padding:'20px'}}>
+      <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:11,letterSpacing:2,textTransform:'uppercase',color:T1,marginBottom:10}}>Key Stats</div>
+      <div style={{display:'flex',gap:8,marginBottom:24}}>
+        {b.stats.map((s,i)=>(
+          <div key={s.key} style={{flex:1,background:CARD,border:`1px solid ${BORDER}`,borderRadius:10,padding:'12px 8px',display:'flex',flexDirection:'column',alignItems:'center',gap:4}}>
+            {statIcons[i]}
+            <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:800,fontSize:16,color:GT,lineHeight:1,marginTop:2}}>{s.val}</div>
+            <div style={{fontSize:8,color:T3,fontWeight:600,letterSpacing:0.8,textTransform:'uppercase',textAlign:'center'}}>{s.key}</div>
+          </div>
+        ))}
+      </div>
+      {b.specs.map(g=>(
+        <div key={g.group} style={{marginBottom:20}}>
+          <div style={{fontSize:10,letterSpacing:2,textTransform:'uppercase',color:GT,paddingBottom:8,borderBottom:`1px solid ${BORDER}`,fontWeight:700}}>{g.group}</div>
+          {g.rows.map(([k,v])=>(
+            <div key={k} style={{display:'flex',justifyContent:'space-between',alignItems:'baseline',padding:'10px 0',borderBottom:`1px solid ${BORDER}`,gap:16}}>
+              <span style={{fontSize:13,color:T3}}>{k}</span>
+              <span style={{fontSize:13,fontWeight:500,textAlign:'right',color:T1}}>{v}</span>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>}
+
+    {/* SALES */}
+    {tab==='sales'&&<div style={{padding:'20px'}}>
+      <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:11,letterSpacing:2,textTransform:'uppercase',color:T1,marginBottom:12}}>Sales Playbook</div>
+      {salesCards.map(({icon,title,text})=>(
+        <div key={title} style={{background:CARD,border:`1px solid ${BORDER}`,borderRadius:10,padding:'14px',marginBottom:10,display:'flex',gap:12,alignItems:'flex-start'}}>
+          <div style={{flexShrink:0,marginTop:2}}>{icon}</div>
+          <div style={{flex:1}}>
+            <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:11,letterSpacing:2,textTransform:'uppercase',color:T1,marginBottom:6,textAlign:'left'}}>{title}</div>
+            <div style={{fontSize:13,color:T2,lineHeight:1.55,textAlign:'left'}}>{text}</div>
+          </div>
+        </div>
+      ))}
+    </div>}
+
+    {/* QUIZ */}
+    {tab==='quiz'&&<QuizTab bike={b} onLearn={()=>setTab('overview')} onUp={onUp} onNext={onNext}/>}
+
   </div>;
 }
 
 // ── LEARN TAB ───────────────────────────────────────────────────────────────
 function LearnTab({bike:b,onQuiz}){
+  if(b.id==='nb500') return <BikeLearnTabV2 bike={b} onQuiz={onQuiz}/>;
   return <BikeLearnTab bike={b} onQuiz={onQuiz}/>;
 }
 // ── SPECS TAB ───────────────────────────────────────────────────────────────
@@ -440,18 +590,14 @@ function QuizTab({bike:b,onLearn,onUp,onNext}){
 
 // ── BIKE SCREEN ─────────────────────────────────────────────────────────────
 function BikeScreen({bike:b,onBack,onUp,onChange}){
-  const [tab,sT]=useState("learn");
-  const tabs=["learn","specs","quiz","cards"];
-  const labels={learn:"Learn",specs:"Specs",quiz:"Quiz",cards:"Cards"};
   return <div style={{paddingBottom:0}}>
-    <Hdr title={b.name} onBack={onBack}/>
-    <div style={{display:"flex",borderBottom:`1px solid ${C.border}`,background:C.bg}}>
-      {tabs.map(t=><button key={t} style={{flex:1,padding:"13px 8px",fontFamily:"'Rajdhani',sans-serif",fontWeight:600,fontSize:11,letterSpacing:2,textTransform:"uppercase",color:tab===t?C.text:C.t2,border:"none",background:"none",cursor:"pointer",borderBottom:tab===t?`2px solid ${C.accent}`:"2px solid transparent",marginBottom:-1}} onClick={()=>sT(t)}>{labels[t]}</button>)}
+    <div style={{background:C.bg,borderBottom:`1px solid ${C.border}`,padding:'12px 20px',display:'flex',alignItems:'center',position:'sticky',top:0,zIndex:100}}>
+      <button className="tp" style={{background:'none',border:'none',color:C.t3,fontSize:22,cursor:'pointer',padding:'0 8px 0 0',lineHeight:1,flexShrink:0}} onClick={onBack}>←</button>
+      <div style={{position:'absolute',left:0,right:0,display:'flex',justifyContent:'center',pointerEvents:'none'}}>
+        <img src="/images/BENDAlogo.png" alt="Benda" style={{height:42,objectFit:'contain',filter:'brightness(0) invert(1)'}}/>
+      </div>
     </div>
-    {tab==="learn"&&<LearnTab bike={b} onQuiz={()=>sT("quiz")}/>}
-    {tab==="specs"&&<SpecsTab bike={b}/>}
-    {tab==="cards"&&<FlashTab bike={b}/>}
-    {tab==="quiz"&&<QuizTab bike={b} onLearn={()=>sT("learn")} onUp={onUp} onNext={onChange}/>}
+    <BikeLearnTabV2 bike={b} onUp={onUp} onNext={onChange}/>
   </div>;
 }
 
