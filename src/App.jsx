@@ -89,7 +89,7 @@ function TabBar({active,onChange}){
       const isActive=active===t.id;
       return <button key={t.id} className="tp" onClick={()=>onChange(t.id)} style={{flex:1,padding:"10px 0 8px",background:"none",border:"none",color:isActive?C.goldTxt:C.t3,display:"flex",flexDirection:"column",alignItems:"center",gap:4,cursor:"pointer",transition:"color .2s",position:"relative"}}>
         {isActive&&<div style={{position:"absolute",top:0,width:20,height:2,background:C.gold,borderRadius:2}}/>}
-        <t.icon/><span style={{fontSize:9,letterSpacing:1,fontWeight:isActive?700:400,fontFamily:"'Rajdhani',sans-serif",textTransform:"uppercase"}}>{t.label}</span>
+        <t.icon/><span style={{fontSize:9,letterSpacing:1,fontWeight:isActive?700:400,fontFamily:"'Inter',sans-serif",textTransform:"uppercase"}}>{t.label}</span>
       </button>;
     })}
   </div>;
@@ -99,7 +99,7 @@ function TabBar({active,onChange}){
 function Hdr({title,onBack,right}){
   return <div style={{background:C.bg,borderBottom:`1px solid ${C.border}`,padding:"16px 20px",display:"flex",alignItems:"center",gap:12,position:"sticky",top:0,zIndex:100}}>
     {onBack&&<button className="tp" style={{background:"none",border:"none",color:C.t3,fontSize:22,cursor:"pointer",padding:"0 8px 0 0",lineHeight:1}} onClick={onBack}>←</button>}
-    <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:17,letterSpacing:2,textTransform:"uppercase",flex:1}}>{title}</div>
+    <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:17,letterSpacing:0.5,textTransform:"uppercase",flex:1}}>{title}</div>
     {right}
   </div>
 }
@@ -117,29 +117,38 @@ function QE({questions:qs,badge,onFinish}){
   function next(){if(idx+1>=qs.length){onFinish(sc);return}sI(i=>i+1);sC(null)}
 
   const q=qs[idx];const os=sh[idx];const tot=qs.length;const pct=((idx+(ch!==null?1:0))/tot)*100;
-  return <div style={bd}>
-    <div style={{display:"flex",justifyContent:"space-between",fontSize:12,color:C.t2,letterSpacing:1,textTransform:"uppercase",marginBottom:8}}>
-      <span>Question {idx+1} of {tot}</span>
-      <span style={{color:C.accent}}>{sc} correct</span>
+  const correct=ch!==null&&ch===q.a;
+  return <div style={{...bd,display:'flex',flexDirection:'column',minHeight:'calc(100dvh - 115px)'}}>
+    <div style={{flexShrink:0}}>
+      <div style={{display:"flex",justifyContent:"space-between",fontSize:12,color:C.t2,letterSpacing:1,textTransform:"uppercase",marginBottom:8}}>
+        <span>Question {idx+1} of {tot}</span>
+        <span style={{color:C.accent}}>{sc} correct</span>
+      </div>
+      <div style={{height:3,background:C.border,borderRadius:3,marginBottom:20,overflow:"hidden"}}>
+        <div style={{height:"100%",background:C.accent,borderRadius:3,width:pct+"%",transition:"width .5s ease"}}/>
+      </div>
+      {badge&&(()=>{const bt=badge(q);const bc=bt.includes("easy")?"#22c55e":bt.includes("medium")?"#f59e0b":bt.includes("hard")?"#ef4444":C.t2;return <div style={{display:"inline-block",fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:bc,border:`1px solid ${bc}`,padding:"4px 10px",borderRadius:3,marginBottom:12}}>{bt}</div>})()}
+      <A t="as" key={idx}><div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:20,lineHeight:1.3,marginBottom:16,letterSpacing:.5}}>{q.q}</div></A>
     </div>
-    <div style={{height:3,background:C.border,borderRadius:3,marginBottom:28,overflow:"hidden"}}>
-      <div style={{height:"100%",background:C.accent,borderRadius:3,width:pct+"%",transition:"width .5s ease"}}/>
+    <div style={{flex:1,display:'flex',flexDirection:'column',gap:8}} className={an}>
+      {ch===null
+        ? os.map(o=><HoverBtn key={o} onClick={()=>pick(o)} disabled={false} style={{width:"100%",padding:"14px 16px",background:C.s1,border:`1px solid ${C.border}`,borderRadius:6,color:C.text,fontSize:15,textAlign:"left",cursor:"pointer",lineHeight:1.4,transition:"all .15s"}}>{o}</HoverBtn>)
+        : <div style={{display:'flex',flexDirection:'column',flex:1}}>
+            <div style={{display:'flex',flexDirection:'column',gap:6}}>
+              {os.map(o=>{
+                let bg=C.s1,br=C.border,cl=C.t4;
+                if(o===q.a){bg=C.okBg;br=C.okBdr;cl=C.okTxt}
+                else if(o===ch){bg=C.noBg;br=C.noBdr;cl=C.noTxt}
+                return <div key={o} style={{padding:"10px 14px",background:bg,border:`1px solid ${br}`,borderRadius:6,color:cl,fontSize:14,lineHeight:1.4}}>{o}</div>
+              })}
+            </div>
+            <div style={{padding:"10px 14px",borderLeft:`3px solid ${correct?C.ok:C.no}`,fontSize:13,lineHeight:1.55,color:C.t2,marginTop:10}}>{correct?"Correct. ":`The answer was ${q.a}. `}{q.fact}
+              {!correct&&q.tab&&<div style={{marginTop:5,fontSize:12}}><span style={{color:C.accent}}>→ </span>Find this in the <span style={{color:C.accent,fontWeight:600}}>{q.tab} tab</span>{q.section?` under "${q.section}"`:""}</div>}
+            </div>
+            <button className="tp" style={{width:"100%",padding:14,background:C.s2,border:`1px solid ${C.border}`,borderRadius:6,fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:14,letterSpacing:0.5,textTransform:"uppercase",color:C.text,cursor:"pointer",flexShrink:0,marginTop:10}} onClick={next}>{idx+1<tot?"Next Question":"See Results"}</button>
+          </div>
+      }
     </div>
-    {badge&&(()=>{const bt=badge(q);const bc=bt.includes("easy")?"#22c55e":bt.includes("medium")?"#f59e0b":bt.includes("hard")?"#ef4444":C.t2;return <div style={{display:"inline-block",fontSize:10,letterSpacing:2,textTransform:"uppercase",color:bc,border:`1px solid ${bc}`,padding:"4px 10px",borderRadius:3,marginBottom:14}}>{bt}</div>})()}
-    <A t="as" key={idx}><div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:22,lineHeight:1.25,marginBottom:24,letterSpacing:.5}}>{q.q}</div></A>
-    <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:16}} className={an}>
-      {os.map(o=>{
-        let bg=C.s1,br=C.border,cl=C.text;
-        if(ch!==null){if(o===q.a){bg=C.okBg;br=C.okBdr;cl=C.okTxt}else if(o===ch){bg=C.noBg;br=C.noBdr;cl=C.noTxt}else cl=C.t4}
-        return <HoverBtn key={o} onClick={()=>pick(o)} disabled={ch!==null} style={{width:"100%",padding:"15px 16px",background:bg,border:`1px solid ${br}`,borderRadius:6,color:cl,fontSize:15,textAlign:"left",cursor:ch===null?"pointer":"default",lineHeight:1.4,transition:"all .15s"}}>{o}</HoverBtn>
-      })}
-    </div>
-    {ch!==null&&<A><div style={{padding:"12px 14px",borderLeft:`3px solid ${ch===q.a?C.ok:C.no}`,fontSize:13,lineHeight:1.6,color:C.t2,marginBottom:ch===q.a?16:8}}>{ch===q.a?"Correct. ":`The answer was ${q.a}. `}{q.fact}</div>
-    {ch!==q.a&&<div style={{padding:"8px 14px",background:C.s2,borderRadius:4,marginBottom:16,fontSize:12,color:C.t2}}>
-      <span style={{color:C.accent}}>→ </span>Find this in the <span style={{color:C.accent,fontWeight:600}}>{q.tab||"Learn"} tab</span>{q.section?` under "${q.section}"`:""}.
-    </div>}
-    </A>}
-    {ch!==null&&<button className="tp" style={{width:"100%",padding:16,background:C.s2,border:`1px solid ${C.border}`,borderRadius:6,fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:14,letterSpacing:2,textTransform:"uppercase",color:C.text,cursor:"pointer"}} onClick={next}>{idx+1<tot?"Next Question":"See Results"}</button>}
   </div>;
 }
 
@@ -148,11 +157,11 @@ function Res({score,total,actions}){
   const pct=Math.round(score/total*100);const tier=getTier(pct);
   return <div style={bd}>
     <div style={{textAlign:"center"}}>
-      <A><div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:68,lineHeight:1,marginBottom:4}}>{score}<span style={{color:C.accent}}>/{total}</span></div>
+      <A><div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:68,lineHeight:1,marginBottom:4}}>{score}<span style={{color:C.accent}}>/{total}</span></div>
       <div style={{fontSize:11,letterSpacing:3,textTransform:"uppercase",color:C.t2,marginBottom:20}}>{pct}% correct</div></A>
       <A d={200}><div className="at" style={{display:"inline-flex",alignItems:"center",gap:10,padding:"12px 24px",border:`2px solid ${tier.color}`,borderRadius:6,marginBottom:20}}>
         <span style={{fontSize:20,color:tier.color}}>{tier.icon}</span>
-        <span style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:18,letterSpacing:3,textTransform:"uppercase",color:tier.color}}>{tier.label}</span>
+        <span style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:18,letterSpacing:3,textTransform:"uppercase",color:tier.color}}>{tier.label}</span>
       </div></A>
       <A d={350}><div style={{fontSize:14,color:C.t2,lineHeight:1.6,marginBottom:28,paddingBottom:28,borderBottom:`1px solid ${C.border}`}}>{tier.msg}</div></A>
     </div>
@@ -177,7 +186,7 @@ function GlossaryItem({term,def}){
   const [open,sO]=useState(false);
   return <div style={{background:C.s1,border:`1px solid ${C.border}`,borderRadius:open?6:0,marginBottom:open?4:0,overflow:"hidden"}}>
     <div className="tp" onClick={()=>sO(!open)} style={{padding:"12px 16px",display:"flex",justifyContent:"space-between",alignItems:"center",cursor:"pointer"}}>
-      <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:15,letterSpacing:1}}>{term}</div>
+      <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:15,letterSpacing:1}}>{term}</div>
       <div style={{color:C.t4,fontSize:18,transition:"transform .2s",transform:open?"rotate(45deg)":"rotate(0deg)"}}>+</div>
     </div>
     {open&&<div style={{padding:"0 16px 14px",fontSize:13,color:C.t2,lineHeight:1.7,borderTop:`1px solid ${C.border}`}}><div style={{paddingTop:12}}>{def}</div></div>}
@@ -212,9 +221,9 @@ function BikeLearnTab({bike:b,onQuiz}){
       <img src={b.images[0]} alt={b.name} style={{position:"absolute",right:0,top:0,width:"65%",height:"100%",objectFit:"cover",objectPosition:"left center"}}/>
       <div style={{position:"absolute",inset:0,background:"linear-gradient(to right,#0d0d0d 30%,rgba(13,13,13,0.82) 52%,rgba(13,13,13,0.15) 100%)"}}/>
       <div style={{position:"relative",zIndex:2,padding:"28px 20px 24px",maxWidth:"58%"}}>
-        <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:900,fontSize:33,textTransform:"uppercase",lineHeight:.9,letterSpacing:-0.5,marginBottom:10}}>{b.name}</div>
-        <div style={{fontFamily:"'Rajdhani',sans-serif",fontSize:22,fontWeight:700,color:GT,marginBottom:6}}>{b.price}</div>
-        <div style={{fontSize:10,letterSpacing:2,color:"rgba(255,255,255,0.75)",textTransform:"uppercase",fontWeight:600}}>{b.type}</div>
+        <div style={{fontFamily:"'Inter',sans-serif",fontWeight:900,fontSize:33,textTransform:"uppercase",lineHeight:.9,letterSpacing:-0.5,marginBottom:10}}>{b.name}</div>
+        <div style={{fontFamily:"'Inter',sans-serif",fontSize:22,fontWeight:700,color:GT,marginBottom:6}}>{b.price}</div>
+        <div style={{fontSize:10,letterSpacing:0.5,color:"rgba(255,255,255,0.75)",textTransform:"uppercase",fontWeight:600}}>{b.type}</div>
       </div>
     </div>
     {/* CONTENT */}
@@ -236,8 +245,8 @@ function BikeLearnTab({bike:b,onQuiz}){
       <div style={{borderRadius:10,overflow:"hidden",border:`1px solid ${C.border}`,marginBottom:12}}>
         {[["TYPE",b.anchors.type],["FEEL",b.anchors.feel],["WHO",b.anchors.who]].map(([l,v],i,arr)=>(
           <div key={l} style={{display:"flex",gap:14,padding:"12px 14px",background:C.s1,borderBottom:i<arr.length-1?`1px solid ${C.border}`:"none"}}>
-            <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:10,letterSpacing:2,color:"rgba(255,255,255,0.5)",width:30,flexShrink:0,paddingTop:2}}>{l}</div>
-            <div style={{fontSize:13,color:"#fafafa",lineHeight:1.5,fontFamily:"'Outfit',sans-serif"}}>{v}</div>
+            <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:10,letterSpacing:0.5,color:"rgba(255,255,255,0.5)",width:30,flexShrink:0,paddingTop:2}}>{l}</div>
+            <div style={{fontSize:13,color:"#fafafa",lineHeight:1.5,fontFamily:"'Geist',sans-serif"}}>{v}</div>
           </div>
         ))}
       </div>
@@ -247,7 +256,7 @@ function BikeLearnTab({bike:b,onQuiz}){
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={WI} strokeWidth="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
         </div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:12,letterSpacing:2,textTransform:"uppercase",color:"#fff",marginBottom:6}}>QUICK PITCH</div>
+          <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:12,letterSpacing:0.5,textTransform:"uppercase",color:"#fff",marginBottom:6}}>QUICK PITCH</div>
           <div style={{fontSize:13,color:C.t2,lineHeight:1.6}}>{b.sellingPoints[0].text}</div>
         </div>
       </div>
@@ -257,7 +266,7 @@ function BikeLearnTab({bike:b,onQuiz}){
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={WI} strokeWidth="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:12,letterSpacing:2,textTransform:"uppercase",color:"#fff",marginBottom:10}}>WHY CUSTOMERS LOVE IT</div>
+          <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:12,letterSpacing:0.5,textTransform:"uppercase",color:"#fff",marginBottom:10}}>WHY CUSTOMERS LOVE IT</div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px 12px"}}>
             {(b.love||[]).map(item=>(
               <div key={item} style={{display:"flex",alignItems:"flex-start",gap:6,fontSize:12,color:C.t2,lineHeight:1.4}}>
@@ -271,14 +280,14 @@ function BikeLearnTab({bike:b,onQuiz}){
       {/* KEY HIGHLIGHTS */}
       <div style={{marginBottom:20}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-          <div style={{fontSize:11,fontWeight:700,letterSpacing:2,color:GT,textTransform:"uppercase"}}>KEY HIGHLIGHTS</div>
+          <div style={{fontSize:11,fontWeight:700,letterSpacing:0.5,color:GT,textTransform:"uppercase"}}>KEY HIGHLIGHTS</div>
           <div style={{fontSize:12,color:C.t3}}>See all ›</div>
         </div>
         <div style={{display:"flex",gap:8,overflowX:"auto",marginLeft:-14,marginRight:-14,paddingLeft:14,paddingRight:14,paddingBottom:4}}>
           {hl.map(h=>(
             <div key={h.l} style={{flexShrink:0,background:C.s1,border:`1px solid ${C.border}`,borderRadius:10,padding:"14px 10px",textAlign:"center",minWidth:80,display:"flex",flexDirection:"column",alignItems:"center",gap:6}}>
               {h.icon}
-              <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:800,fontSize:h.fs,color:GT,lineHeight:1}}>{h.v}</div>
+              <div style={{fontFamily:"'Inter',sans-serif",fontWeight:800,fontSize:h.fs,color:GT,lineHeight:1}}>{h.v}</div>
               <div style={{fontSize:8,color:C.t4,letterSpacing:.8,textTransform:"uppercase",lineHeight:1.3}}>{h.l}</div>
             </div>
           ))}
@@ -286,12 +295,12 @@ function BikeLearnTab({bike:b,onQuiz}){
       </div>
       {/* SALES PLAYBOOK */}
       <div style={{marginBottom:20}}>
-        <div style={{fontSize:11,fontWeight:700,letterSpacing:2,color:"#fafafa",textTransform:"uppercase",marginBottom:10}}>SALES PLAYBOOK</div>
+        <div style={{fontSize:11,fontWeight:700,letterSpacing:0.5,color:"#fafafa",textTransform:"uppercase",marginBottom:10}}>SALES PLAYBOOK</div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
           {b.sellingPoints.map((sp,i)=>(
             <div key={i} style={{background:C.s1,border:`1px solid ${C.border}`,borderRadius:10,padding:"14px 12px",position:"relative"}}>
               <div style={{marginBottom:8}}>{pbIcons[i]}</div>
-              <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:11,letterSpacing:1.5,textTransform:"uppercase",color:"#fff",marginBottom:6,paddingRight:14,lineHeight:1.2}}>{sp.title}</div>
+              <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:11,letterSpacing:0.3,textTransform:"uppercase",color:"#fff",marginBottom:6,paddingRight:14,lineHeight:1.2}}>{sp.title}</div>
               <div style={{fontSize:11,color:C.t2,lineHeight:1.5}}>{sp.text}</div>
             </div>
           ))}
@@ -309,8 +318,8 @@ function BikeLearnTabV2({bike:b,onUp,onNext}){
   const T1='#f5f5f5',T2='#b8b8b8',T3='#666';
   const sp=b.sellingPoints;
 
-  const TABS=['overview','specs','sales','quiz'];
-  const TLBL={overview:'Overview',specs:'Specs',sales:'Sales',quiz:'Quiz'};
+  const TABS=['overview','specs','sales','glossary','quiz'];
+  const TLBL={overview:'Overview',specs:'Specs',sales:'Sales',glossary:'Glossary',quiz:'Quiz'};
 
   const statIcons=[
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.8"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
@@ -334,20 +343,20 @@ function BikeLearnTabV2({bike:b,onUp,onNext}){
 
   const nameParts=[b.name.split(' ')[0],b.name.split(' ').slice(1).join(' ')];
 
-  return <div style={{background:'#0a0a0a',color:T1,fontFamily:"'Outfit',sans-serif",paddingBottom:40}}>
+  return <div style={{background:'#0a0a0a',color:T1,fontFamily:"'Geist',sans-serif",paddingBottom:40}}>
 
     {/* HERO */}
-    <div style={{position:'relative',overflow:'hidden',padding:'20px 20px 14px',minHeight:170}}>
+    {tab!=='quiz'&&<div style={{position:'relative',overflow:'hidden',padding:'20px 20px 14px',minHeight:170}}>
       <img src={b.img} alt={b.name} style={{position:'absolute',right:'-5px',top:'-10px',height:'115%',width:'58%',objectFit:'contain',opacity:0.92,filter:'brightness(1.1)',WebkitMaskImage:'linear-gradient(to right,transparent 0%,black 20%,black 80%,transparent 100%)',maskImage:'linear-gradient(to right,transparent 0%,black 20%,black 80%,transparent 100%)',pointerEvents:'none'}}/>
       <div style={{position:'relative',zIndex:1,textAlign:'left'}}>
-        <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:900,textTransform:'uppercase',lineHeight:0.88,letterSpacing:-0.5,color:T1}}>
+        <div style={{fontFamily:"'Inter',sans-serif",fontWeight:900,textTransform:'uppercase',lineHeight:0.88,letterSpacing:-0.5,color:T1}}>
           <div style={{fontSize:28}}>{nameParts[0]}</div>
           <div style={{fontSize:42}}>{nameParts[1]}</div>
         </div>
         <div style={{fontSize:10,color:T3,fontWeight:600,letterSpacing:2.5,textTransform:'uppercase',marginTop:8,marginBottom:8}}>{b.type}</div>
-        <div style={{fontFamily:"'Rajdhani',sans-serif",fontSize:26,fontWeight:800,color:GT,lineHeight:1}}>{b.price}</div>
+        <div style={{fontFamily:"'Inter',sans-serif",fontSize:26,fontWeight:800,color:GT,lineHeight:1}}>{b.price}</div>
       </div>
-    </div>
+    </div>}
 
     {/* TAB BAR */}
     <div style={{display:'flex',overflowX:'auto',scrollbarWidth:'none',borderBottom:`1px solid ${BORDER}`,padding:'0 16px',WebkitOverflowScrolling:'touch',position:'sticky',top:54,zIndex:90,background:'#0a0a0a'}}>
@@ -356,7 +365,7 @@ function BikeLearnTabV2({bike:b,onUp,onNext}){
           flexShrink:0,padding:'10px 12px',background:'none',border:'none',
           borderBottom:tab===t?`2px solid ${GOLD}`:'2px solid transparent',
           color:tab===t?GT:T3,
-          fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:11,letterSpacing:1.5,textTransform:'uppercase',cursor:'pointer',marginBottom:-1,whiteSpace:'nowrap'
+          fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:11,letterSpacing:0.3,textTransform:'uppercase',cursor:'pointer',marginBottom:-1,whiteSpace:'nowrap'
         }}>{TLBL[t]}</button>
       ))}
     </div>
@@ -378,19 +387,21 @@ function BikeLearnTabV2({bike:b,onUp,onNext}){
 
       <div style={{background:CARD,border:`1px solid ${BORDER}`,borderRadius:10,overflow:'hidden',marginBottom:20}}>
         {[['TYPE',b.anchors.type,'TYPE'],['FEEL',b.anchors.feel,'FEEL'],['WHO',b.anchors.who,'WHO']].map(([l,v,k],i,arr)=>(
-          <div key={l} style={{display:'flex',gap:12,padding:'12px 14px',borderBottom:i<arr.length-1?`1px solid ${BORDER}`:'none',alignItems:'flex-start'}}>
-            <div style={{flexShrink:0}}>{anchorIcons[k]}</div>
-            <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:10,letterSpacing:2,color:GT,width:30,flexShrink:0,marginTop:-1}}>{l}</div>
-            <div style={{fontSize:12,color:T1,lineHeight:1.5,fontFamily:"'Outfit',sans-serif",flex:1,textAlign:'left'}}>{v}</div>
+          <div key={l} style={{display:'flex',gap:0,padding:'12px 14px',borderBottom:i<arr.length-1?`1px solid ${BORDER}`:'none',alignItems:'flex-start'}}>
+            <div style={{display:'flex',alignItems:'center',gap:8,width:80,flexShrink:0,paddingRight:14,borderRight:`1px solid ${BORDER}`,marginRight:14}}>
+              <div style={{flexShrink:0}}>{anchorIcons[k]}</div>
+              <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:13,letterSpacing:0.5,color:T1}}>{l}</div>
+            </div>
+            <div style={{fontSize:12,color:T2,lineHeight:1.5,fontFamily:"'Geist',sans-serif",flex:1,textAlign:'left'}}>{v}</div>
           </div>
         ))}
       </div>
 
       <div style={{background:CARD,border:`1px solid ${BORDER}`,borderRadius:10,overflow:'hidden',marginBottom:20}}>
-        <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:11,letterSpacing:2,textTransform:'uppercase',color:GT,padding:'14px 14px 10px'}}>Key Facts</div>
+        <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:14,letterSpacing:0.5,textTransform:'uppercase',color:T1,padding:'14px 14px 10px',textAlign:'left'}}>Key Facts</div>
         {(b.facts||[]).map((f,i)=>(
           <div key={i} style={{display:'flex',gap:12,padding:'10px 14px',borderTop:`1px solid ${BORDER}`,alignItems:'flex-start'}}>
-            <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:800,fontSize:16,color:GT,flexShrink:0,width:20,lineHeight:1,paddingTop:3}}>{i+1}</div>
+            <div style={{fontFamily:"'Inter',sans-serif",fontWeight:800,fontSize:16,color:GT,flexShrink:0,width:20,lineHeight:1,paddingTop:3}}>{i+1}</div>
             <div style={{flex:1}}>
               <div style={{fontSize:12,fontWeight:600,color:T1,marginBottom:2,textAlign:'left'}}>{f.title}</div>
               <div style={{fontSize:12,color:T2,lineHeight:1.5,textAlign:'left'}}>{f.desc}</div>
@@ -400,7 +411,7 @@ function BikeLearnTabV2({bike:b,onUp,onNext}){
       </div>
 
       <div style={{background:CARD,border:`1px solid ${BORDER}`,borderRadius:10,padding:'14px'}}>
-        <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:11,letterSpacing:2,textTransform:'uppercase',color:GT,marginBottom:12}}>Why Customers Love It</div>
+        <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:14,letterSpacing:0.5,textTransform:'uppercase',color:T1,marginBottom:12,textAlign:'left'}}>Why Customers Love It</div>
         {(b.love||[]).map(item=>(
           <div key={item} style={{display:'flex',alignItems:'flex-start',gap:10,marginBottom:9}}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0,marginTop:2}}><polyline points="20 6 9 17 4 12"/></svg>
@@ -412,23 +423,23 @@ function BikeLearnTabV2({bike:b,onUp,onNext}){
 
     {/* SPECS */}
     {tab==='specs'&&<div style={{padding:'20px'}}>
-      <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:11,letterSpacing:2,textTransform:'uppercase',color:T1,marginBottom:10}}>Key Stats</div>
+      <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:14,letterSpacing:0.5,textTransform:'uppercase',color:T1,marginBottom:10}}>Key Stats</div>
       <div style={{display:'flex',gap:8,marginBottom:24}}>
         {b.stats.map((s,i)=>(
           <div key={s.key} style={{flex:1,background:CARD,border:`1px solid ${BORDER}`,borderRadius:10,padding:'12px 8px',display:'flex',flexDirection:'column',alignItems:'center',gap:4}}>
             {statIcons[i]}
-            <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:800,fontSize:16,color:GT,lineHeight:1,marginTop:2}}>{s.val}</div>
-            <div style={{fontSize:8,color:T3,fontWeight:600,letterSpacing:0.8,textTransform:'uppercase',textAlign:'center'}}>{s.key}</div>
+            <div style={{fontFamily:"'Inter',sans-serif",fontWeight:800,fontSize:16,color:GT,lineHeight:1,marginTop:2}}>{s.val}</div>
+            <div style={{fontSize:10,color:T3,fontWeight:600,letterSpacing:0.8,textTransform:'uppercase',textAlign:'center'}}>{s.key}</div>
           </div>
         ))}
       </div>
       {b.specs.map(g=>(
         <div key={g.group} style={{marginBottom:20}}>
-          <div style={{fontSize:10,letterSpacing:2,textTransform:'uppercase',color:GT,paddingBottom:8,borderBottom:`1px solid ${BORDER}`,fontWeight:700}}>{g.group}</div>
+          <div style={{fontSize:10,letterSpacing:0.5,textTransform:'uppercase',color:T3,paddingBottom:8,borderBottom:`1px solid ${BORDER}`,fontWeight:700}}>{g.group}</div>
           {g.rows.map(([k,v])=>(
             <div key={k} style={{display:'flex',justifyContent:'space-between',alignItems:'baseline',padding:'10px 0',borderBottom:`1px solid ${BORDER}`,gap:16}}>
               <span style={{fontSize:13,color:T3}}>{k}</span>
-              <span style={{fontSize:13,fontWeight:500,textAlign:'right',color:T1}}>{v}</span>
+              <span style={{fontSize:13,fontWeight:600,textAlign:'right',color:T1}}>{v}</span>
             </div>
           ))}
         </div>
@@ -437,13 +448,31 @@ function BikeLearnTabV2({bike:b,onUp,onNext}){
 
     {/* SALES */}
     {tab==='sales'&&<div style={{padding:'20px'}}>
-      <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:11,letterSpacing:2,textTransform:'uppercase',color:T1,marginBottom:12}}>Sales Playbook</div>
+      <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:11,letterSpacing:0.5,textTransform:'uppercase',color:T1,marginBottom:12}}>Sales Playbook</div>
       {salesCards.map(({icon,title,text})=>(
         <div key={title} style={{background:CARD,border:`1px solid ${BORDER}`,borderRadius:10,padding:'14px',marginBottom:10,display:'flex',gap:12,alignItems:'flex-start'}}>
           <div style={{flexShrink:0,marginTop:2}}>{icon}</div>
           <div style={{flex:1}}>
-            <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:11,letterSpacing:2,textTransform:'uppercase',color:T1,marginBottom:6,textAlign:'left'}}>{title}</div>
+            <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:11,letterSpacing:0.5,textTransform:'uppercase',color:T1,marginBottom:6,textAlign:'left'}}>{title}</div>
             <div style={{fontSize:13,color:T2,lineHeight:1.55,textAlign:'left'}}>{text}</div>
+          </div>
+        </div>
+      ))}
+    </div>}
+
+    {/* GLOSSARY */}
+    {tab==='glossary'&&<div style={{padding:'20px'}}>
+      <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:14,letterSpacing:0.5,textTransform:'uppercase',color:T1,marginBottom:16}}>Glossary</div>
+      {GLOSSARY.map((cat,ci)=>(
+        <div key={cat.category} style={{marginBottom:20}}>
+          <div style={{fontSize:10,letterSpacing:0.5,textTransform:'uppercase',color:T3,paddingBottom:8,borderBottom:`1px solid ${BORDER}`,fontWeight:700,marginBottom:0}}>{cat.category}</div>
+          <div style={{display:'flex',flexDirection:'column',gap:1}}>
+            {cat.terms.map(t=>(
+              <div key={t.term} style={{borderBottom:`1px solid ${BORDER}`,padding:'10px 0',display:'flex',gap:12,alignItems:'flex-start'}}>
+                <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:12,color:T1,minWidth:110,flexShrink:0}}>{t.term}</div>
+                <div style={{fontSize:12,color:T2,lineHeight:1.5}}>{t.def}</div>
+              </div>
+            ))}
           </div>
         </div>
       ))}
@@ -525,9 +554,9 @@ function FlashTab({bike:b}){
       <div style={{position:"absolute",top:3,left:4,right:4,height:"100%",background:C.s2,borderRadius:8,border:`1px solid ${C.border}`,opacity:.5}}/>
       <div className="tp" onClick={()=>sF(!flipped)} style={{position:"relative",background:flipped?C.s2:C.s1,border:`1px solid ${cardBorder}`,borderRadius:8,overflow:"hidden",padding:"48px 28px 28px",minHeight:200,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",textAlign:"center",transition:"all .2s ease",boxShadow:flash==="ok"?`0 0 0 3px #22c55e,0 0 20px #22c55e66`:flash==="no"?`0 0 0 3px #ef4444,0 0 20px #ef444466`:flipped?`0 0 20px ${bikeCol}33`:"none"}}>
         <div style={{position:"absolute",top:0,left:0,right:0,height:4,background:flash==="ok"?"#22c55e":flash==="no"?"#ef4444":bikeCol}}/>
-        <div style={{position:"absolute",top:12,left:0,right:0,textAlign:"center",fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:11,letterSpacing:2,textTransform:"uppercase",color:flash==="ok"?"#22c55e":flash==="no"?"#ef4444":bikeCol,opacity:.8}}>{b.name}</div>
+        <div style={{position:"absolute",top:12,left:0,right:0,textAlign:"center",fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:11,letterSpacing:0.5,textTransform:"uppercase",color:flash==="ok"?"#22c55e":flash==="no"?"#ef4444":bikeCol,opacity:.8}}>{b.name}</div>
         <div style={{fontSize:10,letterSpacing:3,textTransform:"uppercase",color:flash==="ok"?"#22c55e":flash==="no"?"#ef4444":flipped?bikeCol:C.t4,marginBottom:20,fontWeight:600}}>{flipped?"Answer":"Question"}</div>
-        <div key={`${ri}-${flipped}`} className="af" style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:flipped?24:20,letterSpacing:.5,lineHeight:1.3,color:flipped?C.text:"#ccc"}}>
+        <div key={`${ri}-${flipped}`} className="af" style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:flipped?24:20,letterSpacing:.5,lineHeight:1.3,color:flipped?C.text:"#ccc"}}>
           {flipped?card.back:card.front}
         </div>
         {!flipped&&<div style={{fontSize:12,color:C.t4,marginTop:20}}>Tap to reveal</div>}
@@ -535,8 +564,8 @@ function FlashTab({bike:b}){
     </div>
     {flipped?(
       <A><div style={{display:"flex",gap:10}}>
-        <button className="tp" onClick={markStudy} style={{flex:1,padding:16,background:C.noBg,border:`1px solid ${C.noBdr}`,borderRadius:6,fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:13,letterSpacing:1,textTransform:"uppercase",color:C.noTxt,cursor:"pointer"}}>Not Quite</button>
-        <button className="tp" onClick={markOk} style={{flex:1,padding:16,background:C.okBg,border:`1px solid ${C.okBdr}`,borderRadius:6,fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:13,letterSpacing:1,textTransform:"uppercase",color:C.okTxt,cursor:"pointer"}}>Got It</button>
+        <button className="tp" onClick={markStudy} style={{flex:1,padding:16,background:C.noBg,border:`1px solid ${C.noBdr}`,borderRadius:6,fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:13,letterSpacing:1,textTransform:"uppercase",color:C.noTxt,cursor:"pointer"}}>Not Quite</button>
+        <button className="tp" onClick={markOk} style={{flex:1,padding:16,background:C.okBg,border:`1px solid ${C.okBdr}`,borderRadius:6,fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:13,letterSpacing:1,textTransform:"uppercase",color:C.okTxt,cursor:"pointer"}}>Got It</button>
       </div></A>
     ):(
       <div style={{display:"flex",gap:8}}>
@@ -545,7 +574,7 @@ function FlashTab({bike:b}){
       </div>
     )}
     {allDone&&<A d={200}><div style={{textAlign:"center",marginTop:20,padding:16,background:C.okBg,border:`1px solid ${C.okBdr}`,borderRadius:6}}>
-      <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:16,color:C.okTxt,textTransform:"uppercase",letterSpacing:1}}>All cards done!</div>
+      <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:16,color:C.okTxt,textTransform:"uppercase",letterSpacing:1}}>All cards done!</div>
     </div></A>}
   </div>;
 }
@@ -568,14 +597,14 @@ function QuizTab({bike:b,onLearn,onUp,onNext}){
   if(phase==="start")return <div style={bd}>
     <A><div style={sec}>{b.name} Quiz</div><div style={{fontSize:13,color:C.t2,lineHeight:1.6,marginBottom:24}}>Test your knowledge. All answers are in the Learn tab.</div></A>
     <A d={100}><div style={{display:"flex",gap:8,marginBottom:24}}>
-      {[["easy","Easy","Key facts","#22c55e"],["medium","Medium","Specs & details","#f59e0b"],["hard","Hard","Deep numbers","#ef4444"]].map(([d,l,desc,col])=>(
+      {[["easy","Easy","Key facts","#22c55e"],["medium","Medium","Specs & details","#f59e0b"],["hard","Hard","Sales scenarios","#ef4444"]].map(([d,l,desc,col])=>(
         <div key={d} className="tp" style={{flex:1,padding:"13px 8px",border:`1px solid ${diff===d?col:C.border}`,background:diff===d?`${col}18`:C.s1,borderRadius:6,textAlign:"center",transition:"all .2s"}} onClick={()=>sD(d)}>
-          <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:14,letterSpacing:1,textTransform:"uppercase",marginBottom:3,color:col}}>{l}</div>
+          <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:14,letterSpacing:1,textTransform:"uppercase",marginBottom:3,color:col}}>{l}</div>
           <div style={{fontSize:11,color:C.t2}}>{desc}</div>
         </div>
       ))}
     </div></A>
-    <A d={200}><button className="tp" style={btnA} onClick={start}>Start Quiz</button></A>
+    <A d={200}><button className="tp" style={{...btnA,background:C.gold,color:'#1a1000'}} onClick={start}>Start Quiz</button></A>
   </div>;
 
   if(phase==="results")return <Res score={sc} total={qs.length} actions={<>
@@ -647,9 +676,9 @@ function ScScreen({onBack,onFin}){
       <div style={{height:3,background:C.border,borderRadius:3,marginBottom:28,overflow:"hidden"}}>
         <div style={{height:"100%",background:C.accent,borderRadius:3,width:pct+"%",transition:"width .5s ease"}}/>
       </div>
-      <div style={{display:"inline-block",fontSize:10,letterSpacing:2,textTransform:"uppercase",color:C.t3,border:`1px solid ${C.border}`,padding:"4px 10px",borderRadius:3,marginBottom:14}}>{s.difficulty}</div>
+      <div style={{display:"inline-block",fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:C.t3,border:`1px solid ${C.border}`,padding:"4px 10px",borderRadius:3,marginBottom:14}}>{s.difficulty}</div>
       <A t="as" key={idx}><div style={{...crd,padding:"18px 20px",marginBottom:24}}>
-        <div style={{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:C.accent,fontWeight:600,marginBottom:10}}>Customer Walks In</div>
+        <div style={{fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:C.accent,fontWeight:600,marginBottom:10}}>Customer Walks In</div>
         <div style={{fontSize:15,lineHeight:1.6,color:"#ddd"}}>{s.situation}</div>
       </div></A>
       <div style={{fontSize:12,color:C.t2,letterSpacing:1,textTransform:"uppercase",marginBottom:12}}>Which bike?</div>
@@ -668,10 +697,10 @@ function ScScreen({onBack,onFin}){
           {ch===s.answer?`Correct - ${cb.name}. `:`The answer was ${cb.name}. `}{s.reasoning}
         </div>
         <div style={{...crd,padding:"14px 16px",marginBottom:16}}>
-          <div style={{fontSize:10,letterSpacing:2,textTransform:"uppercase",color:C.accent,fontWeight:600,marginBottom:10}}>{cb.name}</div>
+          <div style={{fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:C.accent,fontWeight:600,marginBottom:10}}>{cb.name}</div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:1,background:C.border,borderRadius:4,overflow:"hidden"}}>
             {cb.stats.map(st=><div key={st.key} style={{background:C.bg,padding:"10px 12px",textAlign:"center"}}>
-              <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:18,lineHeight:1,marginBottom:2}}>{st.val}</div>
+              <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:18,lineHeight:1,marginBottom:2}}>{st.val}</div>
               <div style={{fontSize:10,color:C.t4,letterSpacing:1,textTransform:"uppercase"}}>{st.key}</div>
             </div>)}
           </div>
@@ -681,7 +710,7 @@ function ScScreen({onBack,onFin}){
           </div>
         </div>
       </A>}
-      {ch!==null&&<button className="tp" style={{width:"100%",padding:16,background:C.s2,border:`1px solid ${C.border}`,borderRadius:6,fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:14,letterSpacing:2,textTransform:"uppercase",color:C.text,cursor:"pointer"}} onClick={next}>{idx+1<tot?"Next Scenario":"See Results"}</button>}
+      {ch!==null&&<button className="tp" style={{width:"100%",padding:16,background:C.s2,border:`1px solid ${C.border}`,borderRadius:6,fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:14,letterSpacing:0.5,textTransform:"uppercase",color:C.text,cursor:"pointer"}} onClick={next}>{idx+1<tot?"Next Scenario":"See Results"}</button>}
     </div>
   </div>;
 }
@@ -692,7 +721,7 @@ function GlossaryTab(){
   const [open,sO]=useState(null);
   return <div style={{paddingBottom:80}}>
     <div style={{padding:"40px 20px 24px",borderBottom:`1px solid ${C.border}`}}>
-      <A><div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:32,letterSpacing:1,lineHeight:1.1,marginBottom:8}}>GLOSSARY</div></A>
+      <A><div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:32,letterSpacing:1,lineHeight:1.1,marginBottom:8}}>GLOSSARY</div></A>
       <A d={60}><div style={{fontSize:13,color:C.t3,lineHeight:1.6}}>Common motorcycle terms explained plainly.</div></A>
     </div>
     <div style={{padding:"24px 20px 40px"}}>
@@ -705,7 +734,7 @@ function GlossaryTab(){
               const isOpen=open===key;
               return <div key={t.term} style={{background:C.s1,border:`1px solid ${C.border}`,borderRadius:isOpen?6:0,marginBottom:isOpen?4:0,overflow:"hidden",transition:"all .2s"}}>
                 <div className="tp" onClick={()=>sO(isOpen?null:key)} style={{padding:"14px 18px",display:"flex",justifyContent:"space-between",alignItems:"center",cursor:"pointer"}}>
-                  <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:16,letterSpacing:1}}>{t.term}</div>
+                  <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:16,letterSpacing:1}}>{t.term}</div>
                   <div style={{color:C.t4,fontSize:18,transition:"transform .2s",transform:isOpen?"rotate(45deg)":"rotate(0deg)"}}>+</div>
                 </div>
                 {isOpen&&<A><div style={{padding:"0 18px 16px",fontSize:14,color:C.t2,lineHeight:1.7,borderTop:`1px solid ${C.border}`}}><div style={{paddingTop:14}}>{t.def}</div></div></A>}
@@ -734,7 +763,7 @@ function App(){
   function gqFin(sc,tot){up(pr=>{pr.generalQuiz={best:Math.max(pr.generalQuiz.best,sc),total:tot,attempts:pr.generalQuiz.attempts+1};return pr})}
   function scFin(sc,tot){up(pr=>{pr.scenarios={completed:pr.scenarios.completed+tot,correct:pr.scenarios.correct+sc,attempts:pr.scenarios.attempts+1};return pr})}
 
-  return <div style={{background:C.bg,minHeight:"100vh",color:C.text,fontFamily:"'Outfit',sans-serif",fontSize:15}}>
+  return <div style={{background:C.bg,minHeight:"100vh",color:C.text,fontFamily:"'Geist',sans-serif",fontSize:15}}>
     <style>{CSS}</style>
 {screen==="main"&&<>
       {tab==="home"&&<HomeTab progress={p} onBike={openBike} onNav={navTo}/>}
