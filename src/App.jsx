@@ -96,11 +96,13 @@ function TabBar({active,onChange}){
 }
 
 // ── HEADER ───────────────────────────────────────────────────────────────────
-function Hdr({title,onBack,right}){
-  return <div style={{background:C.bg,borderBottom:`1px solid ${C.border}`,padding:"16px 20px",display:"flex",alignItems:"center",gap:12,position:"sticky",top:0,zIndex:100}}>
-    {onBack&&<button className="tp" style={{background:"none",border:"none",color:C.t3,fontSize:22,cursor:"pointer",padding:"0 8px 0 0",lineHeight:1}} onClick={onBack}>←</button>}
-    <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:17,letterSpacing:0.5,textTransform:"uppercase",flex:1}}>{title}</div>
-    {right}
+function Hdr({onBack,right}){
+  return <div style={{background:"#000",borderBottom:"1px solid #2a2a2a",padding:"12px 20px",display:"flex",alignItems:"center",position:"sticky",top:0,zIndex:100,flexShrink:0}}>
+    {onBack&&<button className="tp" style={{background:"none",border:"none",color:"#666",fontSize:22,cursor:"pointer",padding:"0 8px 0 0",lineHeight:1,flexShrink:0}} onClick={onBack}>←</button>}
+    <div style={{position:"absolute",left:0,right:0,display:"flex",justifyContent:"center",pointerEvents:"none"}}>
+      <img src="/images/BENDAlogo.png" alt="Benda" style={{height:40,objectFit:"contain",filter:"brightness(0) invert(1)"}}/>
+    </div>
+    {right&&<div style={{marginLeft:"auto"}}>{right}</div>}
   </div>
 }
 
@@ -182,14 +184,14 @@ function HoverBtn({onClick,disabled,style,children}){
   >{children}</button>
 }
 
-function GlossaryItem({term,def}){
+function GlossaryItem({term,def,isLast}){
   const [open,sO]=useState(false);
-  return <div style={{background:C.s1,border:`1px solid ${C.border}`,borderRadius:open?6:0,marginBottom:open?4:0,overflow:"hidden"}}>
-    <div className="tp" onClick={()=>sO(!open)} style={{padding:"12px 16px",display:"flex",justifyContent:"space-between",alignItems:"center",cursor:"pointer"}}>
-      <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:15,letterSpacing:1}}>{term}</div>
-      <div style={{color:C.t4,fontSize:18,transition:"transform .2s",transform:open?"rotate(45deg)":"rotate(0deg)"}}>+</div>
+  return <div style={{background:"#141414",borderBottom:isLast?"none":"1px solid #2a2a2a",overflow:"hidden"}}>
+    <div className="tp" onClick={()=>sO(!open)} style={{padding:"14px 16px",display:"flex",justifyContent:"space-between",alignItems:"center",cursor:"pointer"}}>
+      <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:14,color:"#fafafa"}}>{term}</div>
+      <div style={{color:"#666",fontSize:18,transition:"transform .2s",transform:open?"rotate(45deg)":"rotate(0deg)",flexShrink:0,marginLeft:12}}>+</div>
     </div>
-    {open&&<div style={{padding:"0 16px 14px",fontSize:13,color:C.t2,lineHeight:1.7,borderTop:`1px solid ${C.border}`}}><div style={{paddingTop:12}}>{def}</div></div>}
+    {open&&<div style={{padding:"0 16px 14px",fontSize:13,color:"#b8b8b8",lineHeight:1.7,borderTop:"1px solid #2a2a2a"}}><div style={{paddingTop:12}}>{def}</div></div>}
   </div>
 }
 
@@ -667,50 +669,50 @@ function ScScreen({onBack,onFin}){
   const s=scs[idx];const tot=scs.length;const pct=((idx+(ch!==null?1:0))/tot)*100;
   const cb=BIKES.find(b=>b.id===s.answer);
 
-  return <div>
-    <Hdr title="Customer Scenarios" onBack={onBack}/>
+  return <div style={{background:"#000",minHeight:"100vh",color:"#fafafa",fontFamily:"'Geist',sans-serif"}}>
+    <Hdr onBack={onBack}/>
     <div style={bd}>
-      <div style={{display:"flex",justifyContent:"space-between",fontSize:12,color:C.t2,letterSpacing:1,textTransform:"uppercase",marginBottom:8}}>
-        <span>Scenario {idx+1} of {tot}</span><span style={{color:C.accent}}>{sc} correct</span>
+      <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:"#666",letterSpacing:0.5,textTransform:"uppercase",marginBottom:8,fontFamily:"'Inter',sans-serif",fontWeight:700}}>
+        <span>Scenario {idx+1} of {tot}</span><span style={{color:C.goldTxt}}>{sc} correct</span>
       </div>
-      <div style={{height:3,background:C.border,borderRadius:3,marginBottom:28,overflow:"hidden"}}>
-        <div style={{height:"100%",background:C.accent,borderRadius:3,width:pct+"%",transition:"width .5s ease"}}/>
+      <div style={{height:3,background:"#2a2a2a",borderRadius:3,marginBottom:24,overflow:"hidden"}}>
+        <div style={{height:"100%",background:C.gold,borderRadius:3,width:pct+"%",transition:"width .5s ease"}}/>
       </div>
-      <div style={{display:"inline-block",fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:C.t3,border:`1px solid ${C.border}`,padding:"4px 10px",borderRadius:3,marginBottom:14}}>{s.difficulty}</div>
-      <A t="as" key={idx}><div style={{...crd,padding:"18px 20px",marginBottom:24}}>
-        <div style={{fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:C.accent,fontWeight:600,marginBottom:10}}>Customer Walks In</div>
-        <div style={{fontSize:15,lineHeight:1.6,color:"#ddd"}}>{s.situation}</div>
+      <div style={{display:"inline-block",fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:"#666",border:"1px solid #2a2a2a",padding:"4px 10px",borderRadius:6,marginBottom:14,fontFamily:"'Inter',sans-serif",fontWeight:700}}>{s.difficulty}</div>
+      <A t="as" key={idx}><div style={{background:"#141414",border:"1px solid #2a2a2a",borderRadius:14,padding:"16px 18px",marginBottom:20}}>
+        <div style={{fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:C.goldTxt,fontWeight:700,fontFamily:"'Inter',sans-serif",marginBottom:10}}>Customer Walks In</div>
+        <div style={{fontSize:14,lineHeight:1.6,color:"#e0e0e0"}}>{s.situation}</div>
       </div></A>
-      <div style={{fontSize:12,color:C.t2,letterSpacing:1,textTransform:"uppercase",marginBottom:12}}>Which bike?</div>
+      <div style={{fontSize:10,color:"#666",letterSpacing:0.5,textTransform:"uppercase",marginBottom:10,fontFamily:"'Inter',sans-serif",fontWeight:700}}>Which bike?</div>
       <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:16}} className={an}>
         {s.opts.map(id=>{
           const bk=BIKES.find(b=>b.id===id);
-          let bg=C.s1,br=C.border,cl=C.text;
-          if(ch!==null){if(id===s.answer){bg=C.okBg;br=C.okBdr;cl=C.okTxt}else if(id===ch){bg=C.noBg;br=C.noBdr;cl=C.noTxt}else cl=C.t4}
-          return <HoverBtn key={id} onClick={()=>pick(id)} disabled={ch!==null} style={{width:"100%",padding:"15px 16px",background:bg,border:`1px solid ${br}`,borderRadius:6,color:cl,fontSize:15,textAlign:"left",cursor:ch===null?"pointer":"default",lineHeight:1.4}}>
-            <span style={{fontWeight:600}}>{bk.name}</span><span style={{color:C.t2,marginLeft:8,fontSize:13}}>{bk.type}</span>
+          let bg="#141414",br="#2a2a2a",cl="#fafafa";
+          if(ch!==null){if(id===s.answer){bg=C.okBg;br=C.okBdr;cl=C.okTxt}else if(id===ch){bg=C.noBg;br=C.noBdr;cl=C.noTxt}else cl="#444"}
+          return <HoverBtn key={id} onClick={()=>pick(id)} disabled={ch!==null} style={{width:"100%",padding:"14px 16px",background:bg,border:`1px solid ${br}`,borderRadius:12,color:cl,fontSize:14,textAlign:"left",cursor:ch===null?"pointer":"default",lineHeight:1.4}}>
+            <span style={{fontWeight:700,fontFamily:"'Inter',sans-serif"}}>{bk.name}</span><span style={{color:"#666",marginLeft:8,fontSize:12}}>{bk.type}</span>
           </HoverBtn>
         })}
       </div>
       {ch!==null&&<A>
-        <div style={{padding:"12px 14px",borderLeft:`3px solid ${ch===s.answer?C.ok:C.no}`,fontSize:13,lineHeight:1.6,color:C.t2,marginBottom:16}}>
-          {ch===s.answer?`Correct - ${cb.name}. `:`The answer was ${cb.name}. `}{s.reasoning}
+        <div style={{padding:"12px 16px",borderLeft:`3px solid ${ch===s.answer?C.ok:C.no}`,fontSize:13,lineHeight:1.6,color:"#b8b8b8",marginBottom:16,background:"#0d0d0d",borderRadius:"0 8px 8px 0"}}>
+          {ch===s.answer?`Correct — ${cb.name}. `:`The answer was ${cb.name}. `}{s.reasoning}
         </div>
-        <div style={{...crd,padding:"14px 16px",marginBottom:16}}>
-          <div style={{fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:C.accent,fontWeight:600,marginBottom:10}}>{cb.name}</div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:1,background:C.border,borderRadius:4,overflow:"hidden"}}>
-            {cb.stats.map(st=><div key={st.key} style={{background:C.bg,padding:"10px 12px",textAlign:"center"}}>
-              <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:18,lineHeight:1,marginBottom:2}}>{st.val}</div>
-              <div style={{fontSize:10,color:C.t4,letterSpacing:1,textTransform:"uppercase"}}>{st.key}</div>
+        <div style={{background:"#141414",border:"1px solid #2a2a2a",borderRadius:14,padding:"14px 16px",marginBottom:16}}>
+          <div style={{fontFamily:"'Inter',sans-serif",fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:C.goldTxt,fontWeight:700,marginBottom:10}}>{cb.name}</div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:1,background:"#2a2a2a",borderRadius:8,overflow:"hidden",marginBottom:10}}>
+            {cb.stats.map(st=><div key={st.key} style={{background:"#0d0d0d",padding:"10px 12px",textAlign:"center"}}>
+              <div style={{fontFamily:"'Inter',sans-serif",fontWeight:800,fontSize:17,color:"#fafafa",lineHeight:1,marginBottom:2}}>{st.val}</div>
+              <div style={{fontSize:9,color:"#666",letterSpacing:0.5,textTransform:"uppercase",fontWeight:700}}>{st.key}</div>
             </div>)}
           </div>
-          <div style={{display:"flex",justifyContent:"space-between",marginTop:10,fontSize:12}}>
-            <span style={{color:C.t3}}>{cb.type}</span>
-            <span style={{color:"#4ade80",fontWeight:600}}>{cb.price}</span>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:12}}>
+            <span style={{color:"#666"}}>{cb.type}</span>
+            <span style={{fontFamily:"'Inter',sans-serif",fontWeight:700,color:C.goldTxt}}>{cb.price}</span>
           </div>
         </div>
       </A>}
-      {ch!==null&&<button className="tp" style={{width:"100%",padding:16,background:C.s2,border:`1px solid ${C.border}`,borderRadius:6,fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:14,letterSpacing:0.5,textTransform:"uppercase",color:C.text,cursor:"pointer"}} onClick={next}>{idx+1<tot?"Next Scenario":"See Results"}</button>}
+      {ch!==null&&<button className="tp" style={{width:"100%",padding:14,background:"#141414",border:"1px solid #2a2a2a",borderRadius:12,fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:13,letterSpacing:0.5,textTransform:"uppercase",color:"#fafafa",cursor:"pointer"}} onClick={next}>{idx+1<tot?"Next Scenario ›":"See Results"}</button>}
     </div>
   </div>;
 }
@@ -776,17 +778,22 @@ function App(){
     {screen==="bike"&&bike&&<BikeScreen bike={bike} onBack={()=>sS("main")} onUp={bqFin} onChange={b=>{sB(b)}}/>}
     {screen==="gquiz"&&<GQScreen onBack={()=>sS("main")} onFin={gqFin}/>}
     {screen==="scenarios"&&<ScScreen onBack={()=>sS("main")} onFin={scFin}/>}
-    {screen==="glossary"&&<div>
-      <Hdr title="Glossary" onBack={()=>sS("main")}/>
-      <div style={{padding:"24px 20px 80px"}}>
-        {GLOSSARY.map((cat,ci)=>(
-          <A key={cat.category} d={ci*60}>
-            <div style={{...sec,marginBottom:12,marginTop:ci>0?28:0}}>{cat.category}</div>
-            <div style={{display:"flex",flexDirection:"column",gap:1}}>
-              {cat.terms.map(t=><GlossaryItem key={t.term} term={t.term} def={t.def}/>)}
-            </div>
-          </A>
-        ))}
+    {screen==="glossary"&&<div style={{position:"fixed",inset:0,overflow:"hidden",background:"#000",color:"#fafafa",fontFamily:"'Geist',sans-serif"}}>
+      <Hdr onBack={()=>sS("main")}/>
+      <div style={{overflowY:"auto",height:"calc(100% - 65px)",WebkitOverflowScrolling:"touch",paddingBottom:80}}>
+        <div style={{padding:"20px 16px 0"}}>
+          {GLOSSARY.map((cat,ci)=>(
+            <A key={cat.category} d={ci*60}>
+              <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:"#E8B956",marginBottom:8,marginTop:ci>0?24:0}}>{cat.category}</div>
+              <div style={{borderRadius:14,overflow:"hidden",border:"1px solid #2a2a2a",marginBottom:4}}>
+                {cat.terms.map((t,ti,arr)=>{
+                  const isLast=ti===arr.length-1;
+                  return <GlossaryItem key={t.term} term={t.term} def={t.def} isLast={isLast}/>;
+                })}
+              </div>
+            </A>
+          ))}
+        </div>
       </div>
     </div>}
   </div>;
