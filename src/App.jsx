@@ -82,8 +82,8 @@ function TabBar({active,onChange}){
   const tabs=[
     {id:"home",label:"Home",icon:Icons.home},
     {id:"range",label:"Range",icon:Icons.range},
-    {id:"train",label:"Train",icon:Icons.train},
-    {id:"bot",label:"AI Coach",icon:Icons.bot},
+    {id:"bot",label:"Training",icon:Icons.bot},
+    {id:"compare",label:"Compare",icon:Icons.compare},
     {id:"progress",label:"Progress",icon:Icons.progress},
   ];
   return <div style={{position:"fixed",bottom:0,left:0,right:0,background:"rgba(0,0,0,0.95)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",borderTop:`1px solid #1a1a1a`,display:"flex",zIndex:200,paddingBottom:"env(safe-area-inset-bottom)"}}>
@@ -791,9 +791,8 @@ function App(){
 {screen==="main"&&<>
       {tab==="home"&&<HomeTab progress={p} onBike={openBike} onNav={navTo}/>}
       {tab==="range"&&<RangeTab onBike={openBike} progress={p}/>}
-      {tab==="train"&&<TrainTab onQuiz={()=>sS("gquiz")} onScenarios={()=>sS("scenarios")} onGlossary={()=>sS("glossary")} progress={p} onBike={openBike} onBot={()=>sT("bot")}/>}
+      {tab==="bot"&&<BotTab onQuiz={()=>sS("gquiz")} onScenarios={()=>sS("scenarios")} onGlossary={()=>sS("glossary")}/>}
       {tab==="compare"&&<CompareTab/>}
-      {tab==="bot"&&<BotTab/>}
       {tab==="progress"&&<ProgressTab progress={p} onReset={rst}/>}
       <TabBar active={tab} onChange={sT}/>
     </>}
