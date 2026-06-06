@@ -52,14 +52,14 @@
 
 html {
   overscroll-behavior: none;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
   font-family: 'Geist', sans-serif;
   letter-spacing: -0.03em;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 #root {
@@ -67,7 +67,7 @@ body {
   max-width: 100%;
   min-height: 100svh;
   box-sizing: border-box;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 h1,

@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
-import { BIKES, bm, om } from '../data/bikes.js';
-import { C, Ring } from '../shared.jsx';
+import { BIKES, bm } from '../data/bikes.js';
+import { C } from '../shared.jsx';
 
 function SpeedoDial({value,gold,goldTxt,sz=110}){
   const size=sz,stroke=6,r=(size-stroke)/2,c=Math.PI*r,off=c-(value/100)*c;
@@ -23,9 +23,48 @@ function HomeSLabel({children}){
   </div>;
 }
 
+const FACTS=[
+  {bike:"LFC 700",fact:"The LFC 700 is the world's first inline-4 cruiser. Four cylinders in a straight line — a configuration found in sportsbikes — in a full cruiser body."},
+  {bike:"LFC 700",fact:"The LFC 700 uses Brembo brakes — the same brand used on MotoGP factory race machines."},
+  {bike:"LFC 700",fact:"The LFC 700's 310mm rear tyre is the widest fitted to any production motorcycle in the world."},
+  {bike:"LFC 700",fact:"KYB suspension on the LFC 700 is the same brand used on premium Japanese superbikes costing twice the price."},
+  {bike:"Dark Flag 500",fact:"The Dark Flag 500 Commander has a V4 engine under 500cc — almost unheard of at this price point. Most rivals use a V-twin."},
+  {bike:"Dark Flag 500",fact:"The Dark Flag 500 Commander is the only bike in the Benda range with cruise control — standard, not optional."},
+  {bike:"Dark Flag 500",fact:"The Dark Flag's electronic air suspension auto-adjusts to road conditions. That feature normally only appears on bikes costing $25,000+."},
+  {bike:"Dark Flag 500",fact:"The Dark Flag Commander has an adjustable seat — 670mm to 700mm — making it the most accessible bike in the range for shorter riders."},
+  {bike:"Chinchilla 500",fact:"The Chinchilla 500 has USD (upside-down) forks — sportsbike suspension technology on a cruiser under $10k."},
+  {bike:"Chinchilla 500",fact:"The Chinchilla 500 and Napoleonbob 500 share an identical 475cc V-twin engine. Same heart, completely different character."},
+  {bike:"Napoleonbob 250",fact:"The Napoleonbob 250's multi-link front fork is unique in its class — it reduces front-end dive under braking in a way standard forks can't."},
+  {bike:"Napoleonbob 250",fact:"The Napoleonbob 250 sips just 3.1L/100km — the most fuel-efficient bike in the range, giving roughly 300km from a single tank."},
+  {bike:"Benda Range",fact:"4 out of 5 Benda bikes are LAMS approved. The only exception is the LFC 700 — a full-licence flagship."},
+  {bike:"Benda Range",fact:"Every single Benda model comes with ABS and Traction Control as standard. No exceptions, no upgrades required."},
+  {bike:"Napoleonbob 500",fact:"The Napoleonbob 500 sits 53mm lower than the 250 despite having nearly double the engine displacement."},
+];
+
+function DidYouKnow({gold,goldTxt}){
+  const idx=Math.floor(Date.now()/86400000)%FACTS.length;
+  const [current,setCurrent]=useState(idx);
+  const f=FACTS[current];
+  return <div style={{margin:"0 16px 24px",borderRadius:16,background:"#0a0a0a",border:`1px solid #2a2a2a`,overflow:"hidden"}}>
+    <div style={{background:`linear-gradient(90deg,rgba(212,162,74,0.12),transparent)`,borderBottom:"1px solid #1a1a1a",padding:"10px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+      <div style={{display:"flex",alignItems:"center",gap:8}}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={gold} strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div style={{fontFamily:"'Inter',sans-serif",fontWeight:800,fontSize:9,letterSpacing:1.5,color:goldTxt,textTransform:"uppercase"}}>Did You Know?</div>
+      </div>
+      <div style={{fontFamily:"'Inter',sans-serif",fontSize:9,fontWeight:600,color:"#444",letterSpacing:0.3}}>{f.bike}</div>
+    </div>
+    <div style={{padding:"14px 16px 16px"}}>
+      <div style={{fontSize:13,color:"#d4d4d4",lineHeight:1.65}}>{f.fact}</div>
+      <div style={{display:"flex",justifyContent:"flex-end",marginTop:12}}>
+        <button className="tp" onClick={()=>setCurrent(c=>(c+1)%FACTS.length)} style={{background:"none",border:`1px solid #2a2a2a`,borderRadius:8,padding:"5px 12px",fontSize:10,fontWeight:700,color:"#666",cursor:"pointer",fontFamily:"'Inter',sans-serif",letterSpacing:0.3}}>Next fact →</button>
+      </div>
+    </div>
+  </div>;
+}
+
 export default function HomeTab({progress:pr,onBike,onNav}){
   const GOLD=C.gold,GT=C.goldTxt,GD=C.goldDim;
-  const trainingImg={nb250:"/images/napbobpotential.png",nb500:"/images/Napbob500N.png",ch500:"/images/ChinchillaN.png",df500:"/images/DarkflagN.png",lfc700:"/images/LFCN.png"};
+  const trainingImg={nb250:"/images/napbobpotential.png",nb500:"/images/NAP BOB Homepage.png",ch500:"/images/Chinchilla homepage.png",df500:"/images/Dark Flag Homepage",lfc700:"/images/LFC homepage.png"};
   const garageRef=useRef(null);
   const [activeGarageId,setActiveGarageId]=useState(null);
   const onGarageScroll=useCallback(()=>{
@@ -46,18 +85,16 @@ export default function HomeTab({progress:pr,onBike,onNav}){
     return (pb>0?pb:0)-(pa>0?pa:0);
   })[0]||BIKES[0];
   const featPct=bm(pr,featured.id);
-  const overall=om(pr);
   const h=new Date().getHours();
   const greet=h<12?"GOOD MORNING":h<18?"GOOD AFTERNOON":"GOOD EVENING";
   const DAYS=["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
   const dayName=DAYS[new Date().getDay()];
-  const quizCount=Object.values(pr.bikeQuiz).reduce((s,bq)=>s+Object.values(bq).reduce((ss,d)=>ss+(d?.attempts||0),0),0)+pr.generalQuiz.attempts;
   const bq=pr.bikeQuiz[featured.id]||{};
   const nextDiff=!bq.easy||!bq.easy.attempts?"Easy":!bq.medium||!bq.medium.attempts?"Medium":!bq.hard||!bq.hard.attempts?"Hard":"Easy";
 
   return <div style={{background:"#000",minHeight:"100vh",color:"#fafafa",paddingBottom:90,fontFamily:"'Geist',sans-serif",WebkitFontSmoothing:"antialiased",zoom:0.9}}>
     {/* ── HEADER ── */}
-    <div style={{padding:"44px 20px 0",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+    <div style={{padding:"44px 20px 10px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
       <div style={{display:"flex",alignItems:"center",gap:8}}>
         <img src="/images/BENDAlogo.png" alt="Benda" style={{height:55,width:"auto",objectFit:"contain",filter:"brightness(0) invert(1)"}}/>
       </div>
@@ -68,9 +105,6 @@ export default function HomeTab({progress:pr,onBike,onNav}){
             <div>7 DAY</div>
             <div>STREAK</div>
           </div>
-        </div>
-        <div style={{width:28,height:28,borderRadius:"50%",background:C.goldBg,border:`1px solid ${GD}`,display:"flex",alignItems:"center",justifyContent:"center"}}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={GT} strokeWidth="2" strokeLinecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         </div>
       </div>
     </div>
@@ -89,11 +123,23 @@ export default function HomeTab({progress:pr,onBike,onNav}){
         <div style={{flex:1}}>
           <div style={{fontSize:10,fontWeight:700,letterSpacing:1.6,color:C.t3}}>CONTINUE TRAINING</div>
           <div style={{fontFamily:"'Inter',sans-serif",fontWeight:800,fontSize:19,marginTop:5,letterSpacing:-0.3,textTransform:"uppercase"}}>{featured.name}</div>
-          <div style={{fontSize:12,color:C.t2,marginTop:2}}>{nextDiff} quiz next</div>
+          <div style={{display:"flex",alignItems:"center",gap:5,marginTop:6}}>
+            {[["easy","Easy"],["medium","Med"],["hard","Hard"]].map(([d,label],i,arr)=>{
+              const attempted=bq[d]&&bq[d].attempts>0;
+              const perfect=attempted&&bq[d].best===bq[d].total;
+              const isNext=nextDiff.toLowerCase()===d;
+              const col=perfect?"#22c55e":attempted?"#f59e0b":isNext?GT:"#444";
+              const txt=perfect?`✓ ${label}`:attempted?`${bq[d].best}/${bq[d].total} ${label}`:label;
+              return <div key={d} style={{display:"flex",alignItems:"center",gap:5}}>
+                <div style={{fontSize:9,fontWeight:700,color:col,letterSpacing:0.3}}>{txt}</div>
+                {i<arr.length-1&&<div style={{fontSize:9,color:"#333"}}>›</div>}
+              </div>;
+            })}
+          </div>
           <div style={{display:"flex",justifyContent:"center",marginTop:6}}><SpeedoDial value={featPct} gold={GOLD} goldTxt={GT} sz={100}/></div>
         </div>
         <div style={{flex:1,paddingBottom:4,paddingRight:8}}>
-          <button className="tp" onClick={()=>onBike(featured)} style={{
+          <button className="tp" onClick={()=>onBike(featured,'quiz')} style={{
             marginTop:8,display:"flex",alignItems:"center",justifyContent:"center",gap:6,
             width:"100%",padding:"8px 12px",
             background:`linear-gradient(180deg,#f4d27a 0%,${GOLD} 45%,#b8841f 100%)`,
@@ -113,17 +159,19 @@ export default function HomeTab({progress:pr,onBike,onNav}){
         <HomeSLabel>YOUR GARAGE</HomeSLabel>
         <div style={{fontSize:9,fontWeight:600,color:C.t4}}>{BIKES.length} models</div>
       </div>
-      <div ref={garageRef} onScroll={onGarageScroll} style={{display:"flex",gap:10,overflowX:"auto",padding:"2px 16px 6px",scrollbarWidth:"none",WebkitOverflowScrolling:"touch",scrollBehavior:"smooth",overscrollBehaviorX:"none",}}>
+      <div ref={garageRef} onScroll={onGarageScroll} style={{display:"flex",gap:10,overflowX:"auto",padding:"2px 16px 6px",scrollbarWidth:"none",WebkitOverflowScrolling:"touch",scrollBehavior:"smooth",overscrollBehaviorX:"none"}}>
         {BIKES.map((b,i)=>{
           const pct=bm(pr,b.id);
           const isActive=(activeGarageId||featured.id)===b.id;
-          return <div key={b.id} onClick={()=>onBike(b)} style={{flexShrink:0,width:130,padding:12,borderRadius:14,background:C.s1,border:`1px solid ${isActive?GD:"#2a2a2a"}`,cursor:"pointer",position:"relative",overflow:"hidden",boxShadow:isActive?`0 0 18px rgba(212,162,74,0.22)`:"none",transition:"border-color .35s ease, box-shadow .35s ease",}}>
+          const [namePart,numPart]=(b.name.match(/^(.*?)(\d.*)$/)||[,'',b.name]).slice(1);
+          return <div key={b.id} onClick={()=>onBike(b)} style={{flexShrink:0,width:148,padding:12,borderRadius:14,background:C.s1,border:`1px solid ${isActive?GD:"#2a2a2a"}`,cursor:"pointer",position:"relative",overflow:"hidden",boxShadow:isActive?`0 0 18px rgba(212,162,74,0.22)`:"none",transition:"border-color .35s ease, box-shadow .35s ease"}}>
             <div style={{position:"absolute",inset:0,background:`linear-gradient(160deg,#1a1207,${C.s1} 60%)`,opacity:isActive?1:0,transition:"opacity .35s ease",pointerEvents:"none"}}/>
             <div style={{position:"relative"}}>
-              <div style={{height:70,display:"flex",alignItems:"center",justifyContent:"center"}}>
+              <div style={{height:110,display:"flex",alignItems:"center",justifyContent:"center"}}>
                 <img src={{nb250:"/images/NapBOBnew.png",nb500:"/images/Napbob500N.png",ch500:"/images/ChinchillaN.png",df500:"/images/DarkflagN.png",lfc700:"/images/LFCN.png"}[b.id]||b.icon} alt="" style={{width:"140%",height:"100%",objectFit:"contain",WebkitMaskImage:"linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)",maskImage:"linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)"}}/>
               </div>
-              <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:13,color:"#fafafa",marginTop:6,lineHeight:1.2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{b.name}</div>
+              <div style={{fontFamily:"'Inter',sans-serif",fontWeight:800,fontSize:14,color:"#fafafa",marginTop:6,lineHeight:1.2}}>{namePart.trim()}</div>
+              <div style={{fontFamily:"'Inter',sans-serif",fontWeight:600,fontSize:11,color:C.t2,lineHeight:1.2}}>{numPart.trim()}</div>
               <div style={{marginTop:8,display:"flex",alignItems:"center",gap:5}}>
                 <div style={{flex:1,height:2,background:"#262626",borderRadius:2}}>
                   <div style={{width:`${pct}%`,height:"100%",background:GOLD,borderRadius:2,transition:"width 1s ease"}}/>
@@ -136,52 +184,8 @@ export default function HomeTab({progress:pr,onBike,onNav}){
       </div>
     </div>
 
+    {/* ── DID YOU KNOW ── */}
+    <DidYouKnow gold={C.gold} goldTxt={C.goldTxt}/>
 
-    {/* ── TRAINING SNAPSHOT ── */}
-    <div style={{padding:"0 16px",marginBottom:22}}>
-      <HomeSLabel>TRAINING SNAPSHOT</HomeSLabel>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,marginTop:10}}>
-        <div style={{aspectRatio:"1/1.15",borderRadius:12,background:C.s1,border:`1px solid #2a2a2a`,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:8,textAlign:"center"}}>
-          <Ring pct={overall} sz={48} sw={4} c={GOLD}/>
-          <div style={{fontSize:9,fontWeight:700,letterSpacing:0.8,color:C.t2,marginTop:6,textTransform:"uppercase"}}>Overall</div>
-          <div style={{fontSize:9,color:GT,marginTop:2}}>Keep it up!</div>
-        </div>
-        <div style={{aspectRatio:"1/1.15",borderRadius:12,background:C.s1,border:`1px solid #2a2a2a`,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:8,textAlign:"center"}}>
-          <div style={{fontFamily:"'Inter',sans-serif",fontSize:30,fontWeight:800,color:"#fafafa",lineHeight:1}}>{quizCount}</div>
-          <div style={{fontSize:9,fontWeight:700,letterSpacing:0.8,color:C.t2,marginTop:6,textTransform:"uppercase"}}>Quizzes</div>
-          <div style={{fontSize:9,color:GT,marginTop:2}}>All models</div>
-        </div>
-        <div style={{aspectRatio:"1/1.15",borderRadius:12,background:C.s1,border:`1px solid #2a2a2a`,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:8,textAlign:"center"}}>
-          <div style={{fontFamily:"'Inter',sans-serif",fontSize:30,fontWeight:800,color:"#fafafa",lineHeight:1}}>{pr.scenarios.completed||0}</div>
-          <div style={{fontSize:9,fontWeight:700,letterSpacing:0.8,color:C.t2,marginTop:6,textTransform:"uppercase"}}>Scenarios</div>
-          <div style={{fontSize:9,color:GT,marginTop:2}}>Completed</div>
-        </div>
-      </div>
-    </div>
-
-    {/* ── RECENT WINS ── */}
-    {(quizCount>0||pr.scenarios.completed>0)&&<div style={{padding:"0 16px",marginBottom:22}}>
-      <HomeSLabel>RECENT WINS</HomeSLabel>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginTop:10}}>
-        <div style={{padding:12,borderRadius:12,background:C.s1,border:`1px solid #2a2a2a`,display:"flex",alignItems:"center",gap:10}}>
-          <div style={{width:40,height:40,borderRadius:"50%",border:`1.5px solid ${GOLD}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-            <span style={{fontSize:16,fontWeight:800,color:GT,fontFamily:"Georgia,serif"}}>7</span>
-          </div>
-          <div style={{minWidth:0}}>
-            <div style={{fontSize:12,fontWeight:700,color:"#fafafa",fontFamily:"'Inter',sans-serif"}}>Day Streak</div>
-            <div style={{fontSize:10,color:C.t3,marginTop:1}}>You're on fire</div>
-          </div>
-        </div>
-        <div style={{padding:12,borderRadius:12,background:C.s1,border:`1px solid #2a2a2a`,display:"flex",alignItems:"center",gap:10}}>
-          <div style={{width:40,height:40,flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
-            <svg width="36" height="36" viewBox="0 0 40 40" fill="none"><path d="M20 6 8 11v9c0 7 5 12 12 14 7-2 12-7 12-14v-9z" stroke={GOLD} strokeWidth="1.4"/><path d="m20 14 1.5 3 3.3.5-2.4 2.3.6 3.3-3-1.6-3 1.6.6-3.3-2.4-2.3 3.3-.5z" fill={GOLD}/></svg>
-          </div>
-          <div style={{minWidth:0}}>
-            <div style={{fontSize:12,fontWeight:700,color:"#fafafa",fontFamily:"'Inter',sans-serif"}}>Training</div>
-            <div style={{fontSize:10,color:C.t3,marginTop:1}}>{quizCount} quiz{quizCount!==1?"zes":""} done</div>
-          </div>
-        </div>
-      </div>
-    </div>}
   </div>;
 }

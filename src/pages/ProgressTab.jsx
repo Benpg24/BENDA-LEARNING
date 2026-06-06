@@ -9,12 +9,14 @@ const T1='#fafafa',T2='#b8b8b8',T3='#666';
 function isCert(bq){return['easy','medium','hard'].every(d=>bq[d]&&bq[d].best===bq[d].total&&bq[d].total>0)}
 function isInProg(bq){return['easy','medium','hard'].some(d=>bq[d]&&bq[d].attempts>0)}
 
-function ShieldIcon({size=48,check=false}){
+function ShieldIcon({size=48,check=false,col}){
   const s=size,h=Math.round(s*1.12);
+  const stroke=col||(check?GOLD:GOLD);
+  const fill=col?`rgba(34,197,94,0.15)`:`rgba(212,162,74,0.15)`;
   return <svg width={s} height={h} viewBox="0 0 48 54" fill="none">
-    <path d="M24 2L4 10v16c0 14 9 24 20 28 11-4 20-14 20-28V10L24 2z" fill="rgba(212,162,74,0.15)" stroke={GOLD} strokeWidth="1.5"/>
-    {check&&<path d="M16 27l6 6 10-10" stroke={GT} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>}
-    {!check&&<path d="M20 18v8M20 29v2" stroke={GT} strokeWidth="2" strokeLinecap="round"/>}
+    <path d="M24 2L4 10v16c0 14 9 24 20 28 11-4 20-14 20-28V10L24 2z" fill={fill} stroke={stroke} strokeWidth="1.5"/>
+    {check&&<path d="M16 27l6 6 10-10" stroke={stroke} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>}
+    {!check&&<path d="M20 18v8M20 29v2" stroke={stroke} strokeWidth="2" strokeLinecap="round"/>}
   </svg>;
 }
 
@@ -35,15 +37,15 @@ export default function ProgressTab({progress:pr,onReset}){
 
     {/* OVERALL HERO CARD */}
     <div style={{margin:"0 16px 12px",borderRadius:16,background:CARD,border:`1px solid ${BORDER}`,overflow:"hidden",position:"relative"}}>
-      <div style={{position:"relative",padding:"20px 16px 0"}}>
+      <div style={{position:"relative",padding:"20px 16px 0",textAlign:"center"}}>
         <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:T2,textTransform:"uppercase",marginBottom:6}}>OVERALL COMPLETION</div>
         <div style={{fontFamily:"'Inter',sans-serif",fontWeight:900,fontSize:52,color:T1,lineHeight:1,letterSpacing:-2}}>{ov}<span style={{fontSize:28}}>%</span></div>
         <div style={{fontSize:12,color:T2,marginTop:6,lineHeight:1.4}}>You're on track to become shop floor ready.</div>
         {needCount>0&&<div style={{fontSize:12,color:GT,fontWeight:700,marginTop:4}}>{needCount} bike{needCount!==1?"s":""} still need perfect scores.</div>}
-        <div style={{position:"absolute",top:16,right:14,display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
-          <ShieldIcon size={44} check={ov===100}/>
-          <div style={{fontSize:7,fontWeight:800,letterSpacing:0.5,color:GT,textAlign:"center",lineHeight:1.2}}>SHOP FLOOR<br/>READY</div>
-        </div>
+        {ov===100&&<div style={{position:"absolute",top:16,right:14,display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
+          <ShieldIcon size={44} check col="#22c55e"/>
+          <div style={{fontSize:7,fontWeight:800,letterSpacing:0.5,color:C.ok,textAlign:"center",lineHeight:1.2}}>SHOP FLOOR<br/>READY</div>
+        </div>}
       </div>
       <div style={{padding:"14px 16px 16px"}}>
         <div style={{height:5,background:"#262626",borderRadius:3,overflow:"hidden",marginBottom:6}}>
@@ -53,24 +55,6 @@ export default function ProgressTab({progress:pr,onReset}){
           <div style={{fontSize:10,fontWeight:700,color:GT}}>{ov}% COMPLETE</div>
           <div style={{fontSize:10,fontWeight:700,color:T3}}>100% REQUIRED</div>
         </div>
-      </div>
-    </div>
-
-    {/* TO EARN SHOP FLOOR APPROVAL */}
-    <div style={{margin:"0 16px 12px",borderRadius:14,background:CARD,border:`1px solid ${BORDER}`,padding:"20px 16px"}}>
-      <div style={{fontSize:10,fontWeight:800,letterSpacing:1,color:GT,textAlign:"center",marginBottom:18,textTransform:"uppercase"}}>TO EARN SHOP FLOOR APPROVAL</div>
-      <div style={{display:"flex",gap:0}}>
-        {[
-          {icon:<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={GT} strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill={GT} stroke="none"/></svg>,val:"100%",label:"on every quiz"},
-          {icon:<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={GT} strokeWidth="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,val:"All Easy, Medium & Hard",label:"completed"},
-          {icon:<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={GT} strokeWidth="1.5"><path d="M8 21l4-8 4 8M6 8c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="12" cy="15" r="1" fill={GT} stroke="none"/></svg>,val:"5/5",label:"required"},
-        ].map((item,i)=>(
-          <div key={i} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:10,textAlign:"center",borderLeft:i>0?`1px solid ${BORDER}`:"none",padding:"0 12px"}}>
-            {item.icon}
-            <div style={{fontFamily:"'Inter',sans-serif",fontWeight:800,fontSize:13,color:T1,lineHeight:1.3}}>{item.val}</div>
-            <div style={{fontSize:10,color:T3,lineHeight:1.4}}>{item.label}</div>
-          </div>
-        ))}
       </div>
     </div>
 
@@ -149,19 +133,6 @@ export default function ProgressTab({progress:pr,onReset}){
           </div>
         </div>;
       })}
-    </div>
-
-    {/* NEXT MILESTONE */}
-    <div style={{margin:"0 16px 24px",borderRadius:14,background:CARD,border:`1px solid ${BORDER}`,padding:"14px 16px",display:"flex",alignItems:"center",gap:12}}>
-      <ShieldIcon size={38} check={certCount===BIKES.length}/>
-      <div style={{flex:1,minWidth:0}}>
-        <div style={{fontSize:9,fontWeight:800,color:GT,letterSpacing:1,textTransform:"uppercase",marginBottom:3}}>NEXT MILESTONE REWARD</div>
-        <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:13,marginBottom:2}}>{needCount>0?`${needCount} more bike${needCount!==1?"s":""} certified`:"All bikes certified!"}</div>
-        <div style={{fontSize:11,color:T3}}>Gold Benda Expert Badge</div>
-      </div>
-      <div style={{background:`linear-gradient(180deg,#f4d27a 0%,${GOLD} 45%,#b8841f 100%)`,borderRadius:8,padding:"10px 12px",flexShrink:0}}>
-        <div style={{fontFamily:"'Inter',sans-serif",fontWeight:800,fontSize:10,color:"#1a1206",letterSpacing:0.3,whiteSpace:"nowrap"}}>VIEW REWARDS ›</div>
-      </div>
     </div>
 
     {/* RESET */}

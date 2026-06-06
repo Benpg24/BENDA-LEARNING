@@ -57,10 +57,10 @@ return { p, up, rst };
 
 
 function getTier(pct) {
-if (pct === 100) return { label: "EXPERT", color: C.tE, msg: "Perfect score. You own this material.", icon: "◆" };
-if (pct >= 75) return { label: "STRONG", color: C.tS, msg: "Solid knowledge. Close a couple of gaps and you're there.", icon: "▲" };
-if (pct >= 50) return { label: "DEVELOPING", color: C.tD, msg: "Getting there. Review what you missed and go again.", icon: "●" };
-return { label: "NEEDS WORK", color: C.tW, msg: "Spend time on the Learn tab before your next attempt.", icon: "○" };
+if (pct === 100) return { label: "PERFECT", color: "#22c55e", msg: "Flawless. That's how it's done.", icon: "◆" };
+if (pct >= 75) return { label: "STRONG", color: C.goldTxt, msg: "Solid knowledge. Close a couple of gaps and you're there.", icon: "▲" };
+if (pct >= 50) return { label: "DEVELOPING", color: "#f59e0b", msg: "Getting there. Review what you missed and go again.", icon: "●" };
+return { label: "NEEDS WORK", color: "#ef4444", msg: "Spend time on the Learn tab before your next attempt.", icon: "○" };
 }
 
 // ── BIKES ────────────────────────────────────────────────────────────────────
@@ -157,17 +157,19 @@ function QE({questions:qs,badge,onFinish}){
 // ── RESULTS ─────────────────────────────────────────────────────────────────
 function Res({score,total,actions}){
   const pct=Math.round(score/total*100);const tier=getTier(pct);
-  return <div style={bd}>
-    <div style={{textAlign:"center"}}>
-      <A><div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:68,lineHeight:1,marginBottom:4}}>{score}<span style={{color:C.accent}}>/{total}</span></div>
-      <div style={{fontSize:11,letterSpacing:3,textTransform:"uppercase",color:C.t2,marginBottom:20}}>{pct}% correct</div></A>
-      <A d={200}><div className="at" style={{display:"inline-flex",alignItems:"center",gap:10,padding:"12px 24px",border:`2px solid ${tier.color}`,borderRadius:6,marginBottom:20}}>
-        <span style={{fontSize:20,color:tier.color}}>{tier.icon}</span>
-        <span style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:18,letterSpacing:3,textTransform:"uppercase",color:tier.color}}>{tier.label}</span>
-      </div></A>
-      <A d={350}><div style={{fontSize:14,color:C.t2,lineHeight:1.6,marginBottom:28,paddingBottom:28,borderBottom:`1px solid ${C.border}`}}>{tier.msg}</div></A>
-    </div>
-    <A d={450}><div style={{display:"flex",flexDirection:"column",gap:10}}>{actions}</div></A>
+  return <div style={{padding:"32px 20px 24px"}}>
+    <A><div style={{textAlign:"center",marginBottom:28}}>
+      <div style={{fontFamily:"'Inter',sans-serif",fontWeight:900,fontSize:80,lineHeight:1,letterSpacing:-2,color:tier.color}}>{score}<span style={{fontSize:40,color:"#2a2a2a"}}>/{total}</span></div>
+      <div style={{fontSize:11,letterSpacing:3,textTransform:"uppercase",color:C.t3,marginTop:4}}>{pct}% correct</div>
+    </div></A>
+    <A d={150}><div style={{background:"#111",border:`1px solid #2a2a2a`,borderLeft:`3px solid ${tier.color}`,borderRadius:8,padding:"14px 16px",marginBottom:20,display:"flex",alignItems:"center",gap:12}}>
+      <span style={{fontSize:22,color:tier.color}}>{tier.icon}</span>
+      <div>
+        <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:13,letterSpacing:1.5,textTransform:"uppercase",color:tier.color}}>{tier.label}</div>
+        <div style={{fontSize:13,color:C.t2,marginTop:3,lineHeight:1.5}}>{tier.msg}</div>
+      </div>
+    </div></A>
+    <A d={300}><div style={{display:"flex",flexDirection:"column",gap:10}}>{actions}</div></A>
   </div>
 }
 
@@ -187,9 +189,9 @@ function HoverBtn({onClick,disabled,style,children}){
 function GlossaryItem({term,def,isLast}){
   const [open,sO]=useState(false);
   return <div style={{background:"#141414",borderBottom:isLast?"none":"1px solid #2a2a2a",overflow:"hidden"}}>
-    <div className="tp" onClick={()=>sO(!open)} style={{padding:"14px 16px",display:"flex",justifyContent:"space-between",alignItems:"center",cursor:"pointer"}}>
+    <div className="tp" onClick={()=>sO(!open)} style={{padding:"14px 16px",display:"flex",justifyContent:"space-between",alignItems:"flex-start",cursor:"pointer"}}>
       <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:14,color:"#fafafa"}}>{term}</div>
-      <div style={{color:"#666",fontSize:18,transition:"transform .2s",transform:open?"rotate(45deg)":"rotate(0deg)",flexShrink:0,marginLeft:12}}>+</div>
+      <div style={{color:"#666",fontSize:18,transition:"transform .2s",transform:open?"rotate(45deg)":"rotate(0deg)",flexShrink:0,marginLeft:12,marginTop:"-1px"}}>+</div>
     </div>
     {open&&<div style={{padding:"0 16px 14px",fontSize:13,color:"#b8b8b8",lineHeight:1.7,borderTop:"1px solid #2a2a2a"}}><div style={{paddingTop:12}}>{def}</div></div>}
   </div>
@@ -313,8 +315,10 @@ function BikeLearnTab({bike:b,onQuiz}){
 }
 
 // ── BIKE LEARN TAB V2 ───────────────────────────────────────────────────────
-function BikeLearnTabV2({bike:b,onUp,onNext}){
-  const [tab,setTab]=useState('overview');
+function BikeLearnTabV2({bike:b,initialTab,onUp,onNext}){
+  const [tab,setTab]=useState(initialTab||'overview');
+  const [openCats,setOpenCats]=useState(()=>({[GLOSSARY[0]?.category]:true}));
+  const toggleCat=cat=>setOpenCats(p=>({...p,[cat]:!p[cat]}));
   const GOLD=C.gold,GT=C.goldTxt;
   const CARD='#141414',BORDER='#282828';
   const T1='#f5f5f5',T2='#b8b8b8',T3='#666';
@@ -343,7 +347,10 @@ function BikeLearnTabV2({bike:b,onUp,onNext}){
     {icon:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,title:'Competitor Comparison',text:sp[1].text},
   ];
 
-  const nameParts=[b.name.split(' ')[0],b.name.split(' ').slice(1).join(' ')];
+  const isCommander=b.name.includes('Commander');
+  const nameParts=isCommander
+    ?['Dark Flag','500','Commander']
+    :[b.name.split(' ')[0],b.name.split(' ').slice(1).join(' ')];
 
   return <div style={{background:'#0a0a0a',color:T1,fontFamily:"'Geist',sans-serif",paddingBottom:40}}>
 
@@ -354,6 +361,7 @@ function BikeLearnTabV2({bike:b,onUp,onNext}){
         <div style={{fontFamily:"'Inter',sans-serif",fontWeight:900,textTransform:'uppercase',lineHeight:0.88,letterSpacing:-0.5,color:T1}}>
           <div style={{fontSize:28}}>{nameParts[0]}</div>
           <div style={{fontSize:42}}>{nameParts[1]}</div>
+          {isCommander&&<div style={{fontSize:13,letterSpacing:3,fontWeight:600,marginTop:4,color:T3}}>{nameParts[2]}</div>}
         </div>
         <div style={{fontSize:10,color:T3,fontWeight:600,letterSpacing:2.5,textTransform:'uppercase',marginTop:8,marginBottom:8}}>{b.type}</div>
         <div style={{fontFamily:"'Inter',sans-serif",fontSize:26,fontWeight:800,color:GT,lineHeight:1}}>{b.price}</div>
@@ -361,7 +369,7 @@ function BikeLearnTabV2({bike:b,onUp,onNext}){
     </div>}
 
     {/* TAB BAR */}
-    <div style={{display:'flex',overflowX:'auto',scrollbarWidth:'none',borderBottom:`1px solid ${BORDER}`,padding:'0 16px',WebkitOverflowScrolling:'touch',position:'sticky',top:54,zIndex:90,background:'#0a0a0a'}}>
+    <div style={{display:'flex',overflowX:'auto',scrollbarWidth:'none',borderBottom:`1px solid ${BORDER}`,padding:'0 16px',WebkitOverflowScrolling:'touch',position:'sticky',top:0,zIndex:90,background:'#0a0a0a'}}>
       {TABS.map(t=>(
         <button key={t} onClick={()=>setTab(t)} className="tp" style={{
           flexShrink:0,padding:'10px 12px',background:'none',border:'none',
@@ -465,17 +473,20 @@ function BikeLearnTabV2({bike:b,onUp,onNext}){
     {/* GLOSSARY */}
     {tab==='glossary'&&<div style={{padding:'20px'}}>
       <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:14,letterSpacing:0.5,textTransform:'uppercase',color:T1,marginBottom:16}}>Glossary</div>
-      {GLOSSARY.map((cat,ci)=>(
-        <div key={cat.category} style={{marginBottom:20}}>
-          <div style={{fontSize:10,letterSpacing:0.5,textTransform:'uppercase',color:T3,paddingBottom:8,borderBottom:`1px solid ${BORDER}`,fontWeight:700,marginBottom:0}}>{cat.category}</div>
-          <div style={{display:'flex',flexDirection:'column',gap:1}}>
+      {GLOSSARY.map((cat)=>(
+        <div key={cat.category} style={{marginBottom:8}}>
+          <div onClick={()=>toggleCat(cat.category)} style={{display:'flex',justifyContent:'space-between',alignItems:'center',fontSize:12,letterSpacing:0.5,textTransform:'uppercase',color:T2,padding:'10px 0',borderBottom:`1px solid ${BORDER}`,fontWeight:700,cursor:'pointer'}}>
+            <span>{cat.category}</span>
+            <span style={{fontSize:16,color:T3,transition:'transform .2s',transform:openCats[cat.category]?'rotate(45deg)':'rotate(0deg)',display:'inline-block'}}>+</span>
+          </div>
+          {openCats[cat.category]&&<div style={{display:'flex',flexDirection:'column'}}>
             {cat.terms.map(t=>(
-              <div key={t.term} style={{borderBottom:`1px solid ${BORDER}`,padding:'10px 0',display:'flex',gap:12,alignItems:'flex-start'}}>
-                <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:12,color:T1,minWidth:110,flexShrink:0}}>{t.term}</div>
+              <div key={t.term} style={{borderBottom:`1px solid ${BORDER}`,padding:'10px 0'}}>
+                <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:12,color:T1,marginBottom:4}}>{t.term}</div>
                 <div style={{fontSize:12,color:T2,lineHeight:1.5}}>{t.def}</div>
               </div>
             ))}
-          </div>
+          </div>}
         </div>
       ))}
     </div>}
@@ -610,9 +621,9 @@ function QuizTab({bike:b,onLearn,onUp,onNext}){
   </div>;
 
   if(phase==="results")return <Res score={sc} total={qs.length} actions={<>
-    {pct===100&&nd&&<button className="tp" style={btnA} onClick={()=>{sD(nd);sP("start")}}>Level Up to {nd[0].toUpperCase()+nd.slice(1)}</button>}
-    {pct===100&&!nd&&nxt&&<button className="tp" style={btnA} onClick={()=>onNext(nxt)}>Next Bike: {nxt.name}</button>}
-    <button className="tp" style={pct<100?btnA:btnG} onClick={()=>sP("start")}>Try {diff} Again</button>
+    {pct===100&&nd&&<button className="tp" style={{...btnA,background:C.gold,color:'#1a1000'}} onClick={()=>{sD(nd);sP("start")}}>Level Up to {nd[0].toUpperCase()+nd.slice(1)}</button>}
+    {pct===100&&!nd&&nxt&&<button className="tp" style={{...btnA,background:C.gold,color:'#1a1000'}} onClick={()=>onNext(nxt)}>Next Bike: {nxt.name}</button>}
+    {pct<100&&<button className="tp" style={{...btnA,background:C.gold,color:'#1a1000'}} onClick={()=>sP("start")}>Try {diff} Again</button>}
     <button className="tp" style={btnG} onClick={onLearn}>Review Learn Tab</button>
   </>}/>;
 
@@ -620,15 +631,17 @@ function QuizTab({bike:b,onLearn,onUp,onNext}){
 }
 
 // ── BIKE SCREEN ─────────────────────────────────────────────────────────────
-function BikeScreen({bike:b,onBack,onUp,onChange}){
-  return <div style={{paddingBottom:0}}>
-    <div style={{background:C.bg,borderBottom:`1px solid ${C.border}`,padding:'12px 20px',display:'flex',alignItems:'center',position:'sticky',top:0,zIndex:100}}>
+function BikeScreen({bike:b,initialTab,onBack,onUp,onChange}){
+  return <div style={{position:'fixed',inset:0,overflow:'hidden',background:C.bg,display:'flex',flexDirection:'column'}}>
+    <div style={{background:C.bg,borderBottom:`1px solid ${C.border}`,padding:'12px 20px',display:'flex',alignItems:'center',flexShrink:0,zIndex:100}}>
       <button className="tp" style={{background:'none',border:'none',color:C.t3,fontSize:22,cursor:'pointer',padding:'0 8px 0 0',lineHeight:1,flexShrink:0}} onClick={onBack}>←</button>
       <div style={{position:'absolute',left:0,right:0,display:'flex',justifyContent:'center',pointerEvents:'none'}}>
         <img src="/images/BENDAlogo.png" alt="Benda" style={{height:42,objectFit:'contain',filter:'brightness(0) invert(1)'}}/>
       </div>
     </div>
-    <BikeLearnTabV2 bike={b} onUp={onUp} onNext={onChange}/>
+    <div style={{flex:1,overflowY:'auto',WebkitOverflowScrolling:'touch'}}>
+      <BikeLearnTabV2 bike={b} initialTab={initialTab} onUp={onUp} onNext={onChange}/>
+    </div>
   </div>;
 }
 
@@ -644,12 +657,14 @@ function GQScreen({onBack,onFin}){
   });
   const [sc,sS]=useState(null);
   function fin(s){onFin(s,qs.length);sS(s)}
-  return <div>
+  return <div style={{position:'fixed',inset:0,overflow:'hidden',background:'#000',display:'flex',flexDirection:'column'}}>
     <Hdr title="All Models Quiz" onBack={onBack}/>
-    {sc!==null
-      ?<Res score={sc} total={qs.length} actions={<button className="tp" style={btnG} onClick={onBack}>Back</button>}/>
-      :<QE questions={qs} badge={q=>`${q.bike} · ${q.difficulty}`} onFinish={fin}/>
-    }
+    <div style={{flex:1,overflowY:'auto',WebkitOverflowScrolling:'touch'}}>
+      {sc!==null
+        ?<Res score={sc} total={qs.length} actions={<button className="tp" style={btnG} onClick={onBack}>Back</button>}/>
+        :<QE questions={qs} badge={q=>`${q.bike} · ${q.difficulty}`} onFinish={fin}/>
+      }
+    </div>
   </div>;
 }
 
@@ -664,14 +679,14 @@ function ScScreen({onBack,onFin}){
   function pick(id){if(ch!==null)return;const ok=id===scs[idx].answer;if(ok)sS(s=>s+1);sC(id);sA(ok?"ac":"aw");setTimeout(()=>sA(""),400)}
   function next(){if(idx+1>=scs.length){onFin(sc,scs.length);sP("results")}else{sI(i=>i+1);sC(null)}}
 
-  if(phase==="results")return <div><Hdr title="Scenarios" onBack={onBack}/><Res score={sc} total={scs.length} actions={<button className="tp" style={btnG} onClick={onBack}>Back</button>}/></div>;
+  if(phase==="results")return <div style={{position:'fixed',inset:0,overflow:'hidden',background:'#000',display:'flex',flexDirection:'column'}}><Hdr title="Scenarios" onBack={onBack}/><div style={{flex:1,overflowY:'auto',WebkitOverflowScrolling:'touch'}}><Res score={sc} total={scs.length} actions={<button className="tp" style={btnG} onClick={onBack}>Back</button>}/></div></div>;
 
   const s=scs[idx];const tot=scs.length;const pct=((idx+(ch!==null?1:0))/tot)*100;
   const cb=BIKES.find(b=>b.id===s.answer);
 
-  return <div style={{background:"#000",minHeight:"100vh",color:"#fafafa",fontFamily:"'Geist',sans-serif"}}>
+  return <div style={{position:'fixed',inset:0,overflow:'hidden',background:"#000",color:"#fafafa",fontFamily:"'Geist',sans-serif",display:'flex',flexDirection:'column'}}>
     <Hdr onBack={onBack}/>
-    <div style={bd}>
+    <div style={{flex:1,overflowY:'auto',WebkitOverflowScrolling:'touch'}}><div style={bd}>
       <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:"#666",letterSpacing:0.5,textTransform:"uppercase",marginBottom:8,fontFamily:"'Inter',sans-serif",fontWeight:700}}>
         <span>Scenario {idx+1} of {tot}</span><span style={{color:C.goldTxt}}>{sc} correct</span>
       </div>
@@ -679,9 +694,12 @@ function ScScreen({onBack,onFin}){
         <div style={{height:"100%",background:C.gold,borderRadius:3,width:pct+"%",transition:"width .5s ease"}}/>
       </div>
       <div style={{display:"inline-block",fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:"#666",border:"1px solid #2a2a2a",padding:"4px 10px",borderRadius:6,marginBottom:14,fontFamily:"'Inter',sans-serif",fontWeight:700}}>{s.difficulty}</div>
-      <A t="as" key={idx}><div style={{background:"#141414",border:"1px solid #2a2a2a",borderRadius:14,padding:"16px 18px",marginBottom:20}}>
-        <div style={{fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:C.goldTxt,fontWeight:700,fontFamily:"'Inter',sans-serif",marginBottom:10}}>Customer Walks In</div>
-        <div style={{fontSize:14,lineHeight:1.6,color:"#e0e0e0"}}>{s.situation}</div>
+      <A t="as" key={idx}><div style={{background:"#141414",border:"1px solid #2a2a2a",borderRadius:14,padding:"16px 18px",marginBottom:20,position:"relative",overflow:"hidden"}}>
+        <img src="/images/customer scenarios bg remove.png" alt="" style={{position:"absolute",right:-8,bottom:"-12%",height:"115%",width:"45%",objectFit:"contain",objectPosition:"right bottom",opacity:0.55,pointerEvents:"none"}}/>
+        <div style={{position:"relative",zIndex:1}}>
+          <div style={{fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:C.goldTxt,fontWeight:700,fontFamily:"'Inter',sans-serif",marginBottom:10}}>Customer Walks In</div>
+          <div style={{fontSize:14,lineHeight:1.6,color:"#e0e0e0",paddingRight:"38%"}}>{s.situation}</div>
+        </div>
       </div></A>
       <div style={{fontSize:10,color:"#666",letterSpacing:0.5,textTransform:"uppercase",marginBottom:10,fontFamily:"'Inter',sans-serif",fontWeight:700}}>Which bike?</div>
       <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:16}} className={an}>
@@ -713,7 +731,7 @@ function ScScreen({onBack,onFin}){
         </div>
       </A>}
       {ch!==null&&<button className="tp" style={{width:"100%",padding:14,background:"#141414",border:"1px solid #2a2a2a",borderRadius:12,fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:13,letterSpacing:0.5,textTransform:"uppercase",color:"#fafafa",cursor:"pointer"}} onClick={next}>{idx+1<tot?"Next Scenario ›":"See Results"}</button>}
-    </div>
+    </div></div>
   </div>;
 }
 
@@ -754,9 +772,10 @@ function App(){
   const [screen,sS]=useState("main");
   const [tab,sT]=useState("home");
   const [bike,sB]=useState(null);
+  const [initTab,sIT]=useState("overview");
   const {p,up,rst}=useProg();
 
-  function openBike(b){sB(b);sS("bike");window.scrollTo(0,0)}
+  function openBike(b,t="overview"){sB(b);sIT(t);sS("bike");window.scrollTo(0,0)}
   function navTo(dest){
     if(dest==="glossary"){sS("glossary");return;}
     sT(dest);
@@ -775,7 +794,7 @@ function App(){
       {tab==="progress"&&<ProgressTab progress={p} onReset={rst}/>}
       <TabBar active={tab} onChange={sT}/>
     </>}
-    {screen==="bike"&&bike&&<BikeScreen bike={bike} onBack={()=>sS("main")} onUp={bqFin} onChange={b=>{sB(b)}}/>}
+    {screen==="bike"&&bike&&<BikeScreen bike={bike} initialTab={initTab} onBack={()=>sS("main")} onUp={bqFin} onChange={b=>{sB(b);sIT("overview")}}/>}
     {screen==="gquiz"&&<GQScreen onBack={()=>sS("main")} onFin={gqFin}/>}
     {screen==="scenarios"&&<ScScreen onBack={()=>sS("main")} onFin={scFin}/>}
     {screen==="glossary"&&<div style={{position:"fixed",inset:0,overflow:"hidden",background:"#000",color:"#fafafa",fontFamily:"'Geist',sans-serif"}}>
