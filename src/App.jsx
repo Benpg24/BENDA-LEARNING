@@ -6,6 +6,7 @@ import TrainTab from './pages/TrainTab.jsx';
 import ProgressTab from './pages/ProgressTab.jsx';
 import CompareTab from './pages/CompareTab.jsx';
 import HomeTab from './pages/HomeTab.jsx';
+import BotTab from './pages/BotTab.jsx';
 
 // ── CSS ─────────────────────────────────────────────────────────────────────
 const CSS=`@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}} @keyframes fi{from{opacity:0}to{opacity:1}} @keyframes si{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}} @keyframes pg{from{width:0}} @keyframes cp{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}} @keyframes ws{0%,100%{transform:translateX(0)}25%,75%{transform:translateX(-3px)}50%{transform:translateX(3px)}} @keyframes tr{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}} @keyframes fc{from{transform:rotateX(80deg);opacity:0}to{transform:rotateX(0);opacity:1}} .au{animation:fu .38s ease both}.ai{animation:fi .3s ease both}.as{animation:si .35s ease both} .ac{animation:cp .35s ease}.aw{animation:ws .35s ease}.at{animation:tr .5s cubic-bezier(.34,1.56,.64,1) both} .af{animation:fc .25s ease both} .tp{transition:all .15s ease;cursor:pointer}.tp:active{transform:scale(.97);opacity:.85} select{-webkit-appearance:none;appearance:none} *{-webkit-tap-highlight-color:transparent;box-sizing:border-box} body{margin:0;padding:0}::-webkit-scrollbar{width:0;height:0}`;
@@ -73,6 +74,7 @@ const Icons={
   compare:()=><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
   progress:()=><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>,
   glossary:()=><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>,
+  bot:()=><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M12 11V7"/><circle cx="12" cy="5" r="2"/><line x1="8" y1="15" x2="8" y2="18"/><line x1="16" y1="15" x2="16" y2="18"/></svg>,
 };
 
 // ── BOTTOM TAB BAR ──────────────────────────────────────────────────────────
@@ -81,7 +83,7 @@ function TabBar({active,onChange}){
     {id:"home",label:"Home",icon:Icons.home},
     {id:"range",label:"Range",icon:Icons.range},
     {id:"train",label:"Train",icon:Icons.train},
-    {id:"compare",label:"Compare",icon:Icons.compare},
+    {id:"bot",label:"AI Coach",icon:Icons.bot},
     {id:"progress",label:"Progress",icon:Icons.progress},
   ];
   return <div style={{position:"fixed",bottom:0,left:0,right:0,background:"rgba(0,0,0,0.95)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",borderTop:`1px solid #1a1a1a`,display:"flex",zIndex:200,paddingBottom:"env(safe-area-inset-bottom)"}}>
@@ -789,8 +791,9 @@ function App(){
 {screen==="main"&&<>
       {tab==="home"&&<HomeTab progress={p} onBike={openBike} onNav={navTo}/>}
       {tab==="range"&&<RangeTab onBike={openBike} progress={p}/>}
-      {tab==="train"&&<TrainTab onQuiz={()=>sS("gquiz")} onScenarios={()=>sS("scenarios")} onGlossary={()=>sS("glossary")}/>}
+      {tab==="train"&&<TrainTab onQuiz={()=>sS("gquiz")} onScenarios={()=>sS("scenarios")} onGlossary={()=>sS("glossary")} progress={p} onBike={openBike} onBot={()=>sT("bot")}/>}
       {tab==="compare"&&<CompareTab/>}
+      {tab==="bot"&&<BotTab/>}
       {tab==="progress"&&<ProgressTab progress={p} onReset={rst}/>}
       <TabBar active={tab} onChange={sT}/>
     </>}

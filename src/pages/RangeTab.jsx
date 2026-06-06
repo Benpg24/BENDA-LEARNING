@@ -2,7 +2,7 @@ import { BIKES } from '../data/bikes.js';
 import { C, bd, A, HoverCard } from '../shared.jsx';
 
 export default function RangeTab({onBike}){
-  return <div style={{position:"fixed",inset:0,overflow:"hidden",background:"#000000"}}>
+  return <div style={{position:"fixed",inset:0,overflow:"hidden",background:"#000"}}>
     <div style={{padding:"14px 20px 10px",borderBottom:`1px solid ${C.border}`,position:"relative",display:"flex",alignItems:"center",justifyContent:"center"}}>
       <img src="/images/BENDAlogo.png" alt="Benda" style={{height:40,width:"auto",objectFit:"contain",filter:"brightness(0) invert(1)",position:"absolute",left:20,top:"50%",transform:"translateY(-50%)"}}/>
       <A><div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:20,letterSpacing:1,textTransform:"uppercase",color:C.t1}}>THE RANGE</div></A>

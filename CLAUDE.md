@@ -59,9 +59,9 @@ Do exactly what is asked. Nothing more, nothing less. If something is unclear, a
 ---
 
 ## Testing
-- Skip preview tools — they don't render correctly for this project
-- Ask the user to check on their phone and wait for feedback
-- Phone: `http://172.20.10.12:5173` (Mac hotspot)
+- Preview tool works — start with `preview_start` using config name `benda-learning`, then navigate to `http://localhost:5173` via `preview_eval: window.location.href = 'http://localhost:5173'`, then resize to mobile preset before screenshotting
+- Always use mobile preset (375x812) — this is a phone-only app
+- Phone: `http://172.20.10.12:5173` (Mac hotspot) for real device testing
 - Laptop: `http://127.0.0.1:5173` in Chrome (not Safari)
 
 ---

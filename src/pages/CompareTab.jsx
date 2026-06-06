@@ -35,7 +35,7 @@ export default function CompareTab(){
         <SLabel>PICK TWO BIKES</SLabel>
         <div style={{display:"flex",gap:10,marginBottom:16}}>
           {[{v:a,s:sA},{v:b,s:sB}].map(({v:val,s:set},i)=>(
-            <select key={i} value={val} onChange={e=>set(e.target.value)} style={{flex:1,padding:"12px 10px",background:CARD,border:`1px solid ${BORDER}`,borderRadius:10,color:T1,fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:12,letterSpacing:0.3,WebkitAppearance:"none",appearance:"none"}}>
+            <select key={i} value={val} onChange={e=>set(e.target.value)} style={{flex:1,minWidth:0,padding:"12px 10px",background:CARD,border:`1px solid ${BORDER}`,borderRadius:10,color:T1,fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:12,letterSpacing:0.3,WebkitAppearance:"none",appearance:"none",overflow:"hidden",textOverflow:"ellipsis"}}>
               {BIKES.map(bk=><option key={bk.id} value={bk.id}>{bk.name}</option>)}
             </select>
           ))}
@@ -44,7 +44,7 @@ export default function CompareTab(){
 
       {a===b
         ?<div style={{padding:"40px 20px",textAlign:"left",color:T3,fontSize:13}}>Select two different bikes to compare.</div>
-        :<A key={a+b}>
+        :<div>
 
           {/* BIKE HERO CARDS */}
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,padding:"0 16px 16px"}}>
@@ -122,7 +122,7 @@ export default function CompareTab(){
             </>}
 
           </div>
-        </A>
+        </div>
       }
     </div>
   </div>;

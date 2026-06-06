@@ -53,6 +53,7 @@
 html {
   overscroll-behavior: none;
   overflow-x: clip;
+  background: #000;
 }
 
 body {
@@ -60,6 +61,8 @@ body {
   font-family: 'Geist', sans-serif;
   letter-spacing: -0.03em;
   overflow-x: clip;
+  background: #000;
+
 }
 
 #root {

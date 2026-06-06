@@ -29,26 +29,25 @@ export default function ProgressTab({progress:pr,onReset}){
   return <div style={{background:'#000',color:T1,fontFamily:"'Geist',sans-serif",minHeight:"100vh",paddingBottom:90,zoom:0.9}}>
 
     {/* HEADER */}
-    <div style={{padding:"44px 20px 12px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-      <img src="/images/BENDAlogo.png" alt="Benda" style={{height:44,width:"auto",objectFit:"contain",filter:"brightness(0) invert(1)"}}/>
-      <div style={{fontFamily:"'Inter',sans-serif",fontWeight:800,fontSize:18,letterSpacing:2,textTransform:"uppercase"}}>PROGRESS</div>
-      <div style={{width:44}}/>
+    <div style={{padding:"14px 20px 10px",borderBottom:`1px solid ${BORDER}`,display:"flex",alignItems:"center",justifyContent:"center",position:"relative"}}>
+      <img src="/images/BENDAlogo.png" alt="Benda" style={{height:40,width:"auto",objectFit:"contain",filter:"brightness(0) invert(1)",position:"absolute",left:20,top:"50%",transform:"translateY(-50%)"}}/>
+      <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:20,letterSpacing:0.5,textTransform:"uppercase"}}>PROGRESS</div>
     </div>
 
     {/* OVERALL HERO CARD */}
-    <div style={{margin:"0 16px 12px",borderRadius:16,background:CARD,border:`1px solid ${BORDER}`,overflow:"hidden",position:"relative"}}>
-      <div style={{position:"relative",padding:"20px 16px 0",textAlign:"center"}}>
-        <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:T2,textTransform:"uppercase",marginBottom:6}}>OVERALL COMPLETION</div>
-        <div style={{fontFamily:"'Inter',sans-serif",fontWeight:900,fontSize:52,color:T1,lineHeight:1,letterSpacing:-2}}>{ov}<span style={{fontSize:28}}>%</span></div>
-        <div style={{fontSize:12,color:T2,marginTop:6,lineHeight:1.4}}>You're on track to become shop floor ready.</div>
-        {needCount>0&&<div style={{fontSize:12,color:GT,fontWeight:700,marginTop:4}}>{needCount} bike{needCount!==1?"s":""} still need perfect scores.</div>}
-        {ov===100&&<div style={{position:"absolute",top:16,right:14,display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
-          <ShieldIcon size={44} check col="#22c55e"/>
+    <div style={{margin:"20px 16px 12px",borderRadius:14,background:CARD,border:`1px solid ${BORDER}`,overflow:"hidden",position:"relative"}}>
+      <div style={{position:"relative",padding:"14px 16px 0",textAlign:"center"}}>
+        <div style={{fontSize:9,fontWeight:700,letterSpacing:1.5,color:T2,textTransform:"uppercase",marginBottom:4}}>OVERALL COMPLETION</div>
+        <div style={{fontFamily:"'Inter',sans-serif",fontWeight:900,fontSize:38,color:T1,lineHeight:1,letterSpacing:-2}}>{ov}<span style={{fontSize:22}}>%</span></div>
+        <div style={{fontSize:11,color:T2,marginTop:4,lineHeight:1.4}}>You're on track to become shop floor ready.</div>
+        {needCount>0&&<div style={{fontSize:11,color:GT,fontWeight:700,marginTop:3}}>{needCount} bike{needCount!==1?"s":""} still need perfect scores.</div>}
+        {ov===100&&<div style={{position:"absolute",top:12,right:14,display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
+          <ShieldIcon size={36} check col="#22c55e"/>
           <div style={{fontSize:7,fontWeight:800,letterSpacing:0.5,color:C.ok,textAlign:"center",lineHeight:1.2}}>SHOP FLOOR<br/>READY</div>
         </div>}
       </div>
-      <div style={{padding:"14px 16px 16px"}}>
-        <div style={{height:5,background:"#262626",borderRadius:3,overflow:"hidden",marginBottom:6}}>
+      <div style={{padding:"10px 16px 12px"}}>
+        <div style={{height:4,background:"#262626",borderRadius:3,overflow:"hidden",marginBottom:5}}>
           <div style={{width:`${ov}%`,height:"100%",background:`linear-gradient(90deg,${GOLD},${GT})`,borderRadius:3,transition:"width 1s ease"}}/>
         </div>
         <div style={{display:"flex",justifyContent:"space-between"}}>

@@ -42,9 +42,7 @@ const FACTS=[
 ];
 
 function DidYouKnow({gold,goldTxt}){
-  const idx=Math.floor(Date.now()/86400000)%FACTS.length;
-  const [current,setCurrent]=useState(idx);
-  const f=FACTS[current];
+  const f=FACTS[Math.floor(Date.now()/86400000)%FACTS.length];
   return <div style={{margin:"0 16px 24px",borderRadius:16,background:"#0a0a0a",border:`1px solid #2a2a2a`,overflow:"hidden"}}>
     <div style={{background:`linear-gradient(90deg,rgba(212,162,74,0.12),transparent)`,borderBottom:"1px solid #1a1a1a",padding:"10px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
       <div style={{display:"flex",alignItems:"center",gap:8}}>
@@ -55,9 +53,6 @@ function DidYouKnow({gold,goldTxt}){
     </div>
     <div style={{padding:"14px 16px 16px"}}>
       <div style={{fontSize:13,color:"#d4d4d4",lineHeight:1.65}}>{f.fact}</div>
-      <div style={{display:"flex",justifyContent:"flex-end",marginTop:12}}>
-        <button className="tp" onClick={()=>setCurrent(c=>(c+1)%FACTS.length)} style={{background:"none",border:`1px solid #2a2a2a`,borderRadius:8,padding:"5px 12px",fontSize:10,fontWeight:700,color:"#666",cursor:"pointer",fontFamily:"'Inter',sans-serif",letterSpacing:0.3}}>Next fact →</button>
-      </div>
     </div>
   </div>;
 }
@@ -94,7 +89,7 @@ export default function HomeTab({progress:pr,onBike,onNav}){
 
   return <div style={{background:"#000",minHeight:"100vh",color:"#fafafa",paddingBottom:90,fontFamily:"'Geist',sans-serif",WebkitFontSmoothing:"antialiased",zoom:0.9}}>
     {/* ── HEADER ── */}
-    <div style={{padding:"44px 20px 10px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+    <div style={{padding:"16px 20px 10px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
       <div style={{display:"flex",alignItems:"center",gap:8}}>
         <img src="/images/BENDAlogo.png" alt="Benda" style={{height:55,width:"auto",objectFit:"contain",filter:"brightness(0) invert(1)"}}/>
       </div>
@@ -118,7 +113,7 @@ export default function HomeTab({progress:pr,onBike,onNav}){
 
     {/* ── CONTINUE TRAINING ── */}
     <div style={{margin:"0 16px 10px",padding:16,borderRadius:16,background:C.s1,border:`1px solid #2a2a2a`,position:"relative",overflow:"hidden"}}>
-      <img src={trainingImg[featured.id]||"/images/Napbob250trainingapp2 (1600 x 900 px)-2.png"} alt={featured.name} style={{position:"absolute",right:"20px",top:"-8px",height:"72%",width:"auto",maxWidth:"70%",objectFit:"contain",opacity:0.9,filter:"brightness(1.3)",pointerEvents:"none",WebkitMaskImage:"linear-gradient(to right, transparent 0%, black 20%, black 85%, transparent 100%)",maskImage:"linear-gradient(to right, transparent 0%, black 20%, black 85%, transparent 100%)"}}/>
+      <img src={trainingImg[featured.id]||"/images/Napbob250trainingapp2 (1600 x 900 px)-2.png"} alt={featured.name} style={{position:"absolute",right:"-10px",top:"-30px",height:"105%",width:"auto",maxWidth:"75%",objectFit:"contain",opacity:0.95,filter:"brightness(1.2)",pointerEvents:"none",WebkitMaskImage:"radial-gradient(ellipse 85% 85% at 65% 50%, black 25%, transparent 80%)",maskImage:"radial-gradient(ellipse 85% 85% at 65% 50%, black 25%, transparent 80%)"}}/>
       <div style={{position:"relative",zIndex:1,display:"flex",alignItems:"flex-end",gap:14}}>
         <div style={{flex:1}}>
           <div style={{fontSize:10,fontWeight:700,letterSpacing:1.6,color:C.t3}}>CONTINUE TRAINING</div>
