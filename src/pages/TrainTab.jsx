@@ -1,6 +1,6 @@
 import { C, A } from '../shared.jsx';
 
-const GOLD=C.gold,GT=C.goldTxt,BORDER='#2a2a2a',CARD='#141414';
+const GOLD=C.gold,GT=C.goldTxt,BORDER='#2a2a2a',CARD='#0a0a0a';
 const T1='#fafafa',T2='#b8b8b8',T3='#666';
 
 export default function TrainTab({onQuiz,onScenarios,onGlossary}){

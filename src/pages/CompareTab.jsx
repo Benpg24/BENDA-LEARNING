@@ -3,7 +3,7 @@ import { BIKES, COMP, compKey } from '../data/bikes.js';
 import { C, A } from '../shared.jsx';
 
 const ICON={nb250:"/images/NapBOBnew.png",nb500:"/images/Napbob500N.png",ch500:"/images/ChinchillaN.png",df500:"/images/DarkflagN.png",lfc700:"/images/LFCN.png"};
-const GOLD=C.gold,GT=C.goldTxt,BORDER='#2a2a2a',CARD='#141414';
+const GOLD=C.gold,GT=C.goldTxt,BORDER='#2a2a2a',CARD='#0a0a0a';
 const T1='#fafafa',T2='#b8b8b8',T3='#666';
 
 function SLabel({children}){
@@ -20,16 +20,15 @@ export default function CompareTab(){
   const sAv=Object.fromEntries(bA.stats.map(s=>[s.key,s.val]));
   const sBv=Object.fromEntries(bB.stats.map(s=>[s.key,s.val]));
 
-  return <div style={{position:"fixed",inset:0,overflow:"hidden",background:"#000",color:T1,fontFamily:"'Geist',sans-serif"}}>
+  return <div style={{background:"#000",color:T1,fontFamily:"'Geist',sans-serif",minHeight:"100vh",paddingBottom:90}}>
 
     {/* HEADER */}
-    <div style={{padding:"14px 20px 10px",borderBottom:`1px solid ${BORDER}`,position:"relative",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+    <div style={{padding:"14px 20px 10px",borderBottom:`1px solid ${BORDER}`,display:"flex",alignItems:"center",justifyContent:"center",position:"sticky",top:0,zIndex:10,background:"#000"}}>
       <img src="/images/BENDAlogo.png" alt="Benda" style={{height:40,width:"auto",objectFit:"contain",filter:"brightness(0) invert(1)",position:"absolute",left:20,top:"50%",transform:"translateY(-50%)"}}/>
       <A><div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:20,letterSpacing:0.5,textTransform:"uppercase",color:T1}}>COMPARE</div></A>
     </div>
 
-    {/* SCROLLABLE BODY */}
-    <div style={{overflowY:"auto",height:"calc(100% - 65px)",WebkitOverflowScrolling:"touch",paddingBottom:80}}>
+    <div>
 
       {/* BIKE SELECTORS */}
       <div style={{padding:"16px 16px 0"}}>
