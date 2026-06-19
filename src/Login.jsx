@@ -11,6 +11,24 @@ const inp = {
   outline: 'none', boxSizing: 'border-box',
 };
 
+// Text input with a subtle gold focus highlight.
+function Field(props) {
+  const [focused, setFocused] = useState(false);
+  return (
+    <input
+      {...props}
+      onFocus={e => { setFocused(true); props.onFocus?.(e); }}
+      onBlur={e => { setFocused(false); props.onBlur?.(e); }}
+      style={{
+        ...inp,
+        border: `1px solid ${focused ? C.gold : C.border}`,
+        boxShadow: focused ? `0 0 0 3px ${C.goldBg}` : 'none',
+        transition: 'border .15s ease, box-shadow .15s ease',
+      }}
+    />
+  );
+}
+
 export default function Login() {
   const [mode, setMode] = useState('signin'); // 'signin' | 'signup'
   const [name, setName] = useState('');
@@ -68,16 +86,16 @@ export default function Login() {
   const disabled = loading || !email.trim() || !password || (isSignup && !name.trim());
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000', color: '#fafafa', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', fontFamily: "'Geist',sans-serif" }}>
-      <img src="/images/BENDAlogo.png" alt="Benda" style={{ height: 54, objectFit: 'contain', filter: 'brightness(0) invert(1)', marginBottom: 10 }} />
-      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: 2.5, textTransform: 'uppercase', color: C.t3, marginBottom: 36 }}>Staff Training</div>
+    <div style={{ minHeight: '100vh', background: '#000', color: '#fafafa', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', paddingTop: '16vh', paddingLeft: 24, paddingRight: 24, paddingBottom: 40, boxSizing: 'border-box', fontFamily: "'Geist',sans-serif" }}>
+      <img src="/images/BENDAlogo.png" alt="Benda" style={{ height: 120, width: 'auto', maxWidth: '80%', objectFit: 'contain', filter: 'brightness(0) invert(1)', marginBottom: -10 }} />
+      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: 2.5, textTransform: 'uppercase', color: C.t3, marginBottom: 24 }}>Staff Training</div>
 
       <form onSubmit={submit} style={{ width: '100%', maxWidth: 320, display: 'flex', flexDirection: 'column', gap: 12 }}>
         {isSignup && (
-          <input type="text" autoCapitalize="words" autoComplete="name" placeholder="Full name" value={name} onChange={e => setName(e.target.value)} style={inp} />
+          <Field type="text" autoCapitalize="words" autoComplete="name" placeholder="Full name" value={name} onChange={e => setName(e.target.value)} />
         )}
-        <input type="email" inputMode="email" autoCapitalize="none" autoCorrect="off" autoComplete="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} style={inp} />
-        <input type="password" autoComplete={isSignup ? 'new-password' : 'current-password'} placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} style={inp} />
+        <Field type="email" inputMode="email" autoCapitalize="none" autoCorrect="off" autoComplete="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+        <Field type="password" autoComplete={isSignup ? 'new-password' : 'current-password'} placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
 
         {error && <div style={{ fontSize: 13, color: C.noTxt, textAlign: 'center', lineHeight: 1.4 }}>{error}</div>}
         {notice && <div style={{ fontSize: 13, color: C.okTxt, textAlign: 'center', lineHeight: 1.4 }}>{notice}</div>}

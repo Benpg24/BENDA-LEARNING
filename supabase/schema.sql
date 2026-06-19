@@ -63,3 +63,15 @@ drop trigger if exists enforce_email_domain_trigger on auth.users;
 create trigger enforce_email_domain_trigger
   before insert on auth.users
   for each row execute function public.enforce_email_domain();
+
+-- 6. Managers — let users whose role is 'manager'/'admin' read ALL staff data
+--    (security-definer helper avoids RLS recursion on the profiles table).
+create or replace function public.is_manager()
+returns boolean language sql security definer stable set search_path = public as $$
+  select exists (select 1 from public.profiles where id = auth.uid() and role in ('manager','admin'));
+$$;
+
+drop policy if exists "managers read all profiles" on public.profiles;
+drop policy if exists "managers read all progress" on public.progress;
+create policy "managers read all profiles" on public.profiles for select using (public.is_manager());
+create policy "managers read all progress" on public.progress for select using (public.is_manager());

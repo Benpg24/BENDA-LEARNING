@@ -6,6 +6,7 @@ import ProgressTab from './pages/ProgressTab.jsx';
 import CompareTab from './pages/CompareTab.jsx';
 import HomeTab from './pages/HomeTab.jsx';
 import BotTab from './pages/BotTab.jsx';
+import ManagerScreen from './pages/ManagerScreen.jsx';
 import Login from './Login.jsx';
 import { supabase } from './supabase.js';
 
@@ -847,6 +848,7 @@ function App(){
   if(authLoading) return <div style={{minHeight:"100vh",background:"#000",display:"flex",alignItems:"center",justifyContent:"center"}}><img src="/images/BENDAlogo.png" alt="Benda" style={{height:48,objectFit:"contain",filter:"brightness(0) invert(1)",opacity:0.8}}/></div>;
   if(!session) return <Login/>;
   const firstName=(profile?.full_name||"").trim().split(" ")[0]||"there";
+  const isManager=["manager","admin"].includes(profile?.role);
 
   return <div style={{background:C.bg,minHeight:"100vh",color:C.text,fontFamily:"'Geist',sans-serif",fontSize:15}}>
     <style>{CSS}</style>
@@ -855,12 +857,13 @@ function App(){
       {tab==="range"&&<RangeTab onBike={openBike} progress={p}/>}
       {tab==="bot"&&<BotTab onQuiz={()=>sS("gquiz")} onScenarios={()=>sS("scenarios")} onGlossary={()=>sS("glossary")}/>}
       {tab==="compare"&&<CompareTab/>}
-      {tab==="progress"&&<ProgressTab progress={p} onReset={rst} onSignOut={signOut}/>}
+      {tab==="progress"&&<ProgressTab progress={p} onReset={rst} onSignOut={signOut} isManager={isManager} onTeam={()=>sS("manager")}/>}
       <TabBar active={tab} onChange={sT}/>
     </>}
     {screen==="bike"&&bike&&<BikeScreen bike={bike} initialTab={initTab} onBack={()=>sS("main")} onUp={bqFin} onChange={b=>{sB(b);sIT("overview")}}/>}
     {screen==="gquiz"&&<GQScreen onBack={()=>sS("main")} onFin={gqFin}/>}
     {screen==="scenarios"&&<ScScreen onBack={()=>sS("main")} onFin={scFin}/>}
+    {screen==="manager"&&<ManagerScreen onBack={()=>sS("main")}/>}
     {screen==="glossary"&&<div style={{position:"fixed",inset:0,overflow:"hidden",background:"#000",color:"#fafafa",fontFamily:"'Geist',sans-serif"}}>
       <Hdr onBack={()=>sS("main")}/>
       <div style={{overflowY:"auto",height:"calc(100% - 65px)",WebkitOverflowScrolling:"touch",paddingBottom:80}}>

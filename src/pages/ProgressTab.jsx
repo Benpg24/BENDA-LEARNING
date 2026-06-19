@@ -20,7 +20,7 @@ function ShieldIcon({size=48,check=false,col}){
   </svg>;
 }
 
-export default function ProgressTab({progress:pr,onReset,onSignOut}){
+export default function ProgressTab({progress:pr,onReset,onSignOut,isManager,onTeam}){
   const [confirm,setConfirm]=useState(false);
   const ov=om(pr);
   const certCount=BIKES.filter(b=>isCert(pr.bikeQuiz[b.id]||{})).length;
@@ -33,6 +33,17 @@ export default function ProgressTab({progress:pr,onReset,onSignOut}){
       <img src="/images/BENDAlogo.png" alt="Benda" style={{height:40,width:"auto",objectFit:"contain",filter:"brightness(0) invert(1)",position:"absolute",left:20,top:"50%",transform:"translateY(-50%)"}}/>
       <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:20,letterSpacing:0.5,textTransform:"uppercase"}}>PROGRESS</div>
     </div>
+
+    {isManager&&onTeam&&<div className="tp" onClick={onTeam} style={{margin:"16px 16px 0",borderRadius:14,background:"#140e00",border:`1px solid ${GOLD}55`,padding:"14px 16px",display:"flex",alignItems:"center",justifyContent:"space-between",cursor:"pointer"}}>
+      <div style={{display:"flex",alignItems:"center",gap:12}}>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={GT} strokeWidth="1.8" strokeLinecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <div>
+          <div style={{fontFamily:"'Inter',sans-serif",fontWeight:800,fontSize:13,color:GT,letterSpacing:0.3}}>TEAM PROGRESS</div>
+          <div style={{fontSize:11,color:T2,marginTop:1}}>See all staff completion at a glance</div>
+        </div>
+      </div>
+      <div style={{color:GT,fontSize:22}}>›</div>
+    </div>}
 
     {/* OVERALL HERO CARD */}
     <div style={{margin:"20px 16px 12px",borderRadius:14,background:CARD,border:`1px solid ${BORDER}`,overflow:"hidden",position:"relative"}}>

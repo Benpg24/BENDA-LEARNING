@@ -30,7 +30,12 @@
       "Bash(xargs kill -9)",
       "Bash(npx netlify *)",
       "Bash(break)",
-      "Bash(git commit -q -m 'Auth: restrict sign-up to @bendamoto.com.au *)"
+      "Bash(git commit -q -m 'Auth: restrict sign-up to @bendamoto.com.au *)",
+      "Bash(awk '{print \"  \"$2}')",
+      "Bash(curl -s -m 8 -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:8888/)",
+      "Bash(curl -s -m 8 -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://172.20.10.12:8888/)",
+      "Bash(curl -s -m 8 -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://172.20.10.12:5173/)",
+      "Bash(git commit -q -m 'Phase 3: manager dashboard \\(team progress view\\) *)"
     ]
   },
   "hooks": {
