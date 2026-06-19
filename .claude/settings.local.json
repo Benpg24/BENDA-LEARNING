@@ -35,7 +35,8 @@
       "Bash(curl -s -m 8 -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:8888/)",
       "Bash(curl -s -m 8 -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://172.20.10.12:8888/)",
       "Bash(curl -s -m 8 -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://172.20.10.12:5173/)",
-      "Bash(git commit -q -m 'Phase 3: manager dashboard \\(team progress view\\) *)"
+      "Bash(git commit -q -m 'Phase 3: manager dashboard \\(team progress view\\) *)",
+      "Bash(git commit -q -m 'Auth: open sign-up to any email \\(remove domain restriction\\) *)"
     ]
   },
   "hooks": {
