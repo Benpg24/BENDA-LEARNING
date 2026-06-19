@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { BIKES, SCENARIOS, COMP, COMPQ, GLOSSARY, bm, om, bs, nb } from './data/bikes.js';
 import { C, bd, crd, sec, btnA, btnG, BIKE_COLOURS, A, Ring, HoverCard } from './shared.jsx';
 import RangeTab from './pages/RangeTab.jsx';
-import TrainTab from './pages/TrainTab.jsx';
 import ProgressTab from './pages/ProgressTab.jsx';
 import CompareTab from './pages/CompareTab.jsx';
 import HomeTab from './pages/HomeTab.jsx';

@@ -59,7 +59,7 @@ function DidYouKnow({gold,goldTxt}){
 
 export default function HomeTab({progress:pr,onBike,onNav}){
   const GOLD=C.gold,GT=C.goldTxt,GD=C.goldDim;
-  const trainingImg={nb250:"/images/napbobpotential.png",nb500:"/images/NAP BOB Homepage.png",ch500:"/images/Chinchilla homepage.png",df500:"/images/Dark Flag Homepage",lfc700:"/images/LFC homepage.png"};
+  const trainingImg={nb250:"/images/napbobpotential.png",nb500:"/images/NAP BOB Homepage.png",ch500:"/images/Chinchilla homepage.png",df500:"/images/Dark Flag Homepage.png",lfc700:"/images/LFC homepage.png"};
   const garageRef=useRef(null);
   const [activeGarageId,setActiveGarageId]=useState(null);
   const onGarageScroll=useCallback(()=>{
@@ -92,15 +92,6 @@ export default function HomeTab({progress:pr,onBike,onNav}){
     <div style={{padding:"16px 20px 10px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
       <div style={{display:"flex",alignItems:"center",gap:8}}>
         <img src="/images/BENDAlogo.png" alt="Benda" style={{height:55,width:"auto",objectFit:"contain",filter:"brightness(0) invert(1)"}}/>
-      </div>
-      <div style={{display:"flex",alignItems:"center",gap:12}}>
-        <div style={{display:"flex",alignItems:"center",gap:6}}>
-          <svg width="11" height="14" viewBox="0 0 11 14" fill="none"><path d="M5.5 0C5.5 0 9.5 3.5 9.5 7.5C9.5 9.985 7.709 12 5.5 12C3.291 12 1.5 9.985 1.5 7.5C1.5 6 2.5 5 2.5 5C2.5 5 3 7 4.5 7C4.5 5 3.5 3 5.5 0Z" fill={GT}/></svg>
-          <div style={{fontSize:9,fontWeight:700,letterSpacing:0.3,color:GT,lineHeight:1.3}}>
-            <div>7 DAY</div>
-            <div>STREAK</div>
-          </div>
-        </div>
       </div>
     </div>
 

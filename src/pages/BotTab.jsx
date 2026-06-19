@@ -234,7 +234,7 @@ export default function BotTab({ onQuiz, onScenarios, onGlossary }) {
   }, [messages, loading]);
 
   async function startScenario(idx) {
-    const p = idx ?? Math.floor(Math.random() * 5);
+    const p = idx ?? 0;
     setCurrentPersona(p);
     setMessages([]);
     setSessionEnded(false);

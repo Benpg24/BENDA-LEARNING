@@ -267,11 +267,24 @@ Be honest and specific. Quote exact lines from the transcript. Don't pad the res
 }
 
 export default async (req) => {
-  if (req.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
+  const json = (data, status = 200) =>
+    new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } });
+
+  if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
+  if (!process.env.ANTHROPIC_API_KEY) return json({ error: 'Server is not configured. Please contact support.' }, 500);
+
+  let body;
+  try {
+    body = await req.json();
+  } catch {
+    return json({ error: 'Invalid request.' }, 400);
   }
 
-  const { messages, mode, persona, difficulty } = await req.json();
+  const { messages, mode, persona, difficulty } = body;
+  if (!Array.isArray(messages) || messages.length === 0) {
+    return json({ error: 'Invalid request.' }, 400);
+  }
+
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
   let system, apiMessages, maxTokens;
@@ -307,16 +320,20 @@ export default async (req) => {
     maxTokens = 1024;
   }
 
-  const response = await client.messages.create({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: maxTokens,
-    system,
-    messages: apiMessages,
-  });
-
-  return new Response(JSON.stringify({ content: response.content[0].text }), {
-    headers: { 'Content-Type': 'application/json' },
-  });
+  try {
+    const response = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: maxTokens,
+      system,
+      messages: apiMessages,
+    });
+    const text = response.content?.[0]?.text;
+    if (!text) return json({ error: 'Empty response. Please try again.' }, 502);
+    return json({ content: text });
+  } catch (err) {
+    console.error('chat function error:', err);
+    return json({ error: 'The AI is busy right now. Please try again in a moment.' }, 503);
+  }
 };
 
 export const config = { path: '/api/chat' };

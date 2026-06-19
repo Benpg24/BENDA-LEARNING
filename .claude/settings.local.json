@@ -15,7 +15,15 @@
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
-      "Bash(pdftotext \"/Users/benpg/Downloads/BENDA Owner's Manual-4.pdf\" -)"
+      "Bash(pdftotext \"/Users/benpg/Downloads/BENDA Owner's Manual-4.pdf\" -)",
+      "Bash(jobs -l)",
+      "Bash(git commit -q -m 'Training: lock Medium/Hard scenarios as Coming Soon \\(EASY-only launch\\) *)",
+      "Bash(git mv *)",
+      "Bash(git rm *)",
+      "Bash(curl -s -m 60 -X POST http://localhost:8888/api/chat -H 'Content-Type: application/json' -d '{\"messages\":[{\"role\":\"assistant\",\"content\":\"Hey, is this where I can look at the Napoleonbob 250?\"},{\"role\":\"user\",\"content\":\"It sure is. Have you got your licence yet?\"}],\"mode\":\"scenario\",\"persona\":0,\"difficulty\":\"easy\"}' -w '\\\\n[HTTP %{http_code}]\\\\n')",
+      "Bash(curl -s -m 20 -X POST http://localhost:8888/api/chat -H 'Content-Type: application/json' -d 'not json' -w '\\\\n[HTTP %{http_code}]\\\\n')",
+      "Bash(curl -s -m 20 -X POST http://localhost:8888/api/chat -H 'Content-Type: application/json' -d '{\"mode\":\"scenario\"}' -w '\\\\n[HTTP %{http_code}]\\\\n')",
+      "Bash(git commit -q -m 'Production hardening: error boundary, function error handling, cleanup *)"
     ]
   },
   "hooks": {
