@@ -6,8 +6,8 @@ const T1 = '#fafafa', T2 = '#b8b8b8', T3 = '#666';
 
 const PERSONA_CARDS = [
   { name: 'Liam', age: 22, tag: 'LAMS & LICENCE', teaser: "Just got his Ls. Likes the look of the NB250 but worried he'll outgrow it fast.", difficulty: 'easy' },
-  { name: 'Steph', age: 34, tag: 'DISCOVERY', teaser: "Quiet browser, full licence. Has a bike in mind but won't say which until you ask.", difficulty: 'medium' },
-  { name: 'Dave', age: 50, tag: 'BRAND OBJECTION', teaser: "20-year rider with a Harley. Openly skeptical about buying 'Chinese'.", difficulty: 'hard' },
+  { name: 'Steph', age: 34, tag: 'DISCOVERY', teaser: "Quiet browser, full licence. Has a bike in mind but won't say which until you ask.", difficulty: 'medium', comingSoon: true },
+  { name: 'Dave', age: 50, tag: 'BRAND OBJECTION', teaser: "20-year rider with a Harley. Openly skeptical about buying 'Chinese'.", difficulty: 'hard', comingSoon: true },
 ];
 
 const DIFF_COLOR = { easy: '#22c55e', medium: '#f59e0b', hard: '#ef4444' };
@@ -389,12 +389,14 @@ export default function BotTab({ onQuiz, onScenarios, onGlossary }) {
         <div style={{ flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch', padding: '16px 16px 100px' }}>
           <A>
             <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 1.5, color: T3, textTransform: 'uppercase', marginBottom: 14 }}>CHOOSE YOUR CUSTOMER</div>
-            {PERSONA_CARDS.map((c, i) => (
+            {PERSONA_CARDS.map((c, i) => {
+              const locked = c.comingSoon;
+              return (
               <div
                 key={c.name}
-                onClick={() => startScenario(i)}
-                className="tp"
-                style={{ display: 'flex', alignItems: 'center', gap: 14, background: CARD, border: `1px solid ${BORDER}`, borderRadius: 14, padding: '16px 16px', marginBottom: 10, cursor: 'pointer' }}
+                onClick={locked ? undefined : () => startScenario(i)}
+                className={locked ? undefined : "tp"}
+                style={{ display: 'flex', alignItems: 'center', gap: 14, background: CARD, border: `1px solid ${BORDER}`, borderRadius: 14, padding: '16px 16px', marginBottom: 10, cursor: locked ? 'default' : 'pointer', opacity: locked ? 0.5 : 1 }}
               >
                 <div style={{ width: 44, height: 44, borderRadius: 12, background: '#111', border: `1px solid #2a2a2a`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontFamily: "'Inter',sans-serif", fontWeight: 800, fontSize: 18, color: GT }}>
                   {c.name[0]}
@@ -406,9 +408,12 @@ export default function BotTab({ onQuiz, onScenarios, onGlossary }) {
                   </div>
                   <div style={{ fontSize: 12, color: T3, lineHeight: 1.5 }}>{c.teaser}</div>
                 </div>
-                <div style={{ color: GT, fontSize: 22, flexShrink: 0 }}>›</div>
+                {locked
+                  ? <div style={{ fontSize: 8, fontWeight: 800, letterSpacing: 1, color: T3, border: `1px solid ${BORDER}`, borderRadius: 4, padding: '3px 7px', flexShrink: 0, textTransform: 'uppercase' }}>Coming Soon</div>
+                  : <div style={{ color: GT, fontSize: 22, flexShrink: 0 }}>›</div>}
               </div>
-            ))}
+              );
+            })}
           </A>
         </div>
       )}
