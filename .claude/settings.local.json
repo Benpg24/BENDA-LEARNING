@@ -23,7 +23,8 @@
       "Bash(curl -s -m 60 -X POST http://localhost:8888/api/chat -H 'Content-Type: application/json' -d '{\"messages\":[{\"role\":\"assistant\",\"content\":\"Hey, is this where I can look at the Napoleonbob 250?\"},{\"role\":\"user\",\"content\":\"It sure is. Have you got your licence yet?\"}],\"mode\":\"scenario\",\"persona\":0,\"difficulty\":\"easy\"}' -w '\\\\n[HTTP %{http_code}]\\\\n')",
       "Bash(curl -s -m 20 -X POST http://localhost:8888/api/chat -H 'Content-Type: application/json' -d 'not json' -w '\\\\n[HTTP %{http_code}]\\\\n')",
       "Bash(curl -s -m 20 -X POST http://localhost:8888/api/chat -H 'Content-Type: application/json' -d '{\"mode\":\"scenario\"}' -w '\\\\n[HTTP %{http_code}]\\\\n')",
-      "Bash(git commit -q -m 'Production hardening: error boundary, function error handling, cleanup *)"
+      "Bash(git commit -q -m 'Production hardening: error boundary, function error handling, cleanup *)",
+      "Bash(git commit -q -m 'Phase 2: Supabase auth + per-user progress saving *)"
     ]
   },
   "hooks": {

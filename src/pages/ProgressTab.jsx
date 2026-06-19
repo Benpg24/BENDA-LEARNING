@@ -20,7 +20,7 @@ function ShieldIcon({size=48,check=false,col}){
   </svg>;
 }
 
-export default function ProgressTab({progress:pr,onReset}){
+export default function ProgressTab({progress:pr,onReset,onSignOut}){
   const [confirm,setConfirm]=useState(false);
   const ov=om(pr);
   const certCount=BIKES.filter(b=>isCert(pr.bikeQuiz[b.id]||{})).length;
@@ -143,6 +143,7 @@ export default function ProgressTab({progress:pr,onReset}){
           <button className="tp" onClick={()=>setConfirm(false)} style={{flex:1,padding:14,background:"transparent",border:`1px solid ${BORDER}`,borderRadius:10,fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:13,color:T3,cursor:"pointer"}}>Cancel</button>
         </div>
       }
+      {onSignOut&&<button className="tp" onClick={onSignOut} style={{width:"100%",marginTop:10,padding:14,background:"transparent",border:"none",fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:13,color:T3,cursor:"pointer"}}>Sign Out</button>}
     </div>
   </div>;
 }

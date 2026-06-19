@@ -57,7 +57,7 @@ function DidYouKnow({gold,goldTxt}){
   </div>;
 }
 
-export default function HomeTab({progress:pr,onBike,onNav}){
+export default function HomeTab({progress:pr,onBike,onNav,name}){
   const GOLD=C.gold,GT=C.goldTxt,GD=C.goldDim;
   const trainingImg={nb250:"/images/napbobpotential.png",nb500:"/images/NAP BOB Homepage.png",ch500:"/images/Chinchilla homepage.png",df500:"/images/Dark Flag Homepage.png",lfc700:"/images/LFC homepage.png"};
   const garageRef=useRef(null);
@@ -98,7 +98,7 @@ export default function HomeTab({progress:pr,onBike,onNav}){
     {/* ── WELCOME ── */}
     <div style={{padding:"6px 20px 8px",textAlign:"left"}}>
       <div style={{fontSize:10,fontWeight:700,letterSpacing:0.5,color:C.t3,marginBottom:3}}>{dayName} · {greet}</div>
-      <div style={{fontFamily:"'Geist',sans-serif",fontWeight:800,fontSize:30,lineHeight:1.05,letterSpacing:-0.5}}>Welcome back, Ben</div>
+      <div style={{fontFamily:"'Geist',sans-serif",fontWeight:800,fontSize:30,lineHeight:1.05,letterSpacing:-0.5}}>Welcome back, {name||'there'}</div>
       <p style={{fontSize:13,color:C.t2,margin:"3px 0 0",lineHeight:1.4}}>Pick up where you left off and sharpen your product knowledge.</p>
     </div>
 

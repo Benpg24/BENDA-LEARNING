@@ -6,6 +6,8 @@ import ProgressTab from './pages/ProgressTab.jsx';
 import CompareTab from './pages/CompareTab.jsx';
 import HomeTab from './pages/HomeTab.jsx';
 import BotTab from './pages/BotTab.jsx';
+import Login from './Login.jsx';
+import { supabase } from './supabase.js';
 
 // ── CSS ─────────────────────────────────────────────────────────────────────
 const CSS=`@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}} @keyframes fi{from{opacity:0}to{opacity:1}} @keyframes si{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}} @keyframes pg{from{width:0}} @keyframes cp{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}} @keyframes ws{0%,100%{transform:translateX(0)}25%,75%{transform:translateX(-3px)}50%{transform:translateX(3px)}} @keyframes tr{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}} @keyframes fc{from{transform:rotateX(80deg);opacity:0}to{transform:rotateX(0);opacity:1}} .au{animation:fu .38s ease both}.ai{animation:fi .3s ease both}.as{animation:si .35s ease both} .ac{animation:cp .35s ease}.aw{animation:ws .35s ease}.at{animation:tr .5s cubic-bezier(.34,1.56,.64,1) both} .af{animation:fc .25s ease both} .tp{transition:all .15s ease;cursor:pointer}.tp:active{transform:scale(.97);opacity:.85} select{-webkit-appearance:none;appearance:none} *{-webkit-tap-highlight-color:transparent;box-sizing:border-box} body{margin:0;padding:0}::-webkit-scrollbar{width:0;height:0}`;
@@ -43,16 +45,52 @@ function BikeCarousel({images,name}){
 // ── GLOSSARY ────────────────────────────────────────────────────────────────
 
 
-// ── STORAGE ─────────────────────────────────────────────────────────────────
-const SK = "benda-v4";
+// ── STORAGE (Supabase, per-user) ────────────────────────────────────────────
 const defProg = () => ({ bikeQuiz: {}, generalQuiz: { best: 0, total: 0, attempts: 0 }, scenarios: { completed: 0, correct: 0, attempts: 0 } });
-function useProg() {
-const [p, sP] = useState(defProg);
-const ld = useRef(false);
-useEffect(() => { (async () => { try { const r = await window.storage.get(SK); if (r?.value) sP(JSON.parse(r.value)); } catch {} ld.current = true; })(); }, []);
-const up = useCallback((fn) => { sP(prev => { const n = fn(JSON.parse(JSON.stringify(prev))); if (ld.current)(async()=>{try{await window.storage.set(SK,JSON.stringify(n))}catch{}})(); return n; }); }, []);
-const rst = useCallback(async () => { const d = defProg(); sP(d); try { await window.storage.set(SK, JSON.stringify(d)); } catch {} }, []);
-return { p, up, rst };
+function useProg(userId) {
+  const [p, sP] = useState(defProg);
+  const loaded = useRef(false);
+  const saveTimer = useRef(null);
+
+  // Load this user's progress when they log in (and reset on logout).
+  useEffect(() => {
+    loaded.current = false;
+    if (!userId) { sP(defProg()); return; }
+    let active = true;
+    (async () => {
+      try {
+        const { data, error } = await supabase.from('progress').select('data').eq('user_id', userId).maybeSingle();
+        if (active) sP(!error && data?.data ? { ...defProg(), ...data.data } : defProg());
+      } catch { if (active) sP(defProg()); }
+      if (active) loaded.current = true;
+    })();
+    return () => { active = false; };
+  }, [userId]);
+
+  // Update local state immediately; debounce-save to Supabase (avoids a write per question).
+  const up = useCallback((fn) => {
+    sP(prev => {
+      const n = fn(JSON.parse(JSON.stringify(prev)));
+      if (loaded.current && userId) {
+        clearTimeout(saveTimer.current);
+        saveTimer.current = setTimeout(() => {
+          supabase.from('progress').upsert({ user_id: userId, data: n, updated_at: new Date().toISOString() })
+            .then(({ error }) => { if (error) console.error('Progress save failed:', error.message); });
+        }, 600);
+      }
+      return n;
+    });
+  }, [userId]);
+
+  const rst = useCallback(async () => {
+    const d = defProg();
+    sP(d);
+    if (userId) {
+      try { await supabase.from('progress').upsert({ user_id: userId, data: d, updated_at: new Date().toISOString() }); } catch {}
+    }
+  }, [userId]);
+
+  return { p, up, rst };
 }
 
 
@@ -770,12 +808,33 @@ function GlossaryTab(){
 
 // ── APP ─────────────────────────────────────────────────────────────────────
 function App(){
+  const [session,setSession]=useState(null);
+  const [profile,setProfile]=useState(null);
+  const [authLoading,setAuthLoading]=useState(true);
   const [screen,sS]=useState("main");
   const [tab,sT]=useState("home");
   const [bike,sB]=useState(null);
   const [initTab,sIT]=useState("overview");
-  const {p,up,rst}=useProg();
+  const userId=session?.user?.id||null;
+  const {p,up,rst}=useProg(userId);
 
+  // Track auth session.
+  useEffect(()=>{
+    let active=true;
+    supabase.auth.getSession().then(({data})=>{if(active){setSession(data.session);setAuthLoading(false);}});
+    const {data:sub}=supabase.auth.onAuthStateChange((_e,s)=>setSession(s));
+    return ()=>{active=false;sub.subscription.unsubscribe();};
+  },[]);
+
+  // Load profile (name/role) for the logged-in user.
+  useEffect(()=>{
+    if(!userId){setProfile(null);return;}
+    let active=true;
+    supabase.from('profiles').select('full_name,role').eq('id',userId).maybeSingle().then(({data})=>{if(active)setProfile(data);});
+    return ()=>{active=false;};
+  },[userId]);
+
+  async function signOut(){await supabase.auth.signOut();sS("main");sT("home");}
   function openBike(b,t="overview"){sB(b);sIT(t);sS("bike");window.scrollTo(0,0)}
   function navTo(dest){
     if(dest==="glossary"){sS("glossary");return;}
@@ -785,14 +844,18 @@ function App(){
   function gqFin(sc,tot){up(pr=>{pr.generalQuiz={best:Math.max(pr.generalQuiz.best,sc),total:tot,attempts:pr.generalQuiz.attempts+1};return pr})}
   function scFin(sc,tot){up(pr=>{pr.scenarios={completed:pr.scenarios.completed+tot,correct:pr.scenarios.correct+sc,attempts:pr.scenarios.attempts+1};return pr})}
 
+  if(authLoading) return <div style={{minHeight:"100vh",background:"#000",display:"flex",alignItems:"center",justifyContent:"center"}}><img src="/images/BENDAlogo.png" alt="Benda" style={{height:48,objectFit:"contain",filter:"brightness(0) invert(1)",opacity:0.8}}/></div>;
+  if(!session) return <Login/>;
+  const firstName=(profile?.full_name||"").trim().split(" ")[0]||"there";
+
   return <div style={{background:C.bg,minHeight:"100vh",color:C.text,fontFamily:"'Geist',sans-serif",fontSize:15}}>
     <style>{CSS}</style>
 {screen==="main"&&<>
-      {tab==="home"&&<HomeTab progress={p} onBike={openBike} onNav={navTo}/>}
+      {tab==="home"&&<HomeTab progress={p} onBike={openBike} onNav={navTo} name={firstName}/>}
       {tab==="range"&&<RangeTab onBike={openBike} progress={p}/>}
       {tab==="bot"&&<BotTab onQuiz={()=>sS("gquiz")} onScenarios={()=>sS("scenarios")} onGlossary={()=>sS("glossary")}/>}
       {tab==="compare"&&<CompareTab/>}
-      {tab==="progress"&&<ProgressTab progress={p} onReset={rst}/>}
+      {tab==="progress"&&<ProgressTab progress={p} onReset={rst} onSignOut={signOut}/>}
       <TabBar active={tab} onChange={sT}/>
     </>}
     {screen==="bike"&&bike&&<BikeScreen bike={bike} initialTab={initTab} onBack={()=>sS("main")} onUp={bqFin} onChange={b=>{sB(b);sIT("overview")}}/>}
