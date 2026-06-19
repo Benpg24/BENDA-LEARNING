@@ -46,3 +46,20 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
+
+-- 5. Restrict sign-up to the company email domain (hard backstop; the app
+--    also checks this for a friendly message). Change the domain if needed.
+create or replace function public.enforce_email_domain()
+returns trigger language plpgsql security definer set search_path = public as $$
+begin
+  if lower(new.email) not like '%@bendamoto.com.au' then
+    raise exception 'Only @bendamoto.com.au email addresses can sign up.';
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists enforce_email_domain_trigger on auth.users;
+create trigger enforce_email_domain_trigger
+  before insert on auth.users
+  for each row execute function public.enforce_email_domain();

@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { supabase } from './supabase.js';
 import { C } from './shared.jsx';
 
+// Staff sign-up is restricted to the company email domain.
+const ALLOWED_DOMAIN = 'bendamoto.com.au';
+
 const inp = {
   width: '100%', padding: '14px 16px', background: '#111', border: `1px solid ${C.border}`,
   borderRadius: 10, color: '#fafafa', fontSize: 16, fontFamily: "'Geist',sans-serif",
@@ -28,6 +31,10 @@ export default function Login() {
     e.preventDefault();
     if (loading || !email.trim() || !password) return;
     if (isSignup && password.length < 6) { setError('Password must be at least 6 characters.'); return; }
+    if (isSignup && !email.trim().toLowerCase().endsWith('@' + ALLOWED_DOMAIN)) {
+      setError(`Please use your @${ALLOWED_DOMAIN} work email.`);
+      return;
+    }
     setLoading(true); setError(''); setNotice('');
 
     if (isSignup) {

@@ -27,7 +27,10 @@
       "Bash(git commit -q -m 'Phase 2: Supabase auth + per-user progress saving *)",
       "Bash(git commit -q -m 'Auth: add self-service sign-up \\(name + email + password\\) *)",
       "Bash(lsof -ti:8888,5173,5174,5175)",
-      "Bash(xargs kill -9)"
+      "Bash(xargs kill -9)",
+      "Bash(npx netlify *)",
+      "Bash(break)",
+      "Bash(git commit -q -m 'Auth: restrict sign-up to @bendamoto.com.au *)"
     ]
   },
   "hooks": {
