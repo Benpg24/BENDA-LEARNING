@@ -31,6 +31,7 @@ export default function Login() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [loading, setLoading] = useState(false);
@@ -39,13 +40,14 @@ export default function Login() {
 
   function switchMode() {
     setMode(isSignup ? 'signin' : 'signup');
-    setError(''); setNotice('');
+    setError(''); setNotice(''); setConfirmPassword('');
   }
 
   async function submit(e) {
     e.preventDefault();
     if (loading || !email.trim() || !password) return;
     if (isSignup && password.length < 6) { setError('Password must be at least 6 characters.'); return; }
+    if (isSignup && password !== confirmPassword) { setError("Passwords don't match."); return; }
     setLoading(true); setError(''); setNotice('');
 
     if (isSignup) {
@@ -76,7 +78,7 @@ export default function Login() {
     }
   }
 
-  const disabled = loading || !email.trim() || !password || (isSignup && !name.trim());
+  const disabled = loading || !email.trim() || !password || (isSignup && (!name.trim() || !confirmPassword));
 
   return (
     <div style={{ minHeight: '100vh', background: '#000', color: '#fafafa', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', paddingTop: '16vh', paddingLeft: 24, paddingRight: 24, paddingBottom: 40, boxSizing: 'border-box', fontFamily: "'Geist',sans-serif" }}>
@@ -89,6 +91,9 @@ export default function Login() {
         )}
         <Field type="email" inputMode="email" autoCapitalize="none" autoCorrect="off" autoComplete="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
         <Field type="password" autoComplete={isSignup ? 'new-password' : 'current-password'} placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+        {isSignup && (
+          <Field type="password" autoComplete="new-password" placeholder="Confirm password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
+        )}
 
         {error && <div style={{ fontSize: 13, color: C.noTxt, textAlign: 'center', lineHeight: 1.4 }}>{error}</div>}
         {notice && <div style={{ fontSize: 13, color: C.okTxt, textAlign: 'center', lineHeight: 1.4 }}>{notice}</div>}
