@@ -57,7 +57,7 @@ function DidYouKnow({gold,goldTxt}){
   </div>;
 }
 
-export default function HomeTab({progress:pr,onBike,onNav,name}){
+export default function HomeTab({progress:pr,onBike,onNav,name,onSignOut}){
   const GOLD=C.gold,GT=C.goldTxt,GD=C.goldDim;
   const trainingImg={nb250:"/images/napbobpotential.png",nb500:"/images/NAP BOB Homepage.png",ch500:"/images/Chinchilla homepage.png",df500:"/images/Dark Flag Homepage.png",lfc700:"/images/LFC homepage.png"};
   const garageRef=useRef(null);
@@ -93,6 +93,7 @@ export default function HomeTab({progress:pr,onBike,onNav,name}){
       <div style={{display:"flex",alignItems:"center",gap:8}}>
         <img src="/images/BENDAlogo.png" alt="Benda" style={{height:55,width:"auto",objectFit:"contain",filter:"brightness(0) invert(1)"}}/>
       </div>
+      <button onClick={onSignOut} style={{background:"none",border:"1px solid #2a2a2a",borderRadius:6,color:"#555",fontSize:9,fontFamily:"'Inter',sans-serif",fontWeight:700,letterSpacing:0.5,padding:"5px 9px",cursor:"pointer",textTransform:"uppercase"}}>Sign out</button>
     </div>
 
     {/* ── WELCOME ── */}
@@ -122,7 +123,7 @@ export default function HomeTab({progress:pr,onBike,onNav,name}){
               </div>;
             })}
           </div>
-          <div style={{display:"flex",justifyContent:"center",marginTop:6}}><SpeedoDial value={featPct} gold={GOLD} goldTxt={GT} sz={100}/></div>
+          <div style={{display:"flex",justifyContent:"flex-start",marginTop:6}}><SpeedoDial value={featPct} gold={GOLD} goldTxt={GT} sz={100}/></div>
         </div>
         <div style={{flex:1,paddingBottom:4,paddingRight:8}}>
           <button className="tp" onClick={()=>onBike(featured,'quiz')} style={{

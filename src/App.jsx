@@ -847,13 +847,14 @@ function App(){
 
   if(authLoading) return <div style={{minHeight:"100vh",background:"#000",display:"flex",alignItems:"center",justifyContent:"center"}}><img src="/images/BENDAlogo.png" alt="Benda" style={{height:48,objectFit:"contain",filter:"brightness(0) invert(1)",opacity:0.8}}/></div>;
   if(!session) return <Login/>;
-  const firstName=(profile?.full_name||"").trim().split(" ")[0]||"there";
-  const isManager=["manager","admin"].includes(profile?.role);
+  const metaName=session?.user?.user_metadata?.full_name||"";
+  const firstName=((profile?.full_name||metaName)||"").trim().split(" ")[0]||"there";
+  const isManager=["manager","admin","creator"].includes(profile?.role);
 
   return <div className="appenter" style={{background:C.bg,minHeight:"100vh",color:C.text,fontFamily:"'Geist',sans-serif",fontSize:15}}>
     <style>{CSS}</style>
 {screen==="main"&&<>
-      {tab==="home"&&<HomeTab progress={p} onBike={openBike} onNav={navTo} name={firstName}/>}
+      {tab==="home"&&<HomeTab progress={p} onBike={openBike} onNav={navTo} name={firstName} onSignOut={signOut}/>}
       {tab==="range"&&<RangeTab onBike={openBike} progress={p}/>}
       {tab==="bot"&&<BotTab onQuiz={()=>sS("gquiz")} onScenarios={()=>sS("scenarios")} onGlossary={()=>sS("glossary")}/>}
       {tab==="compare"&&<CompareTab/>}
