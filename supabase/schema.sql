@@ -21,7 +21,12 @@ create table if not exists public.progress (
   updated_at timestamptz not null default now()
 );
 
--- 3. Row Level Security — each person can only see/edit their OWN data
+-- 3. Access — logged-in users need table-level grants (the pre-existing tables
+--    were missing these), THEN row-level security locks them to their own rows.
+grant usage on schema public to anon, authenticated;
+grant select on public.profiles to authenticated;
+grant select, insert, update on public.progress to authenticated;
+
 alter table public.profiles enable row level security;
 alter table public.progress enable row level security;
 

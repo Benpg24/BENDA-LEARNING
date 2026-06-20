@@ -38,7 +38,8 @@
       "Bash(git commit -q -m 'Phase 3: manager dashboard \\(team progress view\\) *)",
       "Bash(git commit -q -m 'Auth: open sign-up to any email \\(remove domain restriction\\) *)",
       "Bash(git commit -q -m 'Auth: fix signup against pre-existing profiles table *)",
-      "Bash(lsof -ti:8888,5173)"
+      "Bash(lsof -ti:8888,5173)",
+      "Bash(git commit -q -m 'Supabase: document table grants for authenticated role *)"
     ]
   },
   "hooks": {
