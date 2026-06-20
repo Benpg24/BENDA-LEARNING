@@ -11,7 +11,7 @@ import Login from './Login.jsx';
 import { supabase } from './supabase.js';
 
 // ── CSS ─────────────────────────────────────────────────────────────────────
-const CSS=`@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}} @keyframes fi{from{opacity:0}to{opacity:1}} @keyframes si{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}} @keyframes pg{from{width:0}} @keyframes cp{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}} @keyframes ws{0%,100%{transform:translateX(0)}25%,75%{transform:translateX(-3px)}50%{transform:translateX(3px)}} @keyframes tr{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}} @keyframes fc{from{transform:rotateX(80deg);opacity:0}to{transform:rotateX(0);opacity:1}} .au{animation:fu .38s ease both}.ai{animation:fi .3s ease both}.as{animation:si .35s ease both} .ac{animation:cp .35s ease}.aw{animation:ws .35s ease}.at{animation:tr .5s cubic-bezier(.34,1.56,.64,1) both} .af{animation:fc .25s ease both} .tp{transition:all .15s ease;cursor:pointer}.tp:active{transform:scale(.97);opacity:.85} select{-webkit-appearance:none;appearance:none} *{-webkit-tap-highlight-color:transparent;box-sizing:border-box} body{margin:0;padding:0}::-webkit-scrollbar{width:0;height:0}`;
+const CSS=`@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}} @keyframes fi{from{opacity:0}to{opacity:1}} @keyframes si{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}} @keyframes pg{from{width:0}} @keyframes cp{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}} @keyframes ws{0%,100%{transform:translateX(0)}25%,75%{transform:translateX(-3px)}50%{transform:translateX(3px)}} @keyframes tr{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}} @keyframes fc{from{transform:rotateX(80deg);opacity:0}to{transform:rotateX(0);opacity:1}} .au{animation:fu .38s ease both}.ai{animation:fi .3s ease both}.appenter{animation:fi .55s ease both}.as{animation:si .35s ease both} .ac{animation:cp .35s ease}.aw{animation:ws .35s ease}.at{animation:tr .5s cubic-bezier(.34,1.56,.64,1) both} .af{animation:fc .25s ease both} .tp{transition:all .15s ease;cursor:pointer}.tp:active{transform:scale(.97);opacity:.85} select{-webkit-appearance:none;appearance:none} *{-webkit-tap-highlight-color:transparent;box-sizing:border-box} body{margin:0;padding:0}::-webkit-scrollbar{width:0;height:0}`;
 
 
 
@@ -850,7 +850,7 @@ function App(){
   const firstName=(profile?.full_name||"").trim().split(" ")[0]||"there";
   const isManager=["manager","admin"].includes(profile?.role);
 
-  return <div style={{background:C.bg,minHeight:"100vh",color:C.text,fontFamily:"'Geist',sans-serif",fontSize:15}}>
+  return <div className="appenter" style={{background:C.bg,minHeight:"100vh",color:C.text,fontFamily:"'Geist',sans-serif",fontSize:15}}>
     <style>{CSS}</style>
 {screen==="main"&&<>
       {tab==="home"&&<HomeTab progress={p} onBike={openBike} onNav={navTo} name={firstName}/>}
