@@ -73,7 +73,7 @@ export default function ManagerScreen({ onBack }) {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 9 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
                     <div style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.name}</div>
-                    {r.role && r.role !== 'staff' && (
+                    {['manager', 'admin'].includes(r.role) && (
                       <span style={{ fontSize: 8, fontWeight: 800, letterSpacing: 0.5, color: GT, background: C.goldBg, border: `1px solid ${GOLD}40`, borderRadius: 4, padding: '2px 6px', textTransform: 'uppercase', flexShrink: 0 }}>{r.role}</span>
                     )}
                   </div>
