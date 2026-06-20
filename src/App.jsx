@@ -856,7 +856,7 @@ function App(){
 {screen==="main"&&<>
       {tab==="home"&&<HomeTab progress={p} onBike={openBike} onNav={navTo} name={firstName} onSignOut={signOut}/>}
       {tab==="range"&&<RangeTab onBike={openBike} progress={p}/>}
-      {tab==="bot"&&<BotTab onQuiz={()=>sS("gquiz")} onScenarios={()=>sS("scenarios")} onGlossary={()=>sS("glossary")}/>}
+      <div style={{display:tab==="bot"?"block":"none"}}><BotTab onQuiz={()=>sS("gquiz")} onScenarios={()=>sS("scenarios")} onGlossary={()=>sS("glossary")}/></div>
       {tab==="compare"&&<CompareTab/>}
       {tab==="progress"&&<ProgressTab progress={p} onReset={rst} onSignOut={signOut} isManager={isManager} onTeam={()=>sS("manager")}/>}
       <TabBar active={tab} onChange={sT}/>

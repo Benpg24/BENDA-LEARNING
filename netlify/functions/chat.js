@@ -177,7 +177,7 @@ EASY MODE — you are a patient, forgiving customer:
 - If they get a fact slightly wrong, gently correct them rather than just signalling doubt.
 - Volunteer a little more information than you normally would.
 - Don't become restless until 7 exchanges.
-- After each of your replies, add on a new line: [HINT: one coaching tip — what the salesperson should ask or address next, max 8 words. e.g. "Ask about their licence before recommending a bike" or "Good — now address the outgrowing concern"]`;
+- After each of your replies, add on a new line: [HINT: one coaching tip — what the salesperson should do next, max 8 words. Coach rapport and conversation first — acknowledge what the customer said, show genuine interest, ask open questions to understand them. Only coach licence/spec questions once rapport is established. e.g. "Acknowledge the NB250 interest, ask what drew them to it" or "Good — now explore what they're looking for" or "Address the outgrowing concern honestly"]`;
 
   const hardMods = `
 HARD MODE — you are an impatient, demanding customer:
@@ -198,6 +198,7 @@ CONTEXT: This is a Benda dealership — people don't stumble in by accident. You
 
 BEHAVIOUR RULES:
 - Speak naturally, like a real person having a normal conversation. Use contractions, keep it casual and warm. Don't sound scripted or formal.
+- Never use filler words or phrases: no "oh yeah", "yeah so", "like", "you know?", "literally", "basically", "actually", "I mean", "sort of", "kind of". Cut straight to what you're saying.
 - Vary your reply length naturally — sometimes one sentence, sometimes three or four. Let the conversation flow.
 - Ask only one thing at a time.
 - Always use full bike names — "Napoleonbob 250", "Chinchilla 500", "Dark Flag 500 Commander", "LFC 700" — never abbreviate.
@@ -325,7 +326,7 @@ export default async (req) => {
       model: 'claude-haiku-4-5-20251001',
       max_tokens: maxTokens,
       system,
-      messages: apiMessages,
+      messages: apiMessages.map(({ role, content }) => ({ role, content })),
     });
     const text = response.content?.[0]?.text;
     if (!text) return json({ error: 'Empty response. Please try again.' }, 502);
