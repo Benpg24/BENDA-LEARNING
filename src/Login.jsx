@@ -3,8 +3,8 @@ import { supabase } from './supabase.js';
 import { C } from './shared.jsx';
 
 const inp = {
-  width: '100%', padding: '14px 16px', background: '#111', border: `1px solid ${C.border}`,
-  borderRadius: 10, color: '#fafafa', fontSize: 16, fontFamily: "'Geist',sans-serif",
+  width: '100%', padding: '14px 16px', background: '#f5f5f5', border: `1px solid ${C.border}`,
+  borderRadius: 10, color: '#111111', fontSize: 16, fontFamily: "'Geist',sans-serif",
   outline: 'none', boxSizing: 'border-box',
 };
 
@@ -81,7 +81,7 @@ export default function Login() {
   const disabled = loading || !email.trim() || !password || (isSignup && (!name.trim() || !confirmPassword));
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000', color: '#fafafa', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', paddingTop: '16vh', paddingLeft: 24, paddingRight: 24, paddingBottom: 40, boxSizing: 'border-box', fontFamily: "'Geist',sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: '#ffffff', color: '#111111', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', paddingTop: '16vh', paddingLeft: 24, paddingRight: 24, paddingBottom: 40, boxSizing: 'border-box', fontFamily: "'Geist',sans-serif" }}>
       <img src="/images/BENDAlogo.png" alt="Benda" style={{ height: 120, width: 'auto', maxWidth: '80%', objectFit: 'contain', filter: 'brightness(0) invert(1)', marginBottom: -10 }} />
       <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: 2.5, textTransform: 'uppercase', color: C.t3, marginBottom: 24 }}>Staff Training</div>
 

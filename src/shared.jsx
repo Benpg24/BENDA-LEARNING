@@ -1,6 +1,17 @@
 import { useState } from 'react';
 
-export const C = {
+const _light = {
+  bg: "#ffffff", s1: "#f5f5f5", s2: "#eeeeee", s3: "#e8e8e8",
+  border: "#d4d4d4", borderL: "#c0c0c0",
+  text: "#111111", t2: "#555555", t3: "#888888", t4: "#aaaaaa",
+  accent: "#111111", accentDim: "#444444", accentGlow: "rgba(0,0,0,0.06)", accentBorder: "#333333",
+  gold: "#C4921A", goldTxt: "#8B6400", goldDim: "#7A5500", goldBg: "rgba(196,146,26,0.12)",
+  ok: "#16a34a", okTxt: "#15803d", okBg: "rgba(22,163,74,0.1)", okBdr: "#86efac",
+  no: "#dc2626", noTxt: "#b91c1c", noBg: "rgba(220,38,38,0.1)", noBdr: "#fca5a5",
+  tE: "#111111", tS: "#555555", tD: "#888888", tW: "#aaaaaa",
+};
+
+const _dark = {
   bg: "#000000", s1: "#0a0a0a", s2: "#141414", s3: "#1a1a1a",
   border: "#2a2a2a", borderL: "#3f3f46",
   text: "#fafafa", t2: "#a1a1aa", t3: "#71717a", t4: "#52525b",
@@ -10,6 +21,14 @@ export const C = {
   no: "#ef4444", noTxt: "#f87171", noBg: "rgba(239,68,68,0.08)", noBdr: "#7f1d1d",
   tE: "#ffffff", tS: "#a1a1aa", tD: "#71717a", tW: "#52525b",
 };
+
+const _saved = typeof localStorage !== 'undefined' ? (localStorage.getItem('theme') || 'light') : 'light';
+export const C = _saved === 'dark' ? _dark : _light;
+export const isDark = _saved === 'dark';
+export function toggleTheme() {
+  localStorage.setItem('theme', _saved === 'dark' ? 'light' : 'dark');
+  window.location.reload();
+}
 
 export const sec={fontSize:10,letterSpacing:3,textTransform:"uppercase",color:C.t3,marginBottom:14,fontWeight:600};
 export const bd={padding:"24px 20px"};
@@ -40,7 +59,7 @@ export function HoverCard({onClick,title,sub,style,children}){
     style={{
       ...crd,
       ...style,
-      border:`1px solid ${hovered?"rgba(255,255,255,0.6)":C.border}`,
+      border:`1px solid ${hovered?"rgba(0,0,0,0.4)":C.border}`,
       boxShadow:hovered?`0 0 0 1px rgba(255,255,255,0.15)`:"none",
       borderRadius:6,cursor:"pointer",
       transition:"border .2s ease, box-shadow .2s ease",

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { BIKES, SCENARIOS, COMP, COMPQ, GLOSSARY, bm, om, bs, nb } from './data/bikes.js';
-import { C, bd, crd, sec, btnA, btnG, BIKE_COLOURS, A, Ring, HoverCard } from './shared.jsx';
+import { C, bd, crd, sec, btnA, btnG, BIKE_COLOURS, A, Ring, HoverCard, isDark } from './shared.jsx';
 import RangeTab from './pages/RangeTab.jsx';
 import ProgressTab from './pages/ProgressTab.jsx';
 import CompareTab from './pages/CompareTab.jsx';
@@ -124,7 +124,7 @@ function TabBar({active,onChange}){
     {id:"compare",label:"Compare",icon:Icons.compare},
     {id:"progress",label:"Progress",icon:Icons.progress},
   ];
-  return <div style={{position:"fixed",bottom:0,left:0,right:0,background:"rgba(0,0,0,0.95)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",borderTop:`1px solid #1a1a1a`,display:"flex",zIndex:200,paddingBottom:"env(safe-area-inset-bottom)"}}>
+  return <div style={{position:"fixed",bottom:0,left:0,right:0,background:C.bg,backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",borderTop:`1px solid ${C.border}`,display:"flex",zIndex:200,paddingBottom:"env(safe-area-inset-bottom)"}}>
     {tabs.map(t=>{
       const isActive=active===t.id;
       return <button key={t.id} className="tp" onClick={()=>onChange(t.id)} style={{flex:1,padding:"10px 0 8px",background:"none",border:"none",color:isActive?C.goldTxt:C.t3,display:"flex",flexDirection:"column",alignItems:"center",gap:4,cursor:"pointer",transition:"color .2s",position:"relative"}}>
@@ -137,10 +137,10 @@ function TabBar({active,onChange}){
 
 // ── HEADER ───────────────────────────────────────────────────────────────────
 function Hdr({onBack,right}){
-  return <div style={{background:"#000",borderBottom:"1px solid #2a2a2a",padding:"12px 20px",display:"flex",alignItems:"center",position:"sticky",top:0,zIndex:100,flexShrink:0}}>
-    {onBack&&<button className="tp" style={{background:"none",border:"none",color:"#666",fontSize:22,cursor:"pointer",padding:"0 8px 0 0",lineHeight:1,flexShrink:0}} onClick={onBack}>←</button>}
+  return <div style={{background:C.bg,borderBottom:`1px solid ${C.border}`,padding:"12px 20px",display:"flex",alignItems:"center",position:"sticky",top:0,zIndex:100,flexShrink:0}}>
+    {onBack&&<button className="tp" style={{background:"none",border:"none",color:C.t3,fontSize:22,cursor:"pointer",padding:"0 8px 0 0",lineHeight:1,flexShrink:0}} onClick={onBack}>←</button>}
     <div style={{position:"absolute",left:0,right:0,display:"flex",justifyContent:"center",pointerEvents:"none"}}>
-      <img src="/images/BENDAlogo.png" alt="Benda" style={{height:40,objectFit:"contain",filter:"brightness(0) invert(1)"}}/>
+      <img src="/images/BENDAlogo.png" alt="Benda" style={{height:40,objectFit:"contain",filter:isDark?"brightness(0) invert(1)":"brightness(0)"}}/>
     </div>
     {right&&<div style={{marginLeft:"auto"}}>{right}</div>}
   </div>
@@ -202,7 +202,7 @@ function Res({score,total,actions}){
       <div style={{fontFamily:"'Inter',sans-serif",fontWeight:900,fontSize:80,lineHeight:1,letterSpacing:-2,color:tier.color}}>{score}<span style={{fontSize:40,color:"#2a2a2a"}}>/{total}</span></div>
       <div style={{fontSize:11,letterSpacing:3,textTransform:"uppercase",color:C.t3,marginTop:4}}>{pct}% correct</div>
     </div></A>
-    <A d={150}><div style={{background:"#111",border:`1px solid #2a2a2a`,borderLeft:`3px solid ${tier.color}`,borderRadius:8,padding:"14px 16px",marginBottom:20,display:"flex",alignItems:"center",gap:12}}>
+    <A d={150}><div style={{background:C.s2,border:`1px solid #d4d4d4`,borderLeft:`3px solid ${tier.color}`,borderRadius:8,padding:"14px 16px",marginBottom:20,display:"flex",alignItems:"center",gap:12}}>
       <span style={{fontSize:22,color:tier.color}}>{tier.icon}</span>
       <div>
         <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:13,letterSpacing:1.5,textTransform:"uppercase",color:tier.color}}>{tier.label}</div>
@@ -211,6 +211,40 @@ function Res({score,total,actions}){
     </div></A>
     <A d={300}><div style={{display:"flex",flexDirection:"column",gap:10}}>{actions}</div></A>
   </div>
+}
+
+// ── COLOUR TAB ────────────────────────────────────────────────────────────────
+function ColourTab({colours,bikeName}){
+  const [sel,setSel]=useState(0);
+  const BORDER=C.border,GT=C.goldTxt,T1=C.text,T2=C.t2,T3=C.t3;
+  const c=colours[sel];
+  return <div style={{display:'flex',flexDirection:'column',height:'100%'}}>
+    <div style={{height:16}}/>
+    {/* Big image */}
+    <div style={{position:'relative',width:'100%',paddingBottom:'48%',flexShrink:0,background:'radial-gradient(ellipse 60% 25% at 50% 95%, rgba(255,255,255,0.18) 0%, transparent 70%)'}}>
+      <img key={c.file} src={c.file} alt={c.name} style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'contain'}}/>
+      <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom, #000 0%, transparent 12%, transparent 85%, #000 100%), linear-gradient(to right, #000 0%, transparent 8%, transparent 92%, #000 100%)',pointerEvents:'none'}}/>
+    </div>
+    {/* Colour name */}
+    <div style={{padding:'16px 20px 10px',borderBottom:`1px solid ${BORDER}`}}>
+      <div style={{fontSize:18,fontWeight:700,color:T1,fontFamily:"'Inter',sans-serif"}}>{c.name}</div>
+      <div style={{fontSize:12,color:T3,marginTop:2}}>included</div>
+    </div>
+    {/* Swatches */}
+    <div style={{padding:'16px 20px'}}>
+      <div style={{fontSize:10,letterSpacing:1,textTransform:'uppercase',color:T3,fontWeight:700,marginBottom:12}}>Choose your colour</div>
+      <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
+        {colours.map((col,i)=>(
+          <button key={col.name} onClick={()=>setSel(i)} className="tp" style={{padding:0,background:'none',border:'none',cursor:'pointer',display:'flex',flexDirection:'column',alignItems:'center',gap:6}}>
+            <div style={{width:52,height:52,borderRadius:8,background:col.swatch,border:`2.5px solid ${i===sel?GT:BORDER}`,boxShadow:i===sel?`0 0 0 1px ${GT}`:'none',transition:'all .15s',position:'relative',overflow:'hidden'}}>
+              <div style={{position:'absolute',inset:0,background:'linear-gradient(135deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.1) 40%, rgba(0,0,0,0.05) 60%, rgba(0,0,0,0.2) 100%)',borderRadius:6,pointerEvents:'none'}}/>
+            </div>
+            <span style={{fontSize:10,color:i===sel?GT:T3,fontWeight:i===sel?700:400,textAlign:'center',maxWidth:56,lineHeight:1.3}}>{col.name}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>;
 }
 
 // ── GLOSSARY ITEM ────────────────────────────────────────────────────────────
@@ -228,12 +262,12 @@ function HoverBtn({onClick,disabled,style,children}){
 
 function GlossaryItem({term,def,isLast}){
   const [open,sO]=useState(false);
-  return <div style={{background:"#141414",borderBottom:isLast?"none":"1px solid #2a2a2a",overflow:"hidden"}}>
+  return <div style={{background:C.s2,borderBottom:isLast?"none":"1px solid #2a2a2a",overflow:"hidden"}}>
     <div className="tp" onClick={()=>sO(!open)} style={{padding:"14px 16px",display:"flex",justifyContent:"space-between",alignItems:"flex-start",cursor:"pointer"}}>
-      <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:14,color:"#fafafa"}}>{term}</div>
-      <div style={{color:"#666",fontSize:18,transition:"transform .2s",transform:open?"rotate(45deg)":"rotate(0deg)",flexShrink:0,marginLeft:12,marginTop:"-1px"}}>+</div>
+      <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:14,color:C.text}}>{term}</div>
+      <div style={{color:C.t3,fontSize:18,transition:"transform .2s",transform:open?"rotate(45deg)":"rotate(0deg)",flexShrink:0,marginLeft:12,marginTop:"-1px"}}>+</div>
     </div>
-    {open&&<div style={{padding:"0 16px 14px",fontSize:13,color:"#b8b8b8",lineHeight:1.7,borderTop:"1px solid #2a2a2a"}}><div style={{paddingTop:12}}>{def}</div></div>}
+    {open&&<div style={{padding:"0 16px 14px",fontSize:13,color:C.t2,lineHeight:1.7,borderTop:`1px solid ${C.border}`}}><div style={{paddingTop:12}}>{def}</div></div>}
   </div>
 }
 
@@ -261,9 +295,9 @@ function BikeLearnTab({bike:b,onQuiz}){
   ];
   return <div style={{paddingBottom:80}}>
     {/* HERO */}
-    <div style={{position:"relative",background:"#0d0d0d",overflow:"hidden",minHeight:210}}>
+    <div style={{position:"relative",background:C.s2,overflow:"hidden",minHeight:210}}>
       <img src={b.images[0]} alt={b.name} style={{position:"absolute",right:0,top:0,width:"65%",height:"100%",objectFit:"cover",objectPosition:"left center"}}/>
-      <div style={{position:"absolute",inset:0,background:"linear-gradient(to right,#0d0d0d 30%,rgba(13,13,13,0.82) 52%,rgba(13,13,13,0.15) 100%)"}}/>
+      <div style={{position:"absolute",inset:0,background:"linear-gradient(to right,#ffffff 30%,rgba(255,255,255,0.82) 52%,rgba(255,255,255,0.05) 100%)"}}/>
       <div style={{position:"relative",zIndex:2,padding:"28px 20px 24px",maxWidth:"58%"}}>
         <div style={{fontFamily:"'Inter',sans-serif",fontWeight:900,fontSize:33,textTransform:"uppercase",lineHeight:.9,letterSpacing:-0.5,marginBottom:10}}>{b.name}</div>
         <div style={{fontFamily:"'Inter',sans-serif",fontSize:22,fontWeight:700,color:GT,marginBottom:6}}>{b.price}</div>
@@ -290,7 +324,7 @@ function BikeLearnTab({bike:b,onQuiz}){
         {[["TYPE",b.anchors.type],["FEEL",b.anchors.feel],["WHO",b.anchors.who]].map(([l,v],i,arr)=>(
           <div key={l} style={{display:"flex",gap:14,padding:"12px 14px",background:C.s1,borderBottom:i<arr.length-1?`1px solid ${C.border}`:"none"}}>
             <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:10,letterSpacing:0.5,color:"rgba(255,255,255,0.5)",width:30,flexShrink:0,paddingTop:2}}>{l}</div>
-            <div style={{fontSize:13,color:"#fafafa",lineHeight:1.5,fontFamily:"'Geist',sans-serif"}}>{v}</div>
+            <div style={{fontSize:13,color:C.text,lineHeight:1.5,fontFamily:"'Geist',sans-serif"}}>{v}</div>
           </div>
         ))}
       </div>
@@ -339,7 +373,7 @@ function BikeLearnTab({bike:b,onQuiz}){
       </div>
       {/* SALES PLAYBOOK */}
       <div style={{marginBottom:20}}>
-        <div style={{fontSize:11,fontWeight:700,letterSpacing:0.5,color:"#fafafa",textTransform:"uppercase",marginBottom:10}}>SALES PLAYBOOK</div>
+        <div style={{fontSize:11,fontWeight:700,letterSpacing:0.5,color:C.text,textTransform:"uppercase",marginBottom:10}}>SALES PLAYBOOK</div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
           {b.sellingPoints.map((sp,i)=>(
             <div key={i} style={{background:C.s1,border:`1px solid ${C.border}`,borderRadius:10,padding:"14px 12px",position:"relative"}}>
@@ -360,12 +394,13 @@ function BikeLearnTabV2({bike:b,initialTab,onUp,onNext}){
   const [openCats,setOpenCats]=useState(()=>({[GLOSSARY[0]?.category]:true}));
   const toggleCat=cat=>setOpenCats(p=>({...p,[cat]:!p[cat]}));
   const GOLD=C.gold,GT=C.goldTxt;
-  const CARD='#141414',BORDER='#282828';
-  const T1='#f5f5f5',T2='#b8b8b8',T3='#666';
+  const CARD=C.s2,BORDER=C.border;
+  const T1=C.text,T2=C.t2,T3=C.t3;
   const sp=b.sellingPoints;
 
-  const TABS=['overview','specs','sales','glossary','quiz'];
-  const TLBL={overview:'Overview',specs:'Specs',sales:'Sales',glossary:'Glossary',quiz:'Quiz'};
+  const hasCols=!!(b.colours&&b.colours.length);
+  const TABS=['overview','specs','sales',...(hasCols?['colours']:[]),'glossary','quiz'];
+  const TLBL={overview:'Overview',specs:'Specs',sales:'Sales',colours:'Colours',glossary:'Glossary',quiz:'Quiz'};
 
   const statIcons=[
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.8"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
@@ -392,7 +427,7 @@ function BikeLearnTabV2({bike:b,initialTab,onUp,onNext}){
     ?['Dark Flag','500','Commander']
     :[b.name.split(' ')[0],b.name.split(' ').slice(1).join(' ')];
 
-  return <div style={{background:'#0a0a0a',color:T1,fontFamily:"'Geist',sans-serif",paddingBottom:40}}>
+  return <div style={{background:C.s1,color:T1,fontFamily:"'Geist',sans-serif",paddingBottom:40}}>
 
     {/* HERO */}
     {tab!=='quiz'&&<div style={{position:'relative',overflow:'hidden',padding:'20px 20px 14px',minHeight:170}}>
@@ -409,7 +444,7 @@ function BikeLearnTabV2({bike:b,initialTab,onUp,onNext}){
     </div>}
 
     {/* TAB BAR */}
-    <div style={{display:'flex',overflowX:'auto',scrollbarWidth:'none',borderBottom:`1px solid ${BORDER}`,padding:'0 16px',WebkitOverflowScrolling:'touch',position:'sticky',top:0,zIndex:90,background:'#0a0a0a'}}>
+    <div style={{display:'flex',overflowX:'auto',scrollbarWidth:'none',borderBottom:`1px solid ${BORDER}`,padding:'0 16px',WebkitOverflowScrolling:'touch',position:'sticky',top:0,zIndex:90,background:C.s1}}>
       {TABS.map(t=>(
         <button key={t} onClick={()=>setTab(t)} className="tp" style={{
           flexShrink:0,padding:'10px 12px',background:'none',border:'none',
@@ -509,6 +544,9 @@ function BikeLearnTabV2({bike:b,initialTab,onUp,onNext}){
         </div>
       ))}
     </div>}
+
+    {/* COLOURS */}
+    {tab==='colours'&&b.colours&&<ColourTab colours={b.colours} bikeName={b.name}/>}
 
     {/* GLOSSARY */}
     {tab==='glossary'&&<div style={{padding:'20px'}}>
@@ -676,7 +714,7 @@ function BikeScreen({bike:b,initialTab,onBack,onUp,onChange}){
     <div style={{background:C.bg,borderBottom:`1px solid ${C.border}`,padding:'12px 20px',display:'flex',alignItems:'center',flexShrink:0,zIndex:100}}>
       <button className="tp" style={{background:'none',border:'none',color:C.t3,fontSize:22,cursor:'pointer',padding:'0 8px 0 0',lineHeight:1,flexShrink:0}} onClick={onBack}>←</button>
       <div style={{position:'absolute',left:0,right:0,display:'flex',justifyContent:'center',pointerEvents:'none'}}>
-        <img src="/images/BENDAlogo.png" alt="Benda" style={{height:42,objectFit:'contain',filter:'brightness(0) invert(1)'}}/>
+        <img src="/images/BENDAlogo.png" alt="Benda" style={{height:42,objectFit:'contain',filter:isDark?'brightness(0) invert(1)':'brightness(0)'}}/>
       </div>
     </div>
     <div style={{flex:1,overflowY:'auto',WebkitOverflowScrolling:'touch'}}>
@@ -697,7 +735,7 @@ function GQScreen({onBack,onFin}){
   });
   const [sc,sS]=useState(null);
   function fin(s){onFin(s,qs.length);sS(s)}
-  return <div style={{position:'fixed',inset:0,overflow:'hidden',background:'#000',display:'flex',flexDirection:'column'}}>
+  return <div style={{position:'fixed',inset:0,overflow:'hidden',background:C.bg,display:'flex',flexDirection:'column'}}>
     <Hdr title="All Models Quiz" onBack={onBack}/>
     <div style={{flex:1,overflowY:'auto',WebkitOverflowScrolling:'touch'}}>
       {sc!==null
@@ -719,58 +757,58 @@ function ScScreen({onBack,onFin}){
   function pick(id){if(ch!==null)return;const ok=id===scs[idx].answer;if(ok)sS(s=>s+1);sC(id);sA(ok?"ac":"aw");setTimeout(()=>sA(""),400)}
   function next(){if(idx+1>=scs.length){onFin(sc,scs.length);sP("results")}else{sI(i=>i+1);sC(null)}}
 
-  if(phase==="results")return <div style={{position:'fixed',inset:0,overflow:'hidden',background:'#000',display:'flex',flexDirection:'column'}}><Hdr title="Scenarios" onBack={onBack}/><div style={{flex:1,overflowY:'auto',WebkitOverflowScrolling:'touch'}}><Res score={sc} total={scs.length} actions={<button className="tp" style={btnG} onClick={onBack}>Back</button>}/></div></div>;
+  if(phase==="results")return <div style={{position:'fixed',inset:0,overflow:'hidden',background:C.bg,display:'flex',flexDirection:'column'}}><Hdr title="Scenarios" onBack={onBack}/><div style={{flex:1,overflowY:'auto',WebkitOverflowScrolling:'touch'}}><Res score={sc} total={scs.length} actions={<button className="tp" style={btnG} onClick={onBack}>Back</button>}/></div></div>;
 
   const s=scs[idx];const tot=scs.length;const pct=((idx+(ch!==null?1:0))/tot)*100;
   const cb=BIKES.find(b=>b.id===s.answer);
 
-  return <div style={{position:'fixed',inset:0,overflow:'hidden',background:"#000",color:"#fafafa",fontFamily:"'Geist',sans-serif",display:'flex',flexDirection:'column'}}>
+  return <div style={{position:'fixed',inset:0,overflow:'hidden',background:C.bg,color:C.text,fontFamily:"'Geist',sans-serif",display:'flex',flexDirection:'column'}}>
     <Hdr onBack={onBack}/>
     <div style={{flex:1,overflowY:'auto',WebkitOverflowScrolling:'touch'}}><div style={bd}>
-      <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:"#666",letterSpacing:0.5,textTransform:"uppercase",marginBottom:8,fontFamily:"'Inter',sans-serif",fontWeight:700}}>
+      <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:C.t3,letterSpacing:0.5,textTransform:"uppercase",marginBottom:8,fontFamily:"'Inter',sans-serif",fontWeight:700}}>
         <span>Scenario {idx+1} of {tot}</span><span style={{color:C.goldTxt}}>{sc} correct</span>
       </div>
-      <div style={{height:3,background:"#2a2a2a",borderRadius:3,marginBottom:24,overflow:"hidden"}}>
+      <div style={{height:3,background:C.border,borderRadius:3,marginBottom:24,overflow:"hidden"}}>
         <div style={{height:"100%",background:C.gold,borderRadius:3,width:pct+"%",transition:"width .5s ease"}}/>
       </div>
-      <div style={{display:"inline-block",fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:"#666",border:"1px solid #2a2a2a",padding:"4px 10px",borderRadius:6,marginBottom:14,fontFamily:"'Inter',sans-serif",fontWeight:700}}>{s.difficulty}</div>
-      <A t="as" key={idx}><div style={{background:"#141414",border:"1px solid #2a2a2a",borderRadius:14,padding:"16px 18px",marginBottom:20,position:"relative",overflow:"hidden"}}>
+      <div style={{display:"inline-block",fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:C.t3,border:`1px solid ${C.border}`,padding:"4px 10px",borderRadius:6,marginBottom:14,fontFamily:"'Inter',sans-serif",fontWeight:700}}>{s.difficulty}</div>
+      <A t="as" key={idx}><div style={{background:C.s2,border:`1px solid ${C.border}`,borderRadius:14,padding:"16px 18px",marginBottom:20,position:"relative",overflow:"hidden"}}>
         <img src="/images/customer scenarios bg remove.png" alt="" style={{position:"absolute",right:-8,bottom:"-12%",height:"115%",width:"45%",objectFit:"contain",objectPosition:"right bottom",opacity:0.55,pointerEvents:"none"}}/>
         <div style={{position:"relative",zIndex:1}}>
           <div style={{fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:C.goldTxt,fontWeight:700,fontFamily:"'Inter',sans-serif",marginBottom:10}}>Customer Walks In</div>
-          <div style={{fontSize:14,lineHeight:1.6,color:"#e0e0e0",paddingRight:"38%"}}>{s.situation}</div>
+          <div style={{fontSize:14,lineHeight:1.6,color:C.t2,paddingRight:"38%"}}>{s.situation}</div>
         </div>
       </div></A>
-      <div style={{fontSize:10,color:"#666",letterSpacing:0.5,textTransform:"uppercase",marginBottom:10,fontFamily:"'Inter',sans-serif",fontWeight:700}}>Which bike?</div>
+      <div style={{fontSize:10,color:C.t3,letterSpacing:0.5,textTransform:"uppercase",marginBottom:10,fontFamily:"'Inter',sans-serif",fontWeight:700}}>Which bike?</div>
       <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:16}} className={an}>
         {s.opts.map(id=>{
           const bk=BIKES.find(b=>b.id===id);
-          let bg="#141414",br="#2a2a2a",cl="#fafafa";
+          let bg="#f5f5f5",br="#d4d4d4",cl="#111111";
           if(ch!==null){if(id===s.answer){bg=C.okBg;br=C.okBdr;cl=C.okTxt}else if(id===ch){bg=C.noBg;br=C.noBdr;cl=C.noTxt}else cl="#444"}
           return <HoverBtn key={id} onClick={()=>pick(id)} disabled={ch!==null} style={{width:"100%",padding:"14px 16px",background:bg,border:`1px solid ${br}`,borderRadius:12,color:cl,fontSize:14,textAlign:"left",cursor:ch===null?"pointer":"default",lineHeight:1.4}}>
-            <span style={{fontWeight:700,fontFamily:"'Inter',sans-serif"}}>{bk.name}</span><span style={{color:"#666",marginLeft:8,fontSize:12}}>{bk.type}</span>
+            <span style={{fontWeight:700,fontFamily:"'Inter',sans-serif"}}>{bk.name}</span><span style={{color:C.t3,marginLeft:8,fontSize:12}}>{bk.type}</span>
           </HoverBtn>
         })}
       </div>
       {ch!==null&&<A>
-        <div style={{padding:"12px 16px",borderLeft:`3px solid ${ch===s.answer?C.ok:C.no}`,fontSize:13,lineHeight:1.6,color:"#b8b8b8",marginBottom:16,background:"#0d0d0d",borderRadius:"0 8px 8px 0"}}>
+        <div style={{padding:"12px 16px",borderLeft:`3px solid ${ch===s.answer?C.ok:C.no}`,fontSize:13,lineHeight:1.6,color:C.t2,marginBottom:16,background:C.s2,borderRadius:"0 8px 8px 0"}}>
           {ch===s.answer?`Correct — ${cb.name}. `:`The answer was ${cb.name}. `}{s.reasoning}
         </div>
-        <div style={{background:"#141414",border:"1px solid #2a2a2a",borderRadius:14,padding:"14px 16px",marginBottom:16}}>
+        <div style={{background:C.s2,border:`1px solid ${C.border}`,borderRadius:14,padding:"14px 16px",marginBottom:16}}>
           <div style={{fontFamily:"'Inter',sans-serif",fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:C.goldTxt,fontWeight:700,marginBottom:10}}>{cb.name}</div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:1,background:"#2a2a2a",borderRadius:8,overflow:"hidden",marginBottom:10}}>
-            {cb.stats.map(st=><div key={st.key} style={{background:"#0d0d0d",padding:"10px 12px",textAlign:"center"}}>
-              <div style={{fontFamily:"'Inter',sans-serif",fontWeight:800,fontSize:17,color:"#fafafa",lineHeight:1,marginBottom:2}}>{st.val}</div>
-              <div style={{fontSize:9,color:"#666",letterSpacing:0.5,textTransform:"uppercase",fontWeight:700}}>{st.key}</div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:1,background:C.border,borderRadius:8,overflow:"hidden",marginBottom:10}}>
+            {cb.stats.map(st=><div key={st.key} style={{background:C.s2,padding:"10px 12px",textAlign:"center"}}>
+              <div style={{fontFamily:"'Inter',sans-serif",fontWeight:800,fontSize:17,color:C.text,lineHeight:1,marginBottom:2}}>{st.val}</div>
+              <div style={{fontSize:9,color:C.t3,letterSpacing:0.5,textTransform:"uppercase",fontWeight:700}}>{st.key}</div>
             </div>)}
           </div>
           <div style={{display:"flex",justifyContent:"space-between",fontSize:12}}>
-            <span style={{color:"#666"}}>{cb.type}</span>
+            <span style={{color:C.t3}}>{cb.type}</span>
             <span style={{fontFamily:"'Inter',sans-serif",fontWeight:700,color:C.goldTxt}}>{cb.price}</span>
           </div>
         </div>
       </A>}
-      {ch!==null&&<button className="tp" style={{width:"100%",padding:14,background:"#141414",border:"1px solid #2a2a2a",borderRadius:12,fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:13,letterSpacing:0.5,textTransform:"uppercase",color:"#fafafa",cursor:"pointer"}} onClick={next}>{idx+1<tot?"Next Scenario ›":"See Results"}</button>}
+      {ch!==null&&<button className="tp" style={{width:"100%",padding:14,background:C.s2,border:`1px solid ${C.border}`,borderRadius:12,fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:13,letterSpacing:0.5,textTransform:"uppercase",color:C.text,cursor:"pointer"}} onClick={next}>{idx+1<tot?"Next Scenario ›":"See Results"}</button>}
     </div></div>
   </div>;
 }
@@ -827,6 +865,21 @@ function App(){
     return ()=>{active=false;sub.subscription.unsubscribe();};
   },[]);
 
+  // Preload all bike images once logged in so they're cached before the user navigates.
+  useEffect(()=>{
+    if(!userId) return;
+    const imgs=[
+      '/images/nb250-hero.webp','/images/nb500-hero.webp','/images/chinchilla-hero.webp','/images/df500.jpg','/images/lfc-hero-new.jpg',
+      '/images/napbobpotential.jpg','/images/NAP BOB Homepage.jpg','/images/Chinchilla homepage.jpg','/images/Dark Flag Homepage.jpg','/images/LFC homepage.jpg',
+      '/images/nb250-1.jpg','/images/nb250-2.jpg','/images/nb250-3.jpg',
+      '/images/nb500-1.png','/images/nb500-2.jpg','/images/nb500-3.jpg',
+      '/images/ch500-1.jpg','/images/ch500-2.jpg',
+      '/images/df500-1.jpg','/images/df500-2.jpg','/images/df500-3.jpg',
+      '/images/lfc700-1.png','/images/lfc700-2.jpg','/images/lfc700-3.jpg','/images/lfc700-4.jpg',
+    ];
+    imgs.forEach(src=>{ const i=new Image(); i.src=src; });
+  },[userId]);
+
   // Load profile (name/role) for the logged-in user.
   useEffect(()=>{
     if(!userId){setProfile(null);return;}
@@ -845,7 +898,7 @@ function App(){
   function gqFin(sc,tot){up(pr=>{pr.generalQuiz={best:Math.max(pr.generalQuiz.best,sc),total:tot,attempts:pr.generalQuiz.attempts+1};return pr})}
   function scFin(sc,tot){up(pr=>{pr.scenarios={completed:pr.scenarios.completed+tot,correct:pr.scenarios.correct+sc,attempts:pr.scenarios.attempts+1};return pr})}
 
-  if(authLoading) return <div style={{minHeight:"100vh",background:"#000",display:"flex",alignItems:"center",justifyContent:"center"}}><img src="/images/BENDAlogo.png" alt="Benda" style={{height:48,objectFit:"contain",filter:"brightness(0) invert(1)",opacity:0.8}}/></div>;
+  if(authLoading) return <div style={{minHeight:"100vh",background:C.bg,display:"flex",alignItems:"center",justifyContent:"center"}}><img src="/images/BENDAlogo.png" alt="Benda" style={{height:48,objectFit:"contain",filter:isDark?"brightness(0) invert(1)":"brightness(0)",opacity:0.8}}/></div>;
   if(!session) return <Login/>;
   const metaName=session?.user?.user_metadata?.full_name||"";
   const firstName=((profile?.full_name||metaName)||"").trim().split(" ")[0]||"there";
@@ -865,14 +918,14 @@ function App(){
     {screen==="gquiz"&&<GQScreen onBack={()=>sS("main")} onFin={gqFin}/>}
     {screen==="scenarios"&&<ScScreen onBack={()=>sS("main")} onFin={scFin}/>}
     {screen==="manager"&&<ManagerScreen onBack={()=>sS("main")}/>}
-    {screen==="glossary"&&<div style={{position:"fixed",inset:0,overflow:"hidden",background:"#000",color:"#fafafa",fontFamily:"'Geist',sans-serif"}}>
+    {screen==="glossary"&&<div style={{position:"fixed",inset:0,overflow:"hidden",background:C.bg,color:C.text,fontFamily:"'Geist',sans-serif"}}>
       <Hdr onBack={()=>sS("main")}/>
       <div style={{overflowY:"auto",height:"calc(100% - 65px)",WebkitOverflowScrolling:"touch",paddingBottom:80}}>
         <div style={{padding:"20px 16px 0"}}>
           {GLOSSARY.map((cat,ci)=>(
             <A key={cat.category} d={ci*60}>
               <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:10,letterSpacing:0.5,textTransform:"uppercase",color:"#E8B956",marginBottom:8,marginTop:ci>0?24:0}}>{cat.category}</div>
-              <div style={{borderRadius:14,overflow:"hidden",border:"1px solid #2a2a2a",marginBottom:4}}>
+              <div style={{borderRadius:14,overflow:"hidden",border:`1px solid ${C.border}`,marginBottom:4}}>
                 {cat.terms.map((t,ti,arr)=>{
                   const isLast=ti===arr.length-1;
                   return <GlossaryItem key={t.term} term={t.term} def={t.def} isLast={isLast}/>;

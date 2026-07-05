@@ -2,9 +2,9 @@ import { BIKES } from '../data/bikes.js';
 import { C, bd, A, HoverCard } from '../shared.jsx';
 
 export default function RangeTab({onBike}){
-  return <div style={{position:"fixed",inset:0,overflow:"hidden",background:"#000"}}>
+  return <div style={{position:"fixed",inset:0,overflow:"hidden",background:C.bg}}>
     <div style={{padding:"14px 20px 10px",borderBottom:`1px solid ${C.border}`,position:"relative",display:"flex",alignItems:"center",justifyContent:"center"}}>
-      <img src="/images/BENDAlogo.png" alt="Benda" style={{height:40,width:"auto",objectFit:"contain",filter:"brightness(0) invert(1)",position:"absolute",left:20,top:"50%",transform:"translateY(-50%)"}}/>
+      <img src="/images/BENDAlogo.png" alt="Benda" style={{height:40,width:"auto",objectFit:"contain",filter:isDark?"brightness(0) invert(1)":"brightness(0)",position:"absolute",left:20,top:"50%",transform:"translateY(-50%)"}}/>
       <A><div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:20,letterSpacing:1,textTransform:"uppercase",color:C.t1}}>THE RANGE</div></A>
     </div>
     <div style={bd}>
@@ -16,7 +16,7 @@ export default function RangeTab({onBike}){
           <div style={{flex:1,paddingLeft:4,textAlign:"left",minWidth:0}}>
             <div style={{fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:14,letterSpacing:0.5,textTransform:"uppercase",lineHeight:1.1}}>{b.name}</div>
             <div style={{fontSize:10,color:C.t2,letterSpacing:1.2,textTransform:"uppercase",marginTop:3}}>{b.type}</div>
-            <div style={{fontSize:13,color:C.goldTxt,fontWeight:700,marginTop:3,fontFamily:"'Rajdhani',sans-serif"}}>{b.price}</div>
+            <div style={{fontSize:15,color:C.goldTxt,fontWeight:700,marginTop:3,fontFamily:"'Rajdhani',sans-serif"}}>{b.price}</div>
           </div>
           <div style={{color:C.t3,fontSize:20,flexShrink:0}}>›</div>
         </HoverCard></A>

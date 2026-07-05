@@ -112,6 +112,37 @@ const SYSTEM = `You are an AI assistant built into the Benda Motorcycles dealer 
 - vs Harley Sportster S: Harley has heritage but runs V-twin, not inline-4. Triumph Rocket 3 is similar drama but starts at ~$50,000.
 - Brand concern response: Show the components — Brembo brakes (MotoGP), KYB suspension (premium Japanese superbikes). The name is new. The components are not.
 
+### LFC 700 Pro — AWAITING AUSTRALIAN APPROVAL (not yet on sale in AU)
+- Type: Premium Flagship Cruiser — upgraded version of the LFC 700
+- Engine: 676cc inline-4, liquid-cooled — same world-first inline-4 cruiser configuration
+- Power: More than the standard LFC 700 (exact AU-spec figure TBC once approved)
+- Transmission: Chain Drive
+- Seat height: 650–730mm electronically adjustable (lower and more adjustable than standard LFC 700's fixed 695mm)
+- Weight: 287kg
+- Front suspension: KYB USD fork
+- Rear suspension: Dual-chamber air suspension (upgrade over standard LFC 700's mono — same premium tech as the Dark Flag 500 but more advanced)
+- Brakes: Brembo — 4-piston front calipers, Brembo rear (upgrade over standard LFC 700)
+- Safety: Bosch ABS, Traction Control
+- Display: 5-inch TFT with B-ConnecTeD Bluetooth (navigation, call notifications, vehicle info)
+- Rear tyre: 300mm (close to the standard LFC 700's 310mm record-holder)
+- Colours: Golden Horizon, Midnight Black, Stellar Red, Polar Green
+- Key upgrades over standard LFC 700: Air suspension, electronically adjustable seat, Bluetooth connectivity, 4-piston Brembo calipers, more power
+- Status in Australia: Awaiting regulatory approval — it IS in the Benda global range and will come to AU once approved. No confirmed AU price or timeline yet.
+- If a customer asks about it: "Yes, the LFC 700 Pro is a real model — it's on the global Benda range. It's the premium upgrade of the LFC 700 with air suspension, an electronically adjustable seat, and Bluetooth. It's in the approval process for Australia right now, so we don't have a confirmed date or price yet, but it's coming."
+
+## GLOBAL MODELS NOT YET IN AUSTRALIA
+These models exist in Benda's international range but are not currently available or approved in Australia. If a customer asks, be honest that they're not available here yet.
+
+### Chinchilla 300
+- 298cc liquid-cooled V-twin, belt drive, cruiser style
+- Entry-level version of the Chinchilla 500
+- Available in the US market but not AU
+
+### Dark Flag 950
+- 948cc V4, flagship tourer — Benda's most powerful production bike globally
+- ~108hp, cruise control, ride-by-wire, tyre pressure monitoring
+- Heading to UK/Europe in 2026 — no AU timeline confirmed
+
 ## LAMS STATUS SUMMARY
 - LAMS approved: NB250, NB500, Chinchilla 500, Dark Flag 500 Commander
 - NOT LAMS: LFC 700 (full licence required)

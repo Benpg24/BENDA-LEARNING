@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { BIKES, bm } from '../data/bikes.js';
-import { C } from '../shared.jsx';
+import { C, isDark, toggleTheme } from '../shared.jsx';
 
 function SpeedoDial({value,gold,goldTxt,sz=110}){
   const size=sz,stroke=6,r=(size-stroke)/2,c=Math.PI*r,off=c-(value/100)*c;
@@ -8,7 +8,7 @@ function SpeedoDial({value,gold,goldTxt,sz=110}){
     <svg width={size} height={size} style={{position:"absolute",top:0,left:0}}>
       <path d={`M ${stroke/2} ${size/2} A ${r} ${r} 0 0 1 ${size-stroke/2} ${size/2}`} fill="none" stroke="#262626" strokeWidth={stroke} strokeLinecap="round"/>
       <path d={`M ${stroke/2} ${size/2} A ${r} ${r} 0 0 1 ${size-stroke/2} ${size/2}`} fill="none" stroke={gold} strokeWidth={stroke} strokeLinecap="round" strokeDasharray={c} strokeDashoffset={off}/>
-      {[0,25,50,75,100].map(t=>{const ang=Math.PI+(t/100)*Math.PI;const x1=size/2+Math.cos(ang)*(r-8),y1=size/2+Math.sin(ang)*(r-8),x2=size/2+Math.cos(ang)*(r-14),y2=size/2+Math.sin(ang)*(r-14);return <line key={t} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#52525b" strokeWidth="1"/>;})}
+      {[0,25,50,75,100].map(t=>{const ang=Math.PI+(t/100)*Math.PI;const x1=size/2+Math.cos(ang)*(r-8),y1=size/2+Math.sin(ang)*(r-8),x2=size/2+Math.cos(ang)*(r-14),y2=size/2+Math.sin(ang)*(r-14);return <line key={t} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#cccccc" strokeWidth="1"/>;})}
     </svg>
     <div style={{position:"absolute",left:0,right:0,top:14,textAlign:"center"}}>
       <div style={{fontSize:28,fontWeight:800,color:goldTxt,letterSpacing:-1,fontFamily:"Georgia,serif",lineHeight:1}}>{value}<span style={{fontSize:14}}>%</span></div>
@@ -19,7 +19,7 @@ function SpeedoDial({value,gold,goldTxt,sz=110}){
 
 function HomeSLabel({children}){
   return <div style={{textAlign:"left"}}>
-    <div style={{fontSize:10,fontWeight:700,letterSpacing:0.5,color:"#fafafa"}}>{children}</div>
+    <div style={{fontSize:10,fontWeight:700,letterSpacing:0.5,color:C.text}}>{children}</div>
   </div>;
 }
 
@@ -43,23 +43,23 @@ const FACTS=[
 
 function DidYouKnow({gold,goldTxt}){
   const f=FACTS[Math.floor(Date.now()/86400000)%FACTS.length];
-  return <div style={{margin:"0 16px 24px",borderRadius:16,background:"#0a0a0a",border:`1px solid #2a2a2a`,overflow:"hidden"}}>
-    <div style={{background:`linear-gradient(90deg,rgba(212,162,74,0.12),transparent)`,borderBottom:"1px solid #1a1a1a",padding:"10px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+  return <div style={{margin:"0 16px 24px",borderRadius:16,background:C.s1,border:`1px solid #d4d4d4`,overflow:"hidden"}}>
+    <div style={{background:`linear-gradient(90deg,rgba(212,162,74,0.12),transparent)`,borderBottom:`1px solid ${C.border}`,padding:"10px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
       <div style={{display:"flex",alignItems:"center",gap:8}}>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={gold} strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <div style={{fontFamily:"'Inter',sans-serif",fontWeight:800,fontSize:9,letterSpacing:1.5,color:goldTxt,textTransform:"uppercase"}}>Did You Know?</div>
       </div>
-      <div style={{fontFamily:"'Inter',sans-serif",fontSize:9,fontWeight:600,color:"#444",letterSpacing:0.3}}>{f.bike}</div>
+      <div style={{fontFamily:"'Inter',sans-serif",fontSize:9,fontWeight:600,color:C.t4,letterSpacing:0.3}}>{f.bike}</div>
     </div>
     <div style={{padding:"14px 16px 16px"}}>
-      <div style={{fontSize:13,color:"#d4d4d4",lineHeight:1.65}}>{f.fact}</div>
+      <div style={{fontSize:13,color:C.t2,lineHeight:1.65}}>{f.fact}</div>
     </div>
   </div>;
 }
 
 export default function HomeTab({progress:pr,onBike,onNav,name,onSignOut}){
   const GOLD=C.gold,GT=C.goldTxt,GD=C.goldDim;
-  const trainingImg={nb250:"/images/napbobpotential.png",nb500:"/images/NAP BOB Homepage.png",ch500:"/images/Chinchilla homepage.png",df500:"/images/Dark Flag Homepage.png",lfc700:"/images/LFC homepage.png"};
+  const trainingImg={nb250:"/images/napbobpotential.jpg",nb500:"/images/NAP BOB Homepage.jpg",ch500:"/images/Chinchilla homepage.jpg",df500:"/images/Dark Flag Homepage.jpg",lfc700:"/images/LFC homepage.jpg"};
   const garageRef=useRef(null);
   const [activeGarageId,setActiveGarageId]=useState(null);
   const onGarageScroll=useCallback(()=>{
@@ -87,13 +87,16 @@ export default function HomeTab({progress:pr,onBike,onNav,name,onSignOut}){
   const bq=pr.bikeQuiz[featured.id]||{};
   const nextDiff=!bq.easy||!bq.easy.attempts?"Easy":!bq.medium||!bq.medium.attempts?"Medium":!bq.hard||!bq.hard.attempts?"Hard":"Easy";
 
-  return <div style={{background:"#000",minHeight:"100vh",color:"#fafafa",paddingBottom:90,fontFamily:"'Geist',sans-serif",WebkitFontSmoothing:"antialiased",zoom:0.9}}>
+  return <div style={{background:C.bg,minHeight:"100vh",color:C.text,paddingBottom:90,fontFamily:"'Geist',sans-serif",WebkitFontSmoothing:"antialiased",zoom:0.9}}>
     {/* ── HEADER ── */}
     <div style={{padding:"16px 20px 10px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
       <div style={{display:"flex",alignItems:"center",gap:8}}>
-        <img src="/images/BENDAlogo.png" alt="Benda" style={{height:55,width:"auto",objectFit:"contain",filter:"brightness(0) invert(1)"}}/>
+        <img src="/images/BENDAlogo.png" alt="Benda" style={{height:55,width:"auto",objectFit:"contain",filter:isDark?"brightness(0) invert(1)":"brightness(0)"}}/>
       </div>
-      <button onClick={onSignOut} style={{background:"none",border:"1px solid #2a2a2a",borderRadius:6,color:"#555",fontSize:9,fontFamily:"'Inter',sans-serif",fontWeight:700,letterSpacing:0.5,padding:"5px 9px",cursor:"pointer",textTransform:"uppercase"}}>Sign out</button>
+      <div style={{display:"flex",alignItems:"center",gap:8}}>
+        <button onClick={toggleTheme} style={{background:"none",border:`1px solid ${C.border}`,borderRadius:6,color:C.t3,fontSize:9,fontFamily:"'Inter',sans-serif",fontWeight:700,letterSpacing:0.5,padding:"5px 9px",cursor:"pointer",textTransform:"uppercase"}}>{isDark?"☀ Light":"☾ Dark"}</button>
+        <button onClick={onSignOut} style={{background:"none",border:`1px solid ${C.border}`,borderRadius:6,color:C.t3,fontSize:9,fontFamily:"'Inter',sans-serif",fontWeight:700,letterSpacing:0.5,padding:"5px 9px",cursor:"pointer",textTransform:"uppercase"}}>Sign out</button>
+      </div>
     </div>
 
     {/* ── WELCOME ── */}
@@ -104,8 +107,8 @@ export default function HomeTab({progress:pr,onBike,onNav,name,onSignOut}){
     </div>
 
     {/* ── CONTINUE TRAINING ── */}
-    <div style={{margin:"0 16px 10px",padding:16,borderRadius:16,background:C.s1,border:`1px solid #2a2a2a`,position:"relative",overflow:"hidden"}}>
-      <img src={trainingImg[featured.id]||"/images/Napbob250trainingapp2 (1600 x 900 px)-2.png"} alt={featured.name} style={{position:"absolute",right:"-10px",top:"-30px",height:"105%",width:"auto",maxWidth:"75%",objectFit:"contain",opacity:0.95,filter:"brightness(1.2)",pointerEvents:"none",WebkitMaskImage:"radial-gradient(ellipse 85% 85% at 65% 50%, black 25%, transparent 80%)",maskImage:"radial-gradient(ellipse 85% 85% at 65% 50%, black 25%, transparent 80%)"}}/>
+    <div style={{margin:"0 16px 10px",padding:16,borderRadius:16,background:C.s1,border:`1px solid #d4d4d4`,position:"relative",overflow:"hidden"}}>
+      <img src={trainingImg[featured.id]||"/images/Napbob250trainingapp2.jpg"} alt={featured.name} style={{position:"absolute",right:"-10px",top:"-30px",height:"105%",width:"auto",maxWidth:"75%",objectFit:"contain",opacity:0.95,filter:"brightness(1.2)",pointerEvents:"none",WebkitMaskImage:"radial-gradient(ellipse 85% 85% at 65% 50%, black 25%, transparent 80%)",maskImage:"radial-gradient(ellipse 85% 85% at 65% 50%, black 25%, transparent 80%)"}}/>
       <div style={{position:"relative",zIndex:1,display:"flex",alignItems:"flex-end",gap:14}}>
         <div style={{flex:1}}>
           <div style={{fontSize:10,fontWeight:700,letterSpacing:1.6,color:C.t3}}>CONTINUE TRAINING</div>
@@ -119,7 +122,7 @@ export default function HomeTab({progress:pr,onBike,onNav,name,onSignOut}){
               const txt=perfect?`✓ ${label}`:attempted?`${bq[d].best}/${bq[d].total} ${label}`:label;
               return <div key={d} style={{display:"flex",alignItems:"center",gap:5}}>
                 <div style={{fontSize:9,fontWeight:700,color:col,letterSpacing:0.3}}>{txt}</div>
-                {i<arr.length-1&&<div style={{fontSize:9,color:"#333"}}>›</div>}
+                {i<arr.length-1&&<div style={{fontSize:9,color:"#cccccc"}}>›</div>}
               </div>;
             })}
           </div>
@@ -151,16 +154,16 @@ export default function HomeTab({progress:pr,onBike,onNav,name,onSignOut}){
           const pct=bm(pr,b.id);
           const isActive=(activeGarageId||featured.id)===b.id;
           const [namePart,numPart]=(b.name.match(/^(.*?)(\d.*)$/)||[,'',b.name]).slice(1);
-          return <div key={b.id} onClick={()=>onBike(b)} style={{flexShrink:0,width:148,padding:12,borderRadius:14,background:C.s1,border:`1px solid ${isActive?GD:"#2a2a2a"}`,cursor:"pointer",position:"relative",overflow:"hidden",boxShadow:isActive?`0 0 18px rgba(212,162,74,0.22)`:"none",transition:"border-color .35s ease, box-shadow .35s ease"}}>
+          return <div key={b.id} onClick={()=>onBike(b)} style={{flexShrink:0,width:148,padding:12,borderRadius:14,background:C.s1,border:`1px solid ${isActive?GD:"#2a2a2a"}`,cursor:"pointer",position:"relative",overflow:"hidden",boxShadow:isActive?`0 0 0 2px rgba(196,146,26,0.4)`:"none",transition:"border-color .35s ease, box-shadow .35s ease"}}>
             <div style={{position:"absolute",inset:0,background:`linear-gradient(160deg,#1a1207,${C.s1} 60%)`,opacity:isActive?1:0,transition:"opacity .35s ease",pointerEvents:"none"}}/>
             <div style={{position:"relative"}}>
               <div style={{height:110,display:"flex",alignItems:"center",justifyContent:"center"}}>
                 <img src={{nb250:"/images/NapBOBnew.png",nb500:"/images/Napbob500N.png",ch500:"/images/ChinchillaN.png",df500:"/images/DarkflagN.png",lfc700:"/images/LFCN.png"}[b.id]||b.icon} alt="" style={{width:"140%",height:"100%",objectFit:"contain",WebkitMaskImage:"linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)",maskImage:"linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)"}}/>
               </div>
-              <div style={{fontFamily:"'Inter',sans-serif",fontWeight:800,fontSize:14,color:"#fafafa",marginTop:6,lineHeight:1.2}}>{namePart.trim()}</div>
+              <div style={{fontFamily:"'Inter',sans-serif",fontWeight:800,fontSize:14,color:C.text,marginTop:6,lineHeight:1.2}}>{namePart.trim()}</div>
               <div style={{fontFamily:"'Inter',sans-serif",fontWeight:600,fontSize:11,color:C.t2,lineHeight:1.2}}>{numPart.trim()}</div>
               <div style={{marginTop:8,display:"flex",alignItems:"center",gap:5}}>
-                <div style={{flex:1,height:2,background:"#262626",borderRadius:2}}>
+                <div style={{flex:1,height:2,background:C.border,borderRadius:2}}>
                   <div style={{width:`${pct}%`,height:"100%",background:GOLD,borderRadius:2,transition:"width 1s ease"}}/>
                 </div>
                 <div style={{fontSize:9,fontWeight:700,color:GT}}>{pct}%</div>

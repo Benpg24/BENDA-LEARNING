@@ -3,8 +3,8 @@ import { BIKES, om } from '../data/bikes.js';
 import { C, Ring } from '../shared.jsx';
 
 const ICON={nb250:"/images/NapBOBnew.png",nb500:"/images/Napbob500N.png",ch500:"/images/ChinchillaN.png",df500:"/images/DarkflagN.png",lfc700:"/images/LFCN.png"};
-const GOLD=C.gold,GT=C.goldTxt,BORDER='#2a2a2a',CARD='#0a0a0a';
-const T1='#fafafa',T2='#b8b8b8',T3='#666';
+const GOLD=C.gold,GT=C.goldTxt,BORDER=C.border,CARD=C.s1;
+const T1=C.text,T2=C.t2,T3=C.t3;
 
 function isCert(bq){return['easy','medium','hard'].every(d=>bq[d]&&bq[d].best===bq[d].total&&bq[d].total>0)}
 function isInProg(bq){return['easy','medium','hard'].some(d=>bq[d]&&bq[d].attempts>0)}
@@ -26,15 +26,15 @@ export default function ProgressTab({progress:pr,onReset,onSignOut,isManager,onT
   const certCount=BIKES.filter(b=>isCert(pr.bikeQuiz[b.id]||{})).length;
   const needCount=BIKES.length-certCount;
 
-  return <div style={{background:'#000',color:T1,fontFamily:"'Geist',sans-serif",minHeight:"100vh",paddingBottom:90,zoom:0.9}}>
+  return <div style={{background:C.bg,color:T1,fontFamily:"'Geist',sans-serif",minHeight:"100vh",paddingBottom:90,zoom:0.9}}>
 
     {/* HEADER */}
     <div style={{padding:"14px 20px 10px",borderBottom:`1px solid ${BORDER}`,display:"flex",alignItems:"center",justifyContent:"center",position:"relative"}}>
-      <img src="/images/BENDAlogo.png" alt="Benda" style={{height:40,width:"auto",objectFit:"contain",filter:"brightness(0) invert(1)",position:"absolute",left:20,top:"50%",transform:"translateY(-50%)"}}/>
+      <img src="/images/BENDAlogo.png" alt="Benda" style={{height:40,width:"auto",objectFit:"contain",filter:isDark?"brightness(0) invert(1)":"brightness(0)",position:"absolute",left:20,top:"50%",transform:"translateY(-50%)"}}/>
       <div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:20,letterSpacing:0.5,textTransform:"uppercase"}}>PROGRESS</div>
     </div>
 
-    {isManager&&onTeam&&<div className="tp" onClick={onTeam} style={{margin:"16px 16px 0",borderRadius:14,background:"#140e00",border:`1px solid ${GOLD}55`,padding:"14px 16px",display:"flex",alignItems:"center",justifyContent:"space-between",cursor:"pointer"}}>
+    {isManager&&onTeam&&<div className="tp" onClick={onTeam} style={{margin:"16px 16px 0",borderRadius:14,background:"#fdf8ee",border:`1px solid ${GOLD}55`,padding:"14px 16px",display:"flex",alignItems:"center",justifyContent:"space-between",cursor:"pointer"}}>
       <div style={{display:"flex",alignItems:"center",gap:12}}>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={GT} strokeWidth="1.8" strokeLinecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <div>
@@ -58,7 +58,7 @@ export default function ProgressTab({progress:pr,onReset,onSignOut,isManager,onT
         </div>}
       </div>
       <div style={{padding:"10px 16px 12px"}}>
-        <div style={{height:4,background:"#262626",borderRadius:3,overflow:"hidden",marginBottom:5}}>
+        <div style={{height:4,background:C.border,borderRadius:3,overflow:"hidden",marginBottom:5}}>
           <div style={{width:`${ov}%`,height:"100%",background:`linear-gradient(90deg,${GOLD},${GT})`,borderRadius:3,transition:"width 1s ease"}}/>
         </div>
         <div style={{display:"flex",justifyContent:"space-between"}}>

@@ -3,8 +3,8 @@ import { BIKES, COMP, compKey } from '../data/bikes.js';
 import { C, A } from '../shared.jsx';
 
 const ICON={nb250:"/images/NapBOBnew.png",nb500:"/images/Napbob500N.png",ch500:"/images/ChinchillaN.png",df500:"/images/DarkflagN.png",lfc700:"/images/LFCN.png"};
-const GOLD=C.gold,GT=C.goldTxt,BORDER='#2a2a2a',CARD='#0a0a0a';
-const T1='#fafafa',T2='#b8b8b8',T3='#666';
+const GOLD=C.gold,GT=C.goldTxt,BORDER=C.border,CARD=C.s1;
+const T1=C.text,T2=C.t2,T3=C.t3;
 
 function SLabel({children}){
   return <div style={{fontSize:10,fontWeight:700,letterSpacing:0.5,color:T1,marginBottom:8}}>{children}</div>;
@@ -20,11 +20,11 @@ export default function CompareTab(){
   const sAv=Object.fromEntries(bA.stats.map(s=>[s.key,s.val]));
   const sBv=Object.fromEntries(bB.stats.map(s=>[s.key,s.val]));
 
-  return <div style={{background:"#000",color:T1,fontFamily:"'Geist',sans-serif",minHeight:"100vh",paddingBottom:90}}>
+  return <div style={{background:C.bg,color:T1,fontFamily:"'Geist',sans-serif",minHeight:"100vh",paddingBottom:90}}>
 
     {/* HEADER */}
-    <div style={{padding:"14px 20px 10px",borderBottom:`1px solid ${BORDER}`,display:"flex",alignItems:"center",justifyContent:"center",position:"sticky",top:0,zIndex:10,background:"#000"}}>
-      <img src="/images/BENDAlogo.png" alt="Benda" style={{height:40,width:"auto",objectFit:"contain",filter:"brightness(0) invert(1)",position:"absolute",left:20,top:"50%",transform:"translateY(-50%)"}}/>
+    <div style={{padding:"14px 20px 10px",borderBottom:`1px solid ${BORDER}`,display:"flex",alignItems:"center",justifyContent:"center",position:"sticky",top:0,zIndex:10,background:C.bg}}>
+      <img src="/images/BENDAlogo.png" alt="Benda" style={{height:40,width:"auto",objectFit:"contain",filter:isDark?"brightness(0) invert(1)":"brightness(0)",position:"absolute",left:20,top:"50%",transform:"translateY(-50%)"}}/>
       <A><div style={{fontFamily:"'Inter',sans-serif",fontWeight:700,fontSize:20,letterSpacing:0.5,textTransform:"uppercase",color:T1}}>COMPARE</div></A>
     </div>
 
@@ -50,7 +50,7 @@ export default function CompareTab(){
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,padding:"0 16px 16px"}}>
             {[bA,bB].map(bk=>(
               <div key={bk.id} style={{borderRadius:14,background:CARD,border:`1px solid ${BORDER}`,overflow:"hidden"}}>
-                <div style={{height:90,background:"#000",display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden"}}>
+                <div style={{height:90,background:C.bg,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden"}}>
                   <img src={ICON[bk.id]||bk.icon} alt={bk.name} style={{width:"90%",height:"90%",objectFit:"contain",WebkitMaskImage:"radial-gradient(ellipse 85% 80% at 50% 55%, black 35%, transparent 100%)",maskImage:"radial-gradient(ellipse 85% 80% at 50% 55%, black 35%, transparent 100%)",filter:"brightness(1.2) contrast(1.05) saturate(1.1)"}}/>
                 </div>
                 <div style={{padding:"10px 12px",textAlign:"left"}}>

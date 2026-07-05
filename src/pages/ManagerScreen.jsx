@@ -39,7 +39,7 @@ export default function ManagerScreen({ onBack }) {
   const total = (rows || []).length;
 
   return (
-    <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', background: '#000', color: T1, fontFamily: "'Geist',sans-serif", display: 'flex', flexDirection: 'column' }}>
+    <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', background: '#ffffff', color: T1, fontFamily: "'Geist',sans-serif", display: 'flex', flexDirection: 'column' }}>
 
       {/* HEADER */}
       <div style={{ padding: '12px 20px', borderBottom: `1px solid ${BORDER}`, display: 'flex', alignItems: 'center', flexShrink: 0, position: 'relative' }}>
@@ -81,7 +81,7 @@ export default function ManagerScreen({ onBack }) {
                     ? <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 0.5, color: C.ok, textTransform: 'uppercase', flexShrink: 0 }}>✓ Ready</span>
                     : <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 700, color: GT, flexShrink: 0 }}>{r.overall}%</span>}
                 </div>
-                <div style={{ height: 4, background: '#222', borderRadius: 3, overflow: 'hidden', marginBottom: 6 }}>
+                <div style={{ height: 4, background: '#dddddd', borderRadius: 3, overflow: 'hidden', marginBottom: 6 }}>
                   <div style={{ width: `${r.overall}%`, height: '100%', background: r.overall === 100 ? C.ok : `linear-gradient(90deg,${GOLD},${GT})`, borderRadius: 3, transition: 'width .8s ease' }} />
                 </div>
                 <div style={{ fontSize: 10, color: T3, fontWeight: 600 }}>{r.certCount}/{BIKES.length} bikes certified</div>
